@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "994800323007",
+    "firebase_url": "https://scrum-project-management.firebaseio.com",
+    "project_id": "scrum-project-management",
+    "storage_bucket": "scrum-project-management.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994800323007:android:81162635bee57ccd52b90a",
+        "android_client_info": {
+          "package_name": "com.example.project_management_scrum_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994800323007-fmuur9m5t34429u3bsof6f94m82ptn7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjYcWoNUmN3P3AfjjB_fZBfTKRc8SHFZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994800323007-fmuur9m5t34429u3bsof6f94m82ptn7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994800323007:android:8e42a31907fbe73952b90a",
+        "android_client_info": {
+          "package_name": "com.project_management_scrum_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994800323007-fmuur9m5t34429u3bsof6f94m82ptn7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjYcWoNUmN3P3AfjjB_fZBfTKRc8SHFZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994800323007-fmuur9m5t34429u3bsof6f94m82ptn7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
