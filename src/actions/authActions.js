@@ -33,7 +33,10 @@ export const getUserById = (userID) => dispatch => {
     dispatch({type: GET_USER_BY_ID_START});
     firestore().collection('users').where('id', '==', userID).get()
         .then(snapshot => {
-            snapshot.forEach(doc => dispatch({type: GET_USER_BY_ID_SUCCESS, foundUser: doc.data()}));
+            let foundUser = {};
+            snapshot.forEach(doc => foundUser = doc.data());
+
+            dispatch({type: GET_USER_BY_ID_SUCCESS, foundUser: foundUser});
         })
         .catch(() => dispatch({type: GET_USER_BY_ID_FAILURE, error: "Kullanıcı bilgileri getirilemedi."}));
 };

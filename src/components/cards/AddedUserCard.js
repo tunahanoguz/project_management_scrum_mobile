@@ -3,7 +3,7 @@ import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
 import Divider from "../Divider";
-import {colors, fonts} from "../../styles";
+import {colors, fonts, sizes} from "../../styles";
 import Icon from "react-native-vector-icons/Feather";
 
 class AddedUserCard extends Component {
@@ -25,11 +25,12 @@ class AddedUserCard extends Component {
 
 const styles = StyleSheet.create({
     cardStyle: {
+        width: sizes.deviceWidth - 60,
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#21bf73',
-        marginBottom: 20,
-        marginHorizontal: 10,
+        // marginBottom: 20,
+        // marginHorizontal: 10,
         paddingVertical: 20,
         borderRadius: 10,
     },

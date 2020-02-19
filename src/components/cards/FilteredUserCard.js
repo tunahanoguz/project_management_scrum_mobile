@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react';
-import {FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
 import Divider from "../Divider";
-import {fonts} from "../../styles";
+import {fonts, sizes} from "../../styles";
 import Icon from "react-native-vector-icons/Feather";
 import RoundedButton from "../buttons/RoundedButton";
 import {roles} from "../../constants";
@@ -26,8 +26,11 @@ class FilteredUserCard extends Component {
     roleItem = (item, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => this.setSelectedRole(index)}>
-                <Text style={this.state.selectedRole === index ? fonts.mediumText : fonts.normalText}>{item.name}</Text>
-                <Divider height={10}/>
+                <View style={{flexDirection: 'row',}}>
+                    {this.state.selectedRole === index ? <Icon name='arrow-right' size={16} style={{marginRight: 4,}} /> : null}
+                    <Text style={this.state.selectedRole === index ? fonts.mediumText : fonts.normalText}>{item.name}</Text>
+                </View>
+                <Divider height={8}/>
             </TouchableOpacity>
         );
     };
@@ -44,8 +47,10 @@ class FilteredUserCard extends Component {
                 <Text style={fonts.mediumText}>Bir rol seçiniz.</Text>
                 <Divider height={10}/>
 
-                <FlatList data={roles} renderItem={({item, index}) => this.roleItem(item, index)} keyExtractor={(item) => item.id.toString()} listKey={(item, index) => item.id.toString()}/>
-                <RoundedButton color='purple' icon='check' pressFunc={() => this.actionFunc()} />
+                <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 20,}}>
+                    <FlatList data={roles} renderItem={({item, index}) => this.roleItem(item, index)} keyExtractor={(item) => item.id.toString()} listKey={(item, index) => item.id.toString()}/>
+                    <RoundedButton color='purple' icon='check' pressFunc={() => this.actionFunc()} />
+                </View>
             </Fragment>
         );
     };
@@ -58,11 +63,12 @@ class FilteredUserCard extends Component {
         const {fullName, photoURL} = this.props.user;
         return (
             <TouchableOpacity style={styles.cardStyle} onPress={() => this.pressFunc()}>
-                <ProfilePicture picture={photoURL} size={60} />
-                <Divider height={10}/>
-                <Text style={fonts.mediumText}>{fullName}</Text>
-                <Divider height={10}/>
-                <Icon name='plus' size={24}/>
+                <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                    <ProfilePicture picture={photoURL} size={60} />
+                    <Text style={[fonts.mediumText, {fontSize: 16, marginLeft: 10,}]}>{fullName}</Text>
+                </View>
+                {/*<Divider height={10}/>*/}
+                {/*<Icon name='plus' size={24}/>*/}
                 {this.state.isOpen ? this.roleSelectionContainer() : null}
             </TouchableOpacity>
         );
@@ -71,11 +77,12 @@ class FilteredUserCard extends Component {
 
 const styles = StyleSheet.create({
     cardStyle: {
+        width: sizes.deviceWidth - 60,
         flex: 1,
         alignItems: 'center',
         backgroundColor: 'white',
-        marginBottom: 20,
-        marginHorizontal: 10,
+        // marginBottom: 20,
+        // marginHorizontal: 10,
         paddingVertical: 12,
         borderRadius: 10,
     },

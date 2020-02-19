@@ -5,6 +5,8 @@ import Icon from "react-native-vector-icons/Feather";
 import RNFetchBlob from 'rn-fetch-blob'
 import {colors, fonts} from "../../styles";
 import uuid from "rn-fetch-blob/utils/uuid";
+import {deleteProjectFile, getAllProjectFiles} from "../../actions/projectActions";
+import {connect} from "react-redux";
 
 class ProjectFileCard extends Component {
     downloadFile = (fileURL, type) => {
@@ -23,8 +25,12 @@ class ProjectFileCard extends Component {
             .catch(() => console.log("Başarısız"));
     };
 
+    deleteFile = (id) => {
+        this.props.deleteProjectFile(this.props.projectID, id);
+    };
+
     render(){
-        const {fileName, size, downloadURL, contentType} = this.props.file;
+        const {id, fileName, size, downloadURL, contentType} = this.props.file;
         const type = contentType.split('/')[1];
         return (
             <View style={styles.fileContainer}>
@@ -39,9 +45,15 @@ class ProjectFileCard extends Component {
                     </View>
                 </View>
 
-                <TouchableOpacity onPress={() => this.downloadFile(downloadURL, type)}>
-                    <Icon name='download' size={20} color='rgba(0, 0, 0, 0.6)' />
-                </TouchableOpacity>
+                <View style={styles.fileDetailContainer}>
+                    <TouchableOpacity onPress={() => this.downloadFile(downloadURL, type)} style={{marginRight: 4,}}>
+                        <Icon name='download' size={20} color='rgba(0, 0, 0, 0.6)' />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.deleteFile(id)}>
+                        <Icon name='trash-2' size={20} color='rgba(0, 0, 0, 0.6)' />
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -74,6 +86,21 @@ const styles = StyleSheet.create({
 
 ProjectFileCard.propTypes = {
     file: PropTypes.object.isRequired,
+    projectID: PropTypes.string.isRequired,
 };
 
-export default ProjectFileCard;
+const mapStateToProps = state => {
+    return {
+        loading: state.projectReducer.loading,
+        error: state.projectReducer.error,
+        files: state.projectReducer.files,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteProjectFile: (projectID, projectFileID) => dispatch(deleteProjectFile(projectID, projectFileID)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectFileCard);

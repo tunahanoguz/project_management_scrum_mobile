@@ -6,17 +6,17 @@ import {connect} from "react-redux";
 
 class TeamMembers extends Component {
     members = () => {
-        const usersInfo = this.props.teamMembers;
-        const memberRoles = this.props.navigation.getParam("memberRoles", "");
+        // const usersInfo = this.props.teamMembers;
+        const members = this.props.navigation.getParam("members", "");
 
-        return <FlatList data={usersInfo}
+        return <FlatList data={members}
                          renderItem={({item, index}) => {
                              let style = {};
                              if (index === 0) {
                                  style = {marginTop: 30};
                              }
 
-                             return <UserCard user={item} role={memberRoles[index]} style={style}/>;
+                             return <UserCard user={item} role={members[index]?.role} style={style}/>;
                          }}
                          keyExtractor={(item) => item.id.toString()}/>
     };

@@ -63,8 +63,6 @@ class TeamDetail extends Component {
             });
         });
 
-        console.log(newMembers);
-
         if (teamMembers.length === 0) {
             return <Text style={fonts.mediumText}>Henüz hiç üye yok.</Text>;
         } else {
@@ -74,7 +72,7 @@ class TeamDetail extends Component {
                               renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
                               keyExtractor={(item, index) => index.toString()}/>
 
-                    <TouchableOpacity style={styles.moreContainer} onPress={() => this.goToTeamMemberList(memberRoles)}>
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => this.goToTeamMemberList(newMembers)}>
                         <Icon name='arrow-down' size={24} color='rgba(0, 0, 0, 0.4)'/>
                     </TouchableOpacity>
                 </Fragment>
@@ -82,8 +80,8 @@ class TeamDetail extends Component {
         }
     };
 
-    goToTeamMemberList = (memberRoles) => {
-        this.props.navigation.navigate('TeamMembers', {memberRoles});
+    goToTeamMemberList = (members) => {
+        this.props.navigation.navigate('TeamMembers', {members});
     };
 
     render() {
@@ -125,7 +123,7 @@ class TeamDetail extends Component {
                     </View>
 
                     <View style={styles.thirdContainer}>
-                        {this.props.error ? alert(this.props.error) : null}
+                        {/*{this.props.error ? alert(this.props.error) : null}*/}
                         {this.props.loading ? <View style={container.centerContainer}><ActivityIndicator/></View> : this.members()}
                     </View>
                 </View>

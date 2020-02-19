@@ -22,7 +22,7 @@ class Input extends Component {
         return (
             <Fragment>
                 <View style={styles.inputContainer}>
-                    <Icon name={this.props.iconName} size={24} color={this.props.iconColor}/>
+                    <Icon name={this.props.iconName} size={18} color={this.props.iconColor}/>
                     <TextInput
                         name={this.props.name}
                         placeholder={this.props.placeholder}
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     input: {
+        flex: 1,
         width: '100%',
         fontFamily: 'Poppins-Regular',
         fontSize: 16,

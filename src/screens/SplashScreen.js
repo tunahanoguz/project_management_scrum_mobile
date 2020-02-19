@@ -6,6 +6,8 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {connect} from "react-redux";
 import {getUser} from "../actions/authActions";
 import Home from "./Home";
+import FlashMessage from "react-native-flash-message";
+import {getAllTeams} from "../actions/teamActions";
 
 class SplashScreen extends Component {
     constructor(props) {
@@ -38,12 +40,8 @@ class SplashScreen extends Component {
         });
     }
 
-    // static getDerivedStateFromProps(props, state){
-    //     if (!state.splash){
-    //         props.navigation.navigate('Home');
-    //     }
-    //
-    //     return null;
+    // componentDidUpdate(){
+    //     this.props.getAllTeams(this.props.user.id);
     // }
 
     splashScreen = () => {
@@ -60,6 +58,7 @@ class SplashScreen extends Component {
                     </Animated.View>
 
                     <Text style={styles.splashScreenText}>Scrum Yöntemi ile Proje Yönetimi</Text>
+                    <FlashMessage position="top" />
                 </View>
             );
         } else {
@@ -68,6 +67,7 @@ class SplashScreen extends Component {
                     <StatusBar backgroundColor='transparent' translucent={true}/>
                     <Icon name='briefcase' size={48} color='white'/>
                     <Text style={styles.splashScreenText}>Scrum Yöntemi ile Proje Yönetimi</Text>
+                    <FlashMessage position="top" />
                 </View>
             );
         }
@@ -107,6 +107,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getUser: () => dispatch(getUser()),
+        getAllTeams: (userID) => dispatch(getAllTeams(userID)),
     }
 };
 

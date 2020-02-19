@@ -79,9 +79,20 @@ export const createTeam = (teamName, teamDescription, members, userID) => dispat
         createdBy: userID,
         members: members
     })
-        .then(() => dispatch(getAllTeams()))
+        .then(() => dispatch(getAllTeams(userID)))
         .catch(() => dispatch({type: CREATE_TEAM_FAILURE, error: "Takım oluşturulamadı."}));
 };
+
+// export const createTeamMembers = (teamID, members) => dispatch => {
+//     const teamMembersRef = firestore().collection('teamMembers');
+//     members.map(member => {
+//         teamMembersRef.add({
+//             userID: member.id,
+//             role: member.role,
+//             teamID: teamID,
+//         });
+//     });
+// };
 
 export const getTeamMembers = (members) => dispatch => {
     dispatch({type: GET_TEAM_MEMBERS_START});
@@ -96,4 +107,11 @@ export const getTeamMembers = (members) => dispatch => {
         })
         .then(() => dispatch({type: GET_TEAM_MEMBERS_SUCCESS, teamMembers: users}))
         .catch(() => dispatch({type: GET_TEAM_MEMBERS_FAILURE, error: "Takım üyeleri getirilemedi."}));
+};
+
+export const deleteTeam = (projectID) => dispatch => {
+    const teamRef = firestore().collection('teams');
+    teamRef.doc(projectID).delete()
+        .then(() => console.log("Success!"))
+        .catch(() => console.log("Failure!"));
 };

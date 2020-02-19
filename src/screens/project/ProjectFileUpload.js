@@ -101,8 +101,6 @@ class ProjectFileUpload extends Component {
                     projectID,
                 };
 
-                console.log(file);
-
                 props.createProjectFile(true, null, file);
             });
         })
@@ -115,7 +113,7 @@ class ProjectFileUpload extends Component {
 
     render() {
         const buttonStyle = [styles.buttonContainer, this.state.fileUri !== "" ? {backgroundColor: colors.darkGreen} : null];
-        const textStyle = [fonts.mediumText, this.state.fileName !== "" ? {color: 'white'} : null];
+        const textStyle = [fonts.mediumText, this.state.fileUri !== "" ? {color: 'white'} : null];
         const {fileName, fileNameError, fileUri} = this.state;
         return (
             <Container>

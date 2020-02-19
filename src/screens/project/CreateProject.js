@@ -214,9 +214,9 @@ class CreateProject extends Component {
     // --------------------------------------------------------------------------------------
     // Create Project Function
 
-    createProject = (projectName, projectDescription, projectNotes, assignedTeam, teamIDs) => {
+    createProject = (projectName, projectDescription, projectNotes, assignedTeam,) => {
         Keyboard.dismiss();
-        this.props.createProject(projectName, projectDescription, projectNotes, new Date(), null, null, assignedTeam, teamIDs, this.props.user.uid);
+        this.props.createProject(projectName, projectDescription, projectNotes, new Date(), null, null, assignedTeam, this.props.teamIDs, this.props.user.uid);
         this.props.navigation.navigate('ProjectList');
     };
 
@@ -225,7 +225,6 @@ class CreateProject extends Component {
 
     render() {
         const {projectName, projectNameError, projectDescription, projectDescriptionError, projectNotes, assignedTeam} = this.state;
-        const {teamIDs} = this.props;
         return (
             <Container>
                 <TopBar isBack={true}/>
@@ -251,7 +250,7 @@ class CreateProject extends Component {
                     <Divider height={20}/>
 
                     <RoundedButton color='dark' icon='arrow-right'
-                                   pressFunc={() => this.createProject(projectName, projectDescription, projectNotes, assignedTeam, teamIDs)}/>
+                                   pressFunc={() => this.createProject(projectName, projectDescription, projectNotes, assignedTeam)}/>
                 </InnerContainer>
 
                 {this.assignTeamModal()}

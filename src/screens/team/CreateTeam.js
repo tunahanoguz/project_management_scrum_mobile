@@ -5,14 +5,14 @@ import {
     Text,
     View,
     SafeAreaView,
-    FlatList,
     TouchableOpacity,
     Keyboard,
 } from 'react-native';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/Feather';
 import validate from "validate.js";
 import {connect} from "react-redux";
-import {colors, fonts} from "../../styles";
+import {colors, fonts, sizes} from "../../styles";
 import TopBar from "../../components/TopBar";
 import Input from "../../components/form/Input";
 import RoundedButton from "../../components/buttons/RoundedButton";
@@ -21,7 +21,6 @@ import {createTeam} from "../../actions/teamActions";
 import FilteredUserCard from "../../components/cards/FilteredUserCard";
 import AddedUserCard from "../../components/cards/AddedUserCard";
 import {roles} from "../../constants";
-import BlockButton from "../../components/buttons/BlockButton";
 
 class CreateTeam extends Component {
     constructor(props) {
@@ -40,6 +39,9 @@ class CreateTeam extends Component {
             animatedValue: new Animated.Value(0.5),
             tempUsers: this.props.users,
             selectedRole: null,
+            scrollX: new Animated.Value(0),
+            activeFilteredUsersSlide: 0,
+            activeAddedMembersSlide: 0,
         };
     }
 
@@ -190,31 +192,96 @@ class CreateTeam extends Component {
     filteredUsersAction = (user) => {
         this.addToAddedMembers(user);
         this.removeFromFilteredUsers(user);
+        this.setState({activeFilteredUsersSlide: 0});
     };
 
     addedMembersAction = (user) => {
         this.addToFilteredUsers(user);
         this.removeFromAddedMembers(user);
+        this.setState({activeAddedMembersSlide: 0});
+    };
+
+    renderFilteredUsersItem = ({item, index}) => {
+        return (
+            <FilteredUserCard user={item}
+                              action={this.filteredUsersAction}
+                              setStateFunc={this.setValue}/>
+        );
     };
 
     filteredUsersList = () => {
         return (
             <SafeAreaView style={styles.usersListContainer}>
-                <FlatList data={this.state.filteredMembers} numColumns={2}
-                          renderItem={({item}) => <FilteredUserCard user={item}
-                                                                    action={this.filteredUsersAction}
-                                                                    setStateFunc={this.setValue}/>}
-                          keyExtractor={(item, index) => index.toString()}/>
+                <Carousel
+                data={this.state.filteredMembers}
+                renderItem={this.renderFilteredUsersItem}
+                sliderWidth={sizes.deviceWidth}
+                sliderHeight={sizes.deviceHeight}
+                itemWidth={sizes.deviceWidth}
+                onSnapToItem={(index) => this.setState({activeFilteredUsersSlide: index})}
+                />
+
+                <Pagination
+                    dotsLength={this.state.filteredMembers?.length}
+                    activeDotIndex={this.state.activeFilteredUsersSlide}
+                    // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                    dotStyle={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        marginHorizontal: 8,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                    }}
+                    // inactiveDotStyle={{
+                    //     // Define styles for inactive dots here
+                    // }}
+                    inactiveDotOpacity={0.4}
+                    inactiveDotScale={0.6}
+                />
             </SafeAreaView>
+        );
+    };
+
+    renderAddedUsersItem = ({item, index}) => {
+        return (
+            <AddedUserCard user={item}
+                              action={this.addedMembersAction}/>
         );
     };
 
     addedMembersList = () => {
         return (
             <SafeAreaView style={styles.usersListContainer}>
-                <FlatList data={this.state.addedMembers} numColumns={2}
-                          renderItem={({item}) => <AddedUserCard user={item} action={this.addedMembersAction}/>}
-                          keyExtractor={(item, index) => index.toString()}/>
+                {/*<FlatList data={this.state.addedMembers} numColumns={2}*/}
+                {/*          renderItem={({item}) => <AddedUserCard user={item} action={this.addedMembersAction}/>}*/}
+                {/*          keyExtractor={(item, index) => index.toString()}/>*/}
+
+                <Carousel
+                    data={this.state.addedMembers}
+                    renderItem={this.renderAddedUsersItem}
+                    sliderWidth={sizes.deviceWidth}
+                    sliderHeight={sizes.deviceHeight}
+                    itemWidth={sizes.deviceWidth}
+                    onSnapToItem={(index) => this.setState({activeAddedMembersSlide: index})}
+                />
+
+                <Pagination
+                    dotsLength={this.state.addedMembers?.length}
+                    activeDotIndex={this.state.activeAddedMembersSlide}
+                    // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                    dotStyle={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        marginHorizontal: 8,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                    }}
+                    // inactiveDotStyle={{
+                    //     // Define styles for inactive dots here
+                    // }}
+                    inactiveDotOpacity={0.4}
+                    inactiveDotScale={0.6}
+                />
             </SafeAreaView>
         );
     };
@@ -264,7 +331,7 @@ class CreateTeam extends Component {
                     <Input iconName='type' value={this.state.teamName} placeholder="Takım Adı" name='teamName'
                            setStateFunc={this.setValue} isValid={this.validateTeamName}
                            errorMessage={this.state.teamNameError}/>
-                    <Input iconName='type' value={this.state.teamDescription} placeholder="Takım Açıklaması"
+                    <Input iconName='align-left' value={this.state.teamDescription} placeholder="Takım Açıklaması"
                            name='teamDescription'
                            setStateFunc={this.setValue} isValid={this.validateTeamDescription}
                            errorMessage={this.state.teamDescriptionError}/>
@@ -305,21 +372,23 @@ class CreateTeam extends Component {
                     <Divider height={20}/>
 
                     {this.state.showAddedMembers ? this.addedMembersList() : this.filteredUsersList()}
+
+                    {/*{console.log(Animated.divide(this.scrollX, sizes.deviceWidth))}*/}
                 </Fragment>
             );
         }
     };
 
-    modalCardItem = (item, index) => {
-        return (
-            <TouchableOpacity
-                style={[styles.modalCard, {backgroundColor: index === this.state.selectedRole ? colors.green : 'white'}]}
-                onPress={() => this.setState({selectedRole: index})}>
-                <Text
-                    style={[fonts.mediumText, {color: index === this.state.selectedRole ? 'white' : 'black'}]}>{item.name}</Text>
-            </TouchableOpacity>
-        );
-    };
+    // modalCardItem = (item, index) => {
+    //     return (
+    //         <TouchableOpacity
+    //             style={[styles.modalCard, {backgroundColor: index === this.state.selectedRole ? colors.green : 'white'}]}
+    //             onPress={() => this.setState({selectedRole: index})}>
+    //             <Text
+    //                 style={[fonts.mediumText, {color: index === this.state.selectedRole ? 'white' : 'black'}]}>{item.name}</Text>
+    //         </TouchableOpacity>
+    //     );
+    // };
 
     render() {
         return (
@@ -382,7 +451,7 @@ const styles = StyleSheet.create({
     },
     usersListContainer: {
         flex: 1,
-        marginHorizontal: -10,
+        // marginHorizontal: -10,
     },
     searchActionAreaContainer: {
         flexDirection: 'row',

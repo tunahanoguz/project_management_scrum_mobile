@@ -29,3 +29,13 @@ export const fileValidations = {
         },
     },
 };
+
+export const projectCommentValidations = {
+    commentValidation: {
+        comment: {
+            presence: {
+                message: '^Lütfen yorumunuzu giriniz.'
+            },
+        },
+    },
+};

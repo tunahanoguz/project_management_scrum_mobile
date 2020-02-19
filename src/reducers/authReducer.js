@@ -108,11 +108,6 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 error: action.error,
             };
-        // case UPDATE_PP_SUCCESS:
-        //     return {
-        //         ...state,
-        //         fullName: action.fullName,
-        //     };
         case UPDATE_PP_FAILURE:
             return {
                 ...state,

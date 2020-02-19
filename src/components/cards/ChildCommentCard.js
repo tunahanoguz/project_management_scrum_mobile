@@ -2,41 +2,31 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
-import {profiles} from "../../constants";
 import Icon from "react-native-vector-icons/Feather";
 import {colors, fonts} from "../../styles";
 import {connect} from "react-redux";
 import {getUserById} from "../../actions/authActions";
 
 class ChildCommentCard extends Component {
-    // componentDidMount(){
-    //     this.props.getUserById();
-    // }
-
     render(){
         const {comment, userID} = this.props.comment;
-        const {photoURL} = this.props.foundUser;
+        const {photoURL, fullName} = this.props.foundUser;
 
         return (
             <View style={styles.childCommentContainer}>
                 <View style={styles.childCommentInnerContainer}>
                     <View style={styles.childCommentBubbleContainer}>
                         <View style={styles.childCommentIconContainer}>
-                            <Icon name='corner-down-right' size={20} color='white'/>
+                            <Icon name='corner-down-right' size={20}/>
                         </View>
                         <View style={{flex: 0.9,}}>
                             <View style={styles.rowContainer}>
-                                <Text style={styles.commentAuthorText}>Julia Tyler</Text>
-                                <TouchableOpacity style={styles.replyButton}>
-                                    <Icon name='corner-up-right' size={12} color='white'/>
-                                    <Text style={styles.replyButtonText}>Cevapla</Text>
-                                </TouchableOpacity>
+                                <Text style={styles.commentAuthorText}>{fullName}</Text>
                             </View>
-                            <Text style={styles.childCommentText}>Lorem ipsum is placeholder text commonly used in the
-                                graphic, print, and publishing industries for previewing layouts and visual mockups.</Text>
+                            <Text style={styles.childCommentText}>{comment}</Text>
                         </View>
                     </View>
-                    <View style={{flex: 0.16,}}><ProfilePicture size={45} picture={profiles[1].profilePhoto}/></View>
+                    <View style={{flex: 0.16,}}><ProfilePicture size={45} picture={photoURL ? photoURL : ""}/></View>
                 </View>
             </View>
         );
@@ -53,7 +43,7 @@ const styles = StyleSheet.create({
     childCommentBubbleContainer: {
         flex: 0.84,
         flexDirection: 'row',
-        backgroundColor: colors.purple,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         paddingVertical: 8,
         paddingHorizontal: 10,
         borderRadius: 15,
@@ -61,12 +51,10 @@ const styles = StyleSheet.create({
     },
     commentAuthorText: {
         ...fonts.mediumText,
-        fontSize: 14,
-        color: 'white',
+        fontSize: 12,
     },
     commentText: {
         ...fonts.normalText,
-        color: 'white',
         fontSize: 12,
     },
     replyButton: {
@@ -88,7 +76,7 @@ const styles = StyleSheet.create({
     childCommentContainer: {
         flexDirection: 'row',
         paddingVertical: 15,
-        paddingHorizontal: 30,
+        paddingLeft: 15,
     },
     childCommentInnerContainer: {
         flexDirection: 'row',
@@ -102,7 +90,6 @@ const styles = StyleSheet.create({
     childCommentText: {
         ...fonts.normalText,
         fontSize: 12,
-        color: 'white',
     },
 });
 

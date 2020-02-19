@@ -1,43 +1,78 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
-import {profiles} from "../../constants";
 import Icon from "react-native-vector-icons/Feather";
 import {colors, fonts} from "../../styles";
 import {connect} from "react-redux";
 import {getUserById} from "../../actions/authActions";
+import ChildCommentCard from "./ChildCommentCard";
+import firestore from '@react-native-firebase/firestore';
 
 class ParentCommentCard extends Component {
-    // componentDidMount(){
-    //     this.props.getUserById();
-    // }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            childComments: [],
+        };
+    }
+    componentDidMount() {
+        const {id, userID} = this.props.comment;
+        this.props.getUserById(userID);
+        this.getChildComments();
+    }
+
+    getChildComments = () => {
+        const id = this.props.comment.id;
+        const projectCommentsRef = firestore().collection('projectComments');
+        let comments = [];
+        projectCommentsRef.where('parentCommentID', '==', id).get()
+            .then(snapshot => {
+                snapshot.forEach(doc => {
+                    const comment = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    comments.push(comment);
+                });
+
+                this.setState({childComments: comments});
+            })
+            .catch(err => console.log(err));
+    };
+
+    childComments = () => {
+        return (
+            <FlatList data={this.state.childComments} renderItem={({item}) => <ChildCommentCard comment={item} />} keyExtractor={(item, index) => index.toString()} />
+        );
+    };
 
     render(){
-        const {comment, userID} = this.props.comment;
-        const {photoURL} = this.props.foundUser;
+        const {comment} = this.props.comment;
+        const {photoURL, fullName} = this.props.foundUser;
 
         return (
             <View style={styles.commentContainer}>
                 <View style={styles.commentInnerContainer}>
                     <View style={styles.profileContainer}>
-                        <ProfilePicture size={48} picture={profiles[0].profilePhoto}/>
+                        <ProfilePicture size={48} picture={photoURL ? photoURL : ""}/>
                     </View>
 
                     <View style={styles.parentCommentBubbleContainer}>
                         <View style={styles.rowContainer}>
-                            <Text style={styles.commentAuthorText}>Julia Tyler</Text>
+                            <Text style={styles.commentAuthorText}>{fullName}</Text>
                             <TouchableOpacity style={styles.replyButton}>
                                 <Icon name='corner-up-right' size={12} color='white'/>
                                 <Text style={styles.replyButtonText}>Cevapla</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.commentText}>Lorem ipsum is placeholder text commonly used in the
-                            graphic,
-                            print,
-                            and publishing...</Text>
+                        <Text style={styles.commentText}>{comment}</Text>
                     </View>
                 </View>
+
+                {this.childComments()}
             </View>
         );
     }
@@ -110,7 +145,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getUserById: () => dispatch(getUserById()),
+        getUserById: (userID) => dispatch(getUserById(userID)),
     };
 };
 

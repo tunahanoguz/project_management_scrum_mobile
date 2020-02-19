@@ -2,20 +2,16 @@ import React, {Component, Fragment} from 'react';
 import {SafeAreaView, View, Text, FlatList, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import TopBar from "../../components/TopBar";
+import {fonts} from "../../styles";
 
 class ProjectNotes extends Component {
     notes = this.props.navigation.getParam('notes', []);
 
     noteList = (item, index) => (
-        <View key={index} style={{
-            paddingVertical: 20,
-            paddingHorizontal: 30,
-            borderBottomWidth: 2,
-            borderBottomColor: 'rgba(0, 0, 0, 0.05)'
-        }}>
-            <View style={{flexDirection: 'row'}}>
-                <Text style={{fontFamily: 'Poppins-Medium', fontWeight: 'bold', marginRight: 4}}>{index + 1}.</Text>
-                <Text>{item.note}</Text>
+        <View style={styles.noteContainer}>
+            <View style={styles.rowContainer}>
+                <Text style={styles.indexText}>{index + 1}.</Text>
+                <Text style={fonts.normalText}>{item.note}</Text>
             </View>
         </View>
     );
@@ -24,7 +20,7 @@ class ProjectNotes extends Component {
         if (this.notes.length > 0) {
             return (
                 <FlatList data={this.notes} renderItem={({item, index}) => this.noteList(item, index)}
-                          keyExtractor={(index) => index.toString()}/>
+                          keyExtractor={(item, index) => index.toString()}/>
             );
         } else {
             return null;
@@ -53,7 +49,21 @@ const styles = StyleSheet.create({
     },
     innerContainer: {
         flexDirection: 'column',
-        // padding: 30,
+        paddingHorizontal: 30,
+    },
+    noteContainer: {
+        paddingVertical: 20,
+        // paddingHorizontal: 30,
+        borderBottomWidth: 2,
+        borderBottomColor: 'rgba(0, 0, 0, 0.05)',
+    },
+    rowContainer: {
+        flexDirection: 'row',
+    },
+    indexText: {
+        fontFamily: 'Poppins-Medium',
+        fontWeight: 'bold',
+        marginRight: 6,
     },
 });
 

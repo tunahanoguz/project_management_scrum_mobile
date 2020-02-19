@@ -6,15 +6,15 @@ import BlockButton from "../../components/buttons/BlockButton";
 import Icon from "react-native-vector-icons/Feather";
 import {fonts} from "../../styles";
 import Divider from "../../components/Divider";
+import {getAllProjectComments, getAllProjectFiles} from "../../actions/projectActions";
+import {connect} from "react-redux";
 
 class ProjectDetail extends Component {
-
-    notes = [
-        "Our first job.",
-        "Research React hooks for state management.",
-        "Design a page for listing bakery products...",
-        // "Make a new page for payment.",
-    ];
+    componentDidMount() {
+        const {id} = this.props.navigation.getParam('project', {});
+        this.props.getAllProjectComments(id);
+        this.props.getAllProjectFiles(id);
+    }
 
     projectNotes = (note) => {
         const projectNoteLength = note.length;
@@ -49,8 +49,8 @@ class ProjectDetail extends Component {
         })
     );
 
-    goToProjectCommentList = () => {
-        this.props.navigation.navigate("ProjectCommentList", {comments: []})
+    goToProjectCommentList = (projectID) => {
+        this.props.navigation.navigate("ProjectCommentList", {projectID})
     };
 
     goToProjectFileList = (projectID) => {
@@ -71,7 +71,6 @@ class ProjectDetail extends Component {
 
     render() {
         const {id, name, description, notes} = this.props.navigation.getParam('project', {});
-        console.log(this.props.navigation.getParam('project', {}));
         return (
             <View style={styles.container}>
                 <TopBar isBack={true}/>
@@ -90,41 +89,58 @@ class ProjectDetail extends Component {
                     </View>
 
                     <View style={styles.projectDetailContainer}>
-                        <View style={{flexDirection: 'row',}}>
-                            <View style={{marginRight: 30,}}>
-                                <Text style={styles.projectDetailTitle}>Proje Takımı</Text>
-                                <View style={styles.profilePhotosContainer}>
-                                    <TouchableOpacity style={{flexDirection: 'row'}}>
-                                        {this.profilePhotosContainer()}
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
+                            {/*<View style={{marginRight: 30,}}>*/}
+                            {/*    <Text style={styles.projectDetailTitle}>Proje Takımı</Text>*/}
+                            {/*    <View style={styles.profilePhotosContainer}>*/}
+                            {/*        <TouchableOpacity style={{flexDirection: 'row'}}>*/}
+                            {/*            {this.profilePhotosContainer()}*/}
+                            {/*        </TouchableOpacity>*/}
+                            {/*    </View>*/}
+                            {/*</View>*/}
 
-                            <View>
-                                <Text style={styles.projectDetailTitle}>Sayılar</Text>
-                                <View style={{flexDirection: 'row',}}>
-                                    <TouchableOpacity onPress={() => this.goToProjectCommentList()} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#482CA5', marginRight: 10, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 10,}}>
-                                        <Icon name='message-circle' size={20} color='#FD8344' style={{marginRight: 10,}} />
-                                        <Text style={[fonts.mediumText, {fontSize: 18, color: '#FD8344',}]}>12</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.goToProjectFileList(id)} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#482CA5', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 10,}}>
-                                        <Icon name='file' size={20} color='#FD8344' style={{marginRight: 10,}} />
-                                        <Text style={[fonts.mediumText, {fontSize: 18, color: '#FD8344',}]}>4</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                            {/*<View>*/}
+                            {/*    <Text style={styles.projectDetailTitle}>Sayılar</Text>*/}
+                            {/*    <View style={{flexDirection: 'row',}}>*/}
+                            {/*        <TouchableOpacity onPress={() => this.goToProjectCommentList(id)} style={styles.commentButton}>*/}
+                            {/*            <Icon name='message-circle' size={20} color='#FD8344' style={{marginRight: 10,}} />*/}
+                            {/*            <Text style={[fonts.mediumText, {fontSize: 18, color: '#FD8344',}]}>{this.props.comments?.length}</Text>*/}
+                            {/*        </TouchableOpacity>*/}
+                            {/*        <TouchableOpacity onPress={() => this.goToProjectFileList(id)} style={styles.fileButton}>*/}
+                            {/*            <Icon name='file' size={20} color='#FD8344' style={{marginRight: 10,}} />*/}
+                            {/*            <Text style={[fonts.mediumText, {fontSize: 18, color: '#FD8344',}]}>{this.props.files?.length}</Text>*/}
+                            {/*        </TouchableOpacity>*/}
+                            {/*    </View>*/}
+                            {/*</View>*/}
+
+                            <TouchableOpacity>
+                                <Text style={[fonts.mediumText, {color: 'rgba(0, 0, 0, 0.4)'}]}>Takım</Text>
+                                <Text style={fonts.mediumText}>En iyi takım</Text>
+                            </TouchableOpacity>
+                            <View style={{width: 2, height: '100%', marginHorizontal: 10, backgroundColor: 'rgba(0, 0, 0, 0.04)'}}/>
+                            <TouchableOpacity onPress={() => this.goToProjectCommentList(id)}>
+                                <Text style={[fonts.mediumText, {color: 'rgba(0, 0, 0, 0.4)'}]}>Yorumlar</Text>
+                                <Text style={fonts.mediumText}>{this.props.comments?.length}</Text>
+                            </TouchableOpacity>
+                            <View style={{width: 2, height: '100%', marginHorizontal: 10, backgroundColor: 'rgba(0, 0, 0, 0.04)'}}/>
+                            <TouchableOpacity onPress={() => this.goToProjectFileList(id)}>
+                                <Text style={[fonts.mediumText, {color: 'rgba(0, 0, 0, 0.4)'}]}>Dosyalar</Text>
+                                <Text style={fonts.mediumText}>{this.props.files?.length}</Text>
+                            </TouchableOpacity>
                         </View>
 
-                        <Divider height={10} />
-                        <View style={{height: 2, backgroundColor: 'rgba(0, 0, 0, 0.02)'}} />
-                        <Divider height={10} />
+                        {/*<Divider height={20} />*/}
+                        {/*<View style={{height: 2, backgroundColor: 'rgba(0, 0, 0, 0.02)'}} />*/}
+                        <Divider height={20} />
 
                         <Text style={styles.projectDetailTitle}>Notlar</Text>
                         <TouchableOpacity style={styles.notesContainer} onPress={() => this.goToProjectNotes(notes)}>
                             {this.notesContainer(notes)}
                         </TouchableOpacity>
 
-                        <View style={{flex: 1, width: '100%', flexDirection: 'row', alignItems: 'center'}}>
+                        <Divider height={20} />
+
+                        <View style={{width: '100%', flexDirection: 'row', alignItems: 'center'}}>
                             <BlockButton color="green" icon="arrow-right" text="İşlerim" side="left" pressFunc={this.goToMyTasks} />
                             <BlockButton color="purple" icon="arrow-up-right" text="Diğer İşler" side="right" pressFunc={this.goToOtherTasks} />
                         </View>
@@ -167,12 +183,12 @@ const styles = StyleSheet.create({
     singleDotContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 5,
+        marginTop: 14,
         marginVertical: 4,
     },
     singleDot: {
-        width: 8,
-        height: 8,
+        width: 48,
+        height: 6,
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
         borderRadius: 100,
         marginHorizontal: 'auto'
@@ -231,16 +247,41 @@ const styles = StyleSheet.create({
         marginLeft: -20,
         borderRadius: 100,
     },
-    moreTeamDotsContainer: {
+    commentButton: {
         flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+        backgroundColor: '#482CA5',
+        marginRight: 10,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 10,
     },
-    moreTeamDot: {
-        width: 6,
-        height: 6,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        borderRadius: 100,
-        marginLeft: 4
+    fileButton: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+        backgroundColor: '#482CA5',
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 10,
     },
 });
 
-export default ProjectDetail;
+const mapStateToProps = state => {
+    return {
+        comments: state.projectReducer.comments,
+        files: state.projectReducer.files,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getAllProjectComments: (projectID) => dispatch(getAllProjectComments(projectID)),
+        getAllProjectFiles: (projectID) => dispatch(getAllProjectFiles(projectID)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail);

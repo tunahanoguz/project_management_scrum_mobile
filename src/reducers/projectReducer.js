@@ -8,6 +8,15 @@ import {
     GET_ALL_PROJECT_FILES_START,
     GET_ALL_PROJECT_FILES_SUCCESS,
     GET_ALL_PROJECT_FILES_FAILURE,
+    DELETE_PROJECT_FILE_START,
+    DELETE_PROJECT_FILE_SUCCESS,
+    DELETE_PROJECT_FILE_FAILURE,
+    DELETE_PROJECT_REQUEST,
+    DELETE_PROJECT_SUCCESS,
+    DELETE_PROJECT_FAILURE,
+    GET_ALL_PROJECT_COMMENTS_REQUEST,
+    GET_ALL_PROJECT_COMMENTS_SUCCESS, GET_ALL_PROJECT_COMMENTS_ERROR,
+    GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST, GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS, GET_ALL_PROJECT_CHILD_COMMENTS_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -15,8 +24,15 @@ const initialState = {
     project: {},
     files: [],
     file: {},
+    comments: [],
+    childComments: [],
     loading: false,
     error: null,
+    deleteProjectFileLoading: false,
+    deleteProjectFileSuccess: false,
+    deleteProjectFileFailure: "",
+    deleteProjectState: 3,
+    deleteProjectMessage: "",
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -31,6 +47,7 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 projects: action.projects,
                 loading: false,
+                error: null,
             };
         case GET_ALL_PROJECTS_FAILURE:
             return {
@@ -55,6 +72,18 @@ const projectReducer = (state = initialState, action) => {
                 error: action.error,
                 loading: false,
             };
+        case DELETE_PROJECT_REQUEST:
+            return {
+                ...state,
+            };
+        case DELETE_PROJECT_SUCCESS:
+            return {
+                ...state,
+            };
+        case DELETE_PROJECT_FAILURE:
+            return {
+                ...state,
+            };
         case GET_ALL_PROJECT_FILES_START:
             return {
                 ...state,
@@ -71,6 +100,57 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 error: action.error,
                 loading: false,
+            };
+        case DELETE_PROJECT_FILE_START:
+            return {
+                ...state,
+                deleteProjectFileLoading: true,
+            };
+        case DELETE_PROJECT_FILE_SUCCESS:
+            return {
+                ...state,
+                deleteProjectFileSuccess: true,
+                deleteProjectFileLoading: false,
+            };
+        case DELETE_PROJECT_FILE_FAILURE:
+            return {
+                ...state,
+                deleteProjectFileFailure: action.error,
+                deleteProjectFileLoading: false,
+            };
+        case GET_ALL_PROJECT_COMMENTS_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_ALL_PROJECT_COMMENTS_SUCCESS:
+            return {
+                ...state,
+                comments: action.comments,
+                loading: false,
+            };
+        case GET_ALL_PROJECT_COMMENTS_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.error,
+            };
+        case GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS:
+            return {
+                ...state,
+                childComments: action.comments,
+                loading: false,
+            };
+        case GET_ALL_PROJECT_CHILD_COMMENTS_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.error,
             };
         default:
             return state;

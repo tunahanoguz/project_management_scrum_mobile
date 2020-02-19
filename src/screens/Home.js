@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import {View, Text, FlatList, Animated, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, Animated, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import {withNavigation} from 'react-navigation';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
@@ -9,16 +9,21 @@ import Icon from "react-native-vector-icons/Feather";
 import {colors, fonts} from "../styles";
 import {getAllTasks} from "../actions/taskActions";
 import {getAllTeams} from "../actions/teamActions";
+import {getAllProjects} from "../actions/projectActions";
 
 const Home = (props) => {
     const [isOpenAbsoluteButtons, setIsOpenAbsoluteButtons] = useState(false);
     const [animatedValueFirst, setAnimatedValueFirst] = useState(new Animated.Value(0));
     const [animatedValueSecond, setAnimatedValueSecond] = useState(new Animated.Value(0));
     const [animatedValueThird, setAnimatedValueThird] = useState(new Animated.Value(0));
+    const [teamIDsValue, setTeamIDsValue] = useState([]);
+    const [isProjectsExist, setIsProjectsExist] = useState(false);
     const dispatch = useDispatch();
     const authState = useSelector(state => state.authReducer.authState);
     const user = useSelector(state => state.authReducer.user);
     const tasks = useSelector(state => state.taskReducer.tasks);
+    const teamIDs = useSelector(state => state.teamReducer.teamIDs);
+    const projects = useSelector(state => state.projectReducer.projects);
 
     useEffect(() => {
         changeNavigationBarColor('#3f38dd');
@@ -26,34 +31,16 @@ const Home = (props) => {
         dispatch(getAllTeams(user.uid));
     }, []);
 
-    const projectDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...";
-    const projects = [
-        {
-            id: 1,
-            name: 'e-commerce app design',
-            description: projectDescription,
-        },
-        {
-            id: 2,
-            name: 'e-commerce app design',
-            description: projectDescription,
-        },
-        {
-            id: 3,
-            name: 'e-commerce app design',
-            description: projectDescription,
-        },
-        {
-            id: 4,
-            name: 'e-commerce app design',
-            description: projectDescription,
-        },
-        {
-            id: 5,
-            name: 'e-commerce app design',
-            description: projectDescription,
-        },
-    ];
+    useEffect(() => {
+        setTeamIDsValue(teamIDs);
+    });
+
+    useEffect(() => {
+        if (teamIDs.length !== 0){
+            setIsProjectsExist(true);
+            dispatch(getAllProjects(teamIDs));
+        }
+    }, [teamIDsValue]);
 
     const projectContainer = () => (
         <View style={{marginRight: -30}}>
@@ -68,8 +55,7 @@ const Home = (props) => {
                         color = "#024630";
                     }
 
-                    return <ProjectCard key={item.id} id={item.id} name={item.name} description={item.description}
-                                        color={color}/>;
+                    return <ProjectCard project={item} color={color}/>;
                 }}/>
         </View>
     );
@@ -126,7 +112,7 @@ const Home = (props) => {
                 const title = task.title;
                 const titleLength = title.length;
 
-                if (titleLength > 28){
+                if (titleLength > 28) {
                     return title.substring(0, 30) + "...";
                 } else {
                     return title;
@@ -139,8 +125,16 @@ const Home = (props) => {
                     // borderLeftWidth: 10,
                     // borderLeftColor: priorityDotColor(task.priority)
                 }} onPress={() => goToTaskDetail(task)}>
-                    <View style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: colors[0], marginRight: 10, borderRadius: 20}}>
-                        <Icon name={colors[2]} size={20} color='rgba(255, 255, 255, 0.8)' />
+                    <View style={{
+                        width: 50,
+                        height: 50,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: colors[0],
+                        marginRight: 10,
+                        borderRadius: 20
+                    }}>
+                        <Icon name={colors[2]} size={20} color='rgba(255, 255, 255, 0.8)'/>
                     </View>
                     <View>
                         <View style={styles.taskTitleContainer}>
@@ -172,29 +166,39 @@ const Home = (props) => {
                 <TopBar isBack={false} title="Anasayfa" profilePhoto={user.photoURL}/>
                 <View style={styles.container}>
                     <Text style={fonts.title}>Son Projeler</Text>
-                    {projectContainer()}
+                    {isProjectsExist ? projectContainer() : <ActivityIndicator size='large'/>}
                     <View style={styles.space}/>
                     <Text style={fonts.title}>Yaklaşan İşler</Text>
                     {jobsContainer()}
                 </View>
 
-                <AnimatedTouchable style={[absoluteButtonStyle(colors.orange), {bottom: 10, transform: [{translateY: animatedValueFirst}], alignSelf: 'flex-end'}]}
+                <AnimatedTouchable style={[absoluteButtonStyle(colors.orange), {
+                    bottom: 10,
+                    transform: [{translateY: animatedValueFirst}],
+                    alignSelf: 'flex-end'
+                }]}
                                    activeOpacity={0.6}
                                    onPress={() => goToScreen('CreateProject')}>
                     <Icon name='briefcase' size={24} color='white'/>
                 </AnimatedTouchable>
-                <AnimatedTouchable style={[absoluteButtonStyle(colors.darkGreen), {bottom: 10, transform: [{translateY: animatedValueSecond}]}]}
+                <AnimatedTouchable style={[absoluteButtonStyle(colors.darkGreen), {
+                    bottom: 10,
+                    transform: [{translateY: animatedValueSecond}]
+                }]}
                                    activeOpacity={0.6}
                                    onPress={() => goToScreen('CreateTeam')}>
                     <Icon name='users' size={20} color='white'/>
                 </AnimatedTouchable>
-                <AnimatedTouchable style={[absoluteButtonStyle(colors.yellow), {bottom: 10, transform: [{translateY: animatedValueThird}]}]}
+                <AnimatedTouchable style={[absoluteButtonStyle(colors.yellow), {
+                    bottom: 10,
+                    transform: [{translateY: animatedValueThird}]
+                }]}
                                    activeOpacity={0.6} onPress={() => alert("asd")}>
                     <Icon name='plus' size={24} color='white'/>
                 </AnimatedTouchable>
                 <TouchableOpacity style={[absoluteButtonStyle(colors.purple), {bottom: 10,}]} activeOpacity={0.6}
                                   onPress={() => absoluteButtonsAnimate()}>
-                    <Icon name='plus' size={24} color={colors.orange}/>
+                    <Icon name='plus' size={24} color='white'/>
                 </TouchableOpacity>
             </Fragment>
         );

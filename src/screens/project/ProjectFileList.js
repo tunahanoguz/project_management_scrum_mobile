@@ -1,16 +1,20 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
 import Container from "../../components/Container";
 import TopBar from "../../components/TopBar";
-import Icon from "react-native-vector-icons/Feather";
 import {colors, fonts} from "../../styles";
 import ProjectFileCard from "../../components/cards/ProjectFileCard";
 import AbsoluteButton from "../../components/buttons/AbsoluteButton";
-import {getAllProjectFiles, getAllProjects} from "../../actions/projectActions";
+import {getAllProjectFiles} from "../../actions/projectActions";
 import {connect} from "react-redux";
+import {ActivityIndicator} from "react-native-paper";
 
 class ProjectFileList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
     componentDidMount() {
         const projectID = this.props.navigation.getParam('projectID', "");
         this.props.getAllProjectFiles(projectID);
@@ -22,9 +26,19 @@ class ProjectFileList extends Component {
     };
 
     listOfFiles = () => {
-        return (
-            <FlatList data={this.props.files} renderItem={({item}) => <ProjectFileCard file={item}/>} />
-        );
+        const {loading, error, files} = this.props;
+        const projectID = this.props.navigation.getParam('projectID', "");
+        if (loading){
+            return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator size='large'/></View>;
+        } else if (error !== null){
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text style={fonts.mediumText}>{error}</Text></View>
+            );
+        } else {
+            return (
+                <FlatList data={files} renderItem={({item}) => <ProjectFileCard file={item} projectID={projectID}/>} />
+            );
+        }
     };
 
     render(){
@@ -47,6 +61,7 @@ const mapStateToProps = state => {
         loading: state.projectReducer.loading,
         error: state.projectReducer.error,
         files: state.projectReducer.files,
+        deleteProjectFileSuccess: state.projectReducer.deleteProjectFileSuccess,
     };
 };
 

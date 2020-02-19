@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Modal, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from "react-native-vector-icons/Feather";
 import {withNavigation} from 'react-navigation';
@@ -23,7 +23,7 @@ class ProjectListCard extends Component {
     };
 
     render(){
-        const {name, startDate} = this.props.project;
+        const {id, name, startDate} = this.props.project;
         return (
             <View style={styles.projectCard}>
                 <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center',}} onPress={() => this.goToProjectDetail()}>
@@ -41,7 +41,7 @@ class ProjectListCard extends Component {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.props.action()}>
+                <TouchableOpacity onPress={() => this.props.action(id)}>
                     <Icon name='more-vertical' size={24} />
                 </TouchableOpacity>
             </View>
@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 30,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.lightGray,
     },
     projectOrder: {
         justifyContent: 'center',

@@ -30,6 +30,7 @@ import ProjectList from "./src/screens/project/ProjectList";
 import ProjectCommentList from "./src/screens/project/ProjectCommentList";
 import ProjectFileList from "./src/screens/project/ProjectFileList";
 import ProjectFileUpload from "./src/screens/project/ProjectFileUpload";
+import ProjectSendComment from "./src/screens/project/ProjectSendComment";
 
 const stackNavigator = createStackNavigator(
     {
@@ -87,6 +88,7 @@ const projectNavigator = createStackNavigator(
         ProjectAllTasks: ProjectAllTasks,
         TaskDetail: TaskDetail,
         EditTask: EditTask,
+        ProjectSendComment: ProjectSendComment,
     },
     {
         initialRouteName: 'ProjectList',
