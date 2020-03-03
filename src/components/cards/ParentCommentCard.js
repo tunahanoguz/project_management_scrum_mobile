@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
-import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
 import Icon from "react-native-vector-icons/Feather";
-import {colors, fonts} from "../../styles";
+import {colors, Container, DirectionContainer, Divider, fonts, Text} from "../../styles";
 import {connect} from "react-redux";
 import {getUserById} from "../../actions/authActions";
 import ChildCommentCard from "./ChildCommentCard";
 import firestore from '@react-native-firebase/firestore';
+import moment from "moment";
+import 'moment/locale/tr';
+import styled from 'styled-components';
 
 class ParentCommentCard extends Component {
     constructor(props) {
@@ -17,8 +20,9 @@ class ParentCommentCard extends Component {
             childComments: [],
         };
     }
+
     componentDidMount() {
-        const {id, userID} = this.props.comment;
+        const {userID} = this.props.comment;
         this.props.getUserById(userID);
         this.getChildComments();
     }
@@ -49,8 +53,13 @@ class ParentCommentCard extends Component {
         );
     };
 
+    renderDate = (date) => {
+        moment.locale('tr-TR');
+        return moment(date).startOf('hour').fromNow();
+    };
+
     render(){
-        const {comment} = this.props.comment;
+        const {comment, createdAt} = this.props.comment;
         const {photoURL, fullName} = this.props.foundUser;
 
         return (

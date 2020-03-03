@@ -7,12 +7,8 @@ import Divider from "../Divider";
 import {fonts} from "../../styles";
 
 class ProjectCard extends Component {
-    goToProjectDetail = () => {
-        this.props.navigation.navigate("ProjectDetail", {project: this.props.project});
-    };
-
-    goToAllTasks = () => {
-        this.props.navigation.navigate("ProjectAllTasks");
+    goToProjectDetail = (project) => {
+        this.props.navigation.navigate("ProjectDetail", {project});
     };
 
     render(){
@@ -24,7 +20,7 @@ class ProjectCard extends Component {
                 <Text style={styles.projectNameTitle}>{project.name}</Text>
                 <View style={{height: 3, backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 100,}}/>
                 <Divider height={10} />
-                <TouchableOpacity onPress={() => this.goToProjectDetail()}>
+                <TouchableOpacity onPress={() => this.goToProjectDetail(project)}>
                     <Text style={styles.textButton}>İNCELE</Text>
                 </TouchableOpacity>
             </View>

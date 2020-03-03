@@ -10,7 +10,7 @@ import RoundedButton from "../../components/buttons/RoundedButton";
 import {colors, fonts} from "../../styles";
 import storage from "@react-native-firebase/storage";
 import uuid from "uuid";
-import Input from "../../components/form/Input";
+// import Input from "../../components/form/Input";
 import {fileValidations} from "../../validations";
 import validate from "validate.js";
 import {withNavigation} from 'react-navigation';
@@ -47,7 +47,6 @@ class ProjectFileUpload extends Component {
     handleSubmit = (fileName, fileURL, props) => {
         Keyboard.dismiss();
         const projectID = this.props.navigation.getParam('projectID', "");
-        console.log(projectID);
 
         if (fileURL !== ""){
             this.uploadFile(fileName, fileURL, props, projectID)
@@ -120,9 +119,8 @@ class ProjectFileUpload extends Component {
                 <TopBar isBack={true}/>
 
                 <InnerContainer>
-                    <Input iconName='file' value={fileName} placeholder="Dosya adı" isValid={this.validateFileName} errorMessage={fileNameError === undefined ? "" : fileNameError} name='fileName' setStateFunc={this.setValue}/>
-                    {console.log(fileNameError)}
-                    {console.log(this.state)}
+                    {/*<Input iconName='file' value={fileName} placeholder="Dosya adı" isValid={this.validateFileName} errorMessage={fileNameError === undefined ? "" : fileNameError} name='fileName' setStateFunc={this.setValue}/>*/}
+
                     <TouchableOpacity onPress={() => this.openFilePicker()} style={buttonStyle}>
                         <Text style={textStyle}>Bir dosya seçin</Text>
                     </TouchableOpacity>

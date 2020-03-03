@@ -8,9 +8,10 @@ import Icon from "react-native-vector-icons/Feather";
 
 class AddedUserCard extends Component {
     render() {
-        const {photoURL, fullName, role} = this.props.user;
+        const {user, action} = this.props;
+        const {photoURL, fullName, role} = user;
         return (
-            <TouchableOpacity style={styles.cardStyle} onPress={() => this.props.action(this.props.user)}>
+            <TouchableOpacity style={styles.cardStyle} onPress={() => action(user)}>
                 <ProfilePicture picture={photoURL} size={60} iconColor='white' />
                 <Divider height={10}/>
                 <Text style={styles.text}>{fullName}</Text>

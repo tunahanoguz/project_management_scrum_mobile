@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">project_management_scrum_mobile</string>
+    <string name="splash_title">Scrum Proje Yönetimi</string>
 </resources>

@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Image, Text, StyleSheet, Alert} from 'react-native';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import TopBar from "../../components/TopBar";
 import BlockButton from "../../components/buttons/BlockButton";
-import {fonts} from "../../styles";
+import {fonts, sizes, Title} from "../../styles";
 import Divider from "../../components/Divider";
 import {withNavigation} from 'react-navigation';
+import changePasswordImage from '../../../assets/images/change-password.png';
+import Button from "../../components/buttons/Button";
 
 class ChangePasswordFirstScreen extends Component {
 
@@ -31,10 +33,18 @@ class ChangePasswordFirstScreen extends Component {
                 <TopBar isBack={true}/>
 
                 <View style={styles.innerContainer}>
-                    <Text style={fonts.title}>Şifreyi Değiştir</Text>
-                    <Divider height={10}/>
-                    <BlockButton color="green" icon="mail" text="Onay maili gönder"
-                                 pressFunc={this.sendEmail}/>
+                    <Title>Şifreyi Değiştir</Title>
+
+                    {/*<Divider height={20}/>*/}
+
+                    <Image source={changePasswordImage} style={{width: sizes.deviceWidth, height: '50%', alignSelf: 'center',}} resizeMethod='resize' />
+
+                    <Divider height={20}/>
+
+                    <Button action={this.sendEmail} color='purple' text="📮 ONAY MAİLİ GÖNDER" />
+
+                    {/*<BlockButton color="green" icon="mail" text="Onay maili gönder"*/}
+                    {/*             pressFunc={this.sendEmail}/>*/}
                 </View>
             </View>
         );

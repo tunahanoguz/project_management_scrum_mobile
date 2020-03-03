@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {TouchableOpacity, StyleSheet, Animated} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from "react-native-vector-icons/Feather";
-import {colors} from "../../styles";
 
 class AbsoluteButton extends Component {
     buttonStyle = {
@@ -12,17 +11,18 @@ class AbsoluteButton extends Component {
     };
 
     render() {
-        if (this.props.animated) {
+        const {animated, icon, iconColor, pressFunc} = this.props;
+        if (animated) {
             return (
-                <TouchableOpacity style={this.buttonStyle} onPress={() => this.props.pressFunc()} activeOpacity={0.8}>
-                    <Icon name={this.props.icon} size={20} color={this.props.iconColor}/>
+                <TouchableOpacity style={this.buttonStyle} onPress={() => pressFunc()} activeOpacity={0.8}>
+                    <Icon name={icon} size={20} color={iconColor}/>
                 </TouchableOpacity>
             );
         } else {
             const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
             return (
-                <AnimatedTouchableOpacity style={this.buttonStyle} onPress={() => this.props.pressFunc()} activeOpacity={0.8}>
-                    <Icon name={this.props.icon} size={20} color={this.props.iconColor}/>
+                <AnimatedTouchableOpacity style={this.buttonStyle} onPress={() => pressFunc()} activeOpacity={0.8}>
+                    <Icon name={icon} size={20} color={iconColor}/>
                 </AnimatedTouchableOpacity>
             );
         }

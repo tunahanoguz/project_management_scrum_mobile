@@ -18,6 +18,7 @@ import {
 } from "./types";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const getUser = () => dispatch => {
     auth().onAuthStateChanged(function (user) {
@@ -31,10 +32,13 @@ export const getUser = () => dispatch => {
 
 export const getUserById = (userID) => dispatch => {
     dispatch({type: GET_USER_BY_ID_START});
-    firestore().collection('users').where('id', '==', userID).get()
-        .then(snapshot => {
-            let foundUser = {};
-            snapshot.forEach(doc => foundUser = doc.data());
+
+    firestore().collection('users').doc(userID).get()
+        .then(doc => {
+            let foundUser = {
+                id: doc.id,
+                ...doc.data(),
+            };
 
             dispatch({type: GET_USER_BY_ID_SUCCESS, foundUser: foundUser});
         })
@@ -46,8 +50,10 @@ export const getAllUsers = () => dispatch => {
     firestore().collection('users').get()
         .then(snapshot => {
             snapshot.forEach(doc => {
-                const userData = doc.data();
-                const user = Object.assign(userData);
+                const user = {
+                    id: doc.id,
+                    ...doc.data(),
+                };
 
                 users.push(user);
             });
@@ -72,8 +78,7 @@ export const register = (fullName, email, password) => dispatch => {
             newUser.updateProfile({
                 displayName: fullName
             }).then(() => {
-                firestore().collection('users').add({
-                    id: newUser.uid,
+                firestore().collection('users').doc(newUser.uid).set({
                     fullName: fullName,
                     email: newUser.email,
                     photoURL: "",
@@ -99,13 +104,30 @@ export const changeUserFullName = fullName => dispatch => {
 };
 
 export const changeProfilePhoto = photoURL => dispatch => {
+    console.log("changeProfilePhoto'ya girildi.");
     const currentUser = auth().currentUser;
     currentUser.updateProfile({
         photoURL: photoURL,
     })
         .then(() => {
-            firestore().collection('users').where('userID', '==', currentUser.uid).get()
-                .then(() => dispatch(getUser()))
-                .catch(() => dispatch({type: UPDATE_PP_FAILURE, error: "Profil fotoğrafınız değiştirilemedi."}));
+            console.log("updateProfile başarılı.");
+            const userID = currentUser.uid;
+            const userRef = firestore().collection('users');
+            const userDoc = userRef.doc(userID);
+            userDoc.update({
+                photoURL
+            })
+                .then(() => {
+                    console.log("update başarılı.");
+                    dispatch(getUser());
+                })
+                .catch(() => {
+                    console.log("update başarısız.");
+                    dispatch({type: UPDATE_PP_FAILURE, error: "Profil fotoğrafınız değiştirilemedi."})
+                });
+        })
+        .catch(() => {
+            console.log("updateProfile başarısız.");
+            dispatch({type: UPDATE_PP_FAILURE, error: "Profil fotoğrafınız değiştirilemedi."})
         });
 };

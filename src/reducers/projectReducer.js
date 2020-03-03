@@ -15,19 +15,34 @@ import {
     DELETE_PROJECT_SUCCESS,
     DELETE_PROJECT_FAILURE,
     GET_ALL_PROJECT_COMMENTS_REQUEST,
-    GET_ALL_PROJECT_COMMENTS_SUCCESS, GET_ALL_PROJECT_COMMENTS_ERROR,
-    GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST, GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS, GET_ALL_PROJECT_CHILD_COMMENTS_ERROR,
+    GET_ALL_PROJECT_COMMENTS_SUCCESS,
+    GET_ALL_PROJECT_COMMENTS_ERROR,
+    GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST,
+    GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS,
+    GET_ALL_PROJECT_CHILD_COMMENTS_ERROR,
+    GET_ALL_PROJECTS_FOR_HOME_START,
+    GET_ALL_PROJECTS_FOR_HOME_SUCCESS,
+    GET_ALL_PROJECTS_FOR_HOME_FAILURE,
+    GET_PROJECTS_FOR_TEAM_START,
+    GET_PROJECTS_FOR_TEAM_SUCCESS,
+    GET_PROJECTS_FOR_TEAM_FAILURE,
+    GET_TASK_REPLY_COMMENTS_START,
+    GET_TASK_REPLY_COMMENTS_SUCCESS,
+    GET_TASK_REPLY_COMMENTS_FAILURE,
+    GET_PROJECT_REPLY_COMMENTS_START, GET_PROJECT_REPLY_COMMENTS_SUCCESS, GET_PROJECT_REPLY_COMMENTS_FAILURE,
 } from "../actions/types";
 
 const initialState = {
     projects: [],
+    homeProjects: [],
+    projectIDs: [],
     project: {},
     files: [],
     file: {},
     comments: [],
-    childComments: [],
+    replyComments: [],
     loading: false,
-    error: null,
+    error: "",
     deleteProjectFileLoading: false,
     deleteProjectFileSuccess: false,
     deleteProjectFileFailure: "",
@@ -46,10 +61,47 @@ const projectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 projects: action.projects,
+                projectIDs: action.projectIDs,
                 loading: false,
-                error: null,
+                error: "",
             };
         case GET_ALL_PROJECTS_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_ALL_PROJECTS_FOR_HOME_START:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_ALL_PROJECTS_FOR_HOME_SUCCESS:
+            return {
+                ...state,
+                homeProjects: action.projects,
+                loading: false,
+                error: "",
+            };
+        case GET_ALL_PROJECTS_FOR_HOME_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_PROJECTS_FOR_TEAM_START:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_PROJECTS_FOR_TEAM_SUCCESS:
+            return {
+                ...state,
+                projects: action.projects,
+                loading: false,
+                error: "",
+            };
+        case GET_PROJECTS_FOR_TEAM_FAILURE:
             return {
                 ...state,
                 error: action.error,
@@ -135,22 +187,24 @@ const projectReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.error,
             };
-        case GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST:
+        case GET_PROJECT_REPLY_COMMENTS_START:
             return {
                 ...state,
                 loading: true,
+                error: "",
             };
-        case GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS:
+        case GET_PROJECT_REPLY_COMMENTS_SUCCESS:
             return {
                 ...state,
-                childComments: action.comments,
+                replyComments: action.replyComments,
                 loading: false,
+                error: "",
             };
-        case GET_ALL_PROJECT_CHILD_COMMENTS_ERROR:
+        case GET_PROJECT_REPLY_COMMENTS_FAILURE:
             return {
                 ...state,
-                loading: false,
                 error: action.error,
+                loading: false,
             };
         default:
             return state;

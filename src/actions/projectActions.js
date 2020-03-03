@@ -27,6 +27,21 @@ import {
     GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST,
     GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS,
     GET_ALL_PROJECT_CHILD_COMMENTS_ERROR,
+    GET_ALL_PROJECTS_FOR_HOME_START,
+    GET_ALL_PROJECTS_FOR_HOME_SUCCESS,
+    GET_ALL_PROJECTS_FOR_HOME_FAILURE,
+    GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_START,
+    GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_SUCCESS,
+    GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_ERROR,
+    GET_PROJECTS_FOR_TEAM_START,
+    GET_PROJECTS_FOR_TEAM_SUCCESS,
+    GET_PROJECTS_FOR_TEAM_FAILURE,
+    GET_TASK_REPLY_COMMENTS_START,
+    GET_TASK_REPLY_COMMENTS_FAILURE,
+    GET_TASK_REPLY_COMMENTS_SUCCESS,
+    GET_PROJECT_REPLY_COMMENTS_START,
+    GET_PROJECT_REPLY_COMMENTS_SUCCESS,
+    GET_PROJECT_REPLY_COMMENTS_FAILURE,
 } from './types';
 
 export const getAllProjects = (teamIDs) => dispatch => {
@@ -39,6 +54,7 @@ export const getAllProjects = (teamIDs) => dispatch => {
             }
 
             let projects = [];
+            let projectIDs = [];
             snapshot.forEach(doc => {
                 const id = doc.id;
                 const projectData = doc.data();
@@ -48,19 +64,19 @@ export const getAllProjects = (teamIDs) => dispatch => {
                 };
 
                 projects.push(project);
+                projectIDs.push(project.id);
             });
 
-            dispatch({type: GET_ALL_PROJECTS_SUCCESS, projects});
+            dispatch({type: GET_ALL_PROJECTS_SUCCESS, projects, projectIDs});
         })
-        .catch((err) => {
-            console.log(err);
-            dispatch({type: GET_ALL_PROJECTS_FAILURE, error: "Projeler getirilemedi."});
-        });
+        .catch(() => dispatch({type: GET_ALL_PROJECTS_FAILURE, error: "Projeler getirilemedi."}));
 };
 
 export const getProjectsForHomeScreen = (teamIDs) => dispatch => {
+    dispatch({type: GET_ALL_PROJECTS_FOR_HOME_START});
+
     const projectRef = firestore().collection('projects');
-    const query = projectRef.where('teamID', 'in', teamIDs).orderBy('createdAt', 'desc').limit(5);
+    const query = projectRef.where('teamID', 'in', teamIDs).orderBy('createdAt', 'desc').limit(3);
     query.get()
         .then(snapshot => {
             if (snapshot.empty)
@@ -72,20 +88,42 @@ export const getProjectsForHomeScreen = (teamIDs) => dispatch => {
                 projects.push(project);
             });
 
-            console.log('Success!');
+            dispatch({type: GET_ALL_PROJECTS_FOR_HOME_SUCCESS, projects});
         })
-        .catch(() => console.log('Failure!'));
+        .catch(() => dispatch({type: GET_ALL_PROJECTS_FOR_HOME_FAILURE, error: "Projeler getirilemedi."}));
+};
+
+export const getProjectsForTeam = (teamID) => dispatch => {
+    dispatch({type: GET_PROJECTS_FOR_TEAM_START});
+
+    const projectRef = firestore().collection('projects');
+    const query = projectRef.where('teamID', '==', teamID).orderBy('createdAt', 'desc');
+    query.get()
+        .then(snapshot => {
+            if (snapshot.isEmpty){
+                dispatch({type: GET_PROJECTS_FOR_TEAM_FAILURE, error: "Bu takıma ait hiç proje yok."});
+            }
+
+            let projects = [];
+            snapshot.forEach(doc => {
+                const project = {id: doc.id, ...doc.data()};
+                projects.push(project);
+            });
+
+            dispatch({type: GET_PROJECTS_FOR_TEAM_SUCCESS, projects});
+        })
+        .catch(() => dispatch({type: GET_PROJECTS_FOR_TEAM_FAILURE, error: "Projeler getirilemedi."}));
 };
 
 export const getSingleProject = (projectID) => dispatch => {
     dispatch({type: GET_SINGLE_PROJECT_START});
-    firestore().collection('projects').where('id', '==', projectID).get()
-        .then(snapshot => {
+    firestore().collection('projects').doc(projectID).get()
+        .then(doc => {
             const project = {
                 id: doc.id,
                 ...doc.data(),
             };
-            snapshot.forEach(doc => dispatch({type: GET_SINGLE_PROJECT_SUCCESS, project}));
+            dispatch({type: GET_SINGLE_PROJECT_SUCCESS, project})
         })
         .catch(() => dispatch({type: GET_SINGLE_PROJECT_FAILURE, error: "Proje getirilemedi."}));
 };
@@ -107,8 +145,6 @@ export const createProject = (name, description, notes, createdAt, startDate, fi
 
 export const deleteProject = (teamIDs, projectID) => dispatch => {
     dispatch({type: DELETE_PROJECT_REQUEST});
-
-    console.log("Deleted project id: " + projectID);
 
     const projectRef = firestore().collection('projects');
     projectRef.doc(projectID).delete()
@@ -144,7 +180,7 @@ export const createProjectFile = (state, projectID, file) => dispatch => {
     const {fileName, downloadURL, size, contentType, projectID} = file;
     if (state === true) {
         firestore().collection('projectFiles').add({
-            fileName,
+            name: fileName,
             downloadURL,
             size,
             contentType,
@@ -155,7 +191,6 @@ export const createProjectFile = (state, projectID, file) => dispatch => {
     } else {
         dispatch({type: CREATE_PROJECT_FAILURE, error: "Dosya yüklenirken bir hata oluştu."});
     }
-
 };
 
 export const getAllProjectFiles = (projectID) => dispatch => {
@@ -176,8 +211,8 @@ export const getAllProjectFiles = (projectID) => dispatch => {
                 };
 
                 files.push(file);
+
                 dispatch({type: GET_ALL_PROJECT_FILES_SUCCESS, files});
-                console.log(file);
             });
         })
         .catch(() => dispatch({type: GET_ALL_PROJECT_FILES_FAILURE, error: "Projeye ait dosyalar getirilemedi."}));
@@ -192,14 +227,15 @@ export const deleteProjectFile = (projectID, projectFileID) => dispatch => {
         .catch(() => dispatch({type: DELETE_PROJECT_FILE_FAILURE}));
 };
 
-export const sendProjectParentComment = (projectID, userID, comment, parentCommentID) => dispatch => {
+export const createProjectComment = (comment, parentCommentID, projectID, userID) => dispatch => {
     const projectCommentRef = firestore().collection('projectComments');
+    const nowDate = new Date();
     projectCommentRef.add({
-        projectID,
-        userID,
         comment,
+        createdAt: nowDate,
         parentCommentID,
-        createdAt: new Date(),
+        projectID,
+        userID
     })
         .then(() => dispatch(getAllProjectComments(projectID)))
         .catch(() => dispatch({type: SEND_PARENT_MESSAGE_FAILURE}));
@@ -230,14 +266,43 @@ export const getAllProjectComments = (projectID) => dispatch => {
         .catch(() => dispatch({type: GET_ALL_PROJECT_COMMENTS_ERROR, error: "Yorumlar getirilemedi."}));
 };
 
-export const getAllProjectParentComments = (projectID) => dispatch => {
-    dispatch({type: GET_ALL_PROJECT_COMMENTS_REQUEST});
+export const getProjectReplyComments = (parentCommentID) => dispatch => {
+    dispatch({type: GET_PROJECT_REPLY_COMMENTS_START});
 
-    const projectCommentRef = firestore().collection('projectComments');
-    projectCommentRef.where('projectID', '==', projectID).orderBy('createdAt', 'desc').get()
+    const taskCommentRef = firestore().collection('projectComments');
+    const queryTaskComment = taskCommentRef.where('parentCommentID', '==', parentCommentID).orderBy('createdAt', 'asc');
+    queryTaskComment.get()
         .then(snapshot => {
             if (snapshot.empty){
-                dispatch({type: GET_ALL_PROJECT_COMMENTS_ERROR, error: "Henüz hiç yorum yok."})
+                dispatch({type: GET_PROJECT_REPLY_COMMENTS_FAILURE, error: "Bu yoruma hiç cevap verilmemiş."});
+            } else {
+                let replyComments = [];
+                snapshot.forEach(doc => {
+                    const replyComment = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    replyComments.push(replyComment);
+                });
+
+                dispatch({type: GET_PROJECT_REPLY_COMMENTS_SUCCESS, replyComments});
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            dispatch({type: GET_PROJECT_REPLY_COMMENTS_FAILURE, error: "Bu yoruma ya hiç cevap gelmedi ya da cevaplar getirilemedi."})
+        });
+};
+
+export const getProjectParentCommentsForDetail = (projectID) => dispatch => {
+    dispatch({type: GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_START});
+
+    const projectCommentRef = firestore().collection('projectComments');
+    projectCommentRef.where('projectID', '==', projectID).orderBy('createdAt', 'desc').limit(4).get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                dispatch({type: GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_ERROR, error: "Henüz hiç yorum yok."})
             }
 
             let comments = [];
@@ -253,29 +318,7 @@ export const getAllProjectParentComments = (projectID) => dispatch => {
                 }
             });
 
-            dispatch({type: GET_ALL_PROJECT_COMMENTS_SUCCESS, comments});
+            dispatch({type: GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_SUCCESS, comments});
         })
-        .catch(() => dispatch({type: GET_ALL_PROJECT_COMMENTS_ERROR, error: "Yorumlar getirilemedi."}));
-};
-
-export const getAllChildComments = (parentCommentID) => dispatch => {
-    dispatch({type: GET_ALL_PROJECT_CHILD_COMMENTS_REQUEST});
-
-    const projectCommentRef = firestore().collection('projectComments');
-    projectCommentRef.where('parentCommentID', '==', parentCommentID).get()
-        .then(snapshot => {
-            let childComments = [];
-
-            snapshot.forEach(doc => {
-                const comment = {
-                    id: doc.id,
-                    ...doc.data(),
-                };
-
-                childComments.push(comment);
-            });
-
-            dispatch({type: GET_ALL_PROJECT_CHILD_COMMENTS_SUCCESS, childComments});
-        })
-        .catch(() => dispatch({type: GET_ALL_PROJECT_CHILD_COMMENTS_ERROR, error: "Yorumlar getirilemedi."}));
+        .catch(() => dispatch({type: GET_PROJECT_PARENT_COMMENTS_FOR_DETAIL_ERROR, error: "Yorumlar getirilemedi."}));
 };

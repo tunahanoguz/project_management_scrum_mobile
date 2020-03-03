@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
 import Icon from "react-native-vector-icons/Feather";
-import {colors, fonts} from "../../styles";
+import {fonts} from "../../styles";
 import {connect} from "react-redux";
 import {getUserById} from "../../actions/authActions";
 
 class ChildCommentCard extends Component {
     render(){
-        const {comment, userID} = this.props.comment;
+        const {comment} = this.props.comment;
         const {photoURL, fullName} = this.props.foundUser;
 
         return (

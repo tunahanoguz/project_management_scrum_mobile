@@ -3,45 +3,53 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from "react-native-vector-icons/Feather";
 import {withNavigation} from 'react-navigation';
-import {colors, fonts} from "../../styles";
+import {CardOrderContainer, CardOrderText, CardTitle, colors, fonts} from "../../styles";
 
 class ProjectListCard extends Component {
     projectName = "e-commerce application design project";
 
-    goToProjectDetail = () => {
-        this.props.navigation.navigate('ProjectDetail', {project: this.props.project});
+    goToProjectDetail = (project) => {
+        this.props.navigation.navigate('ProjectDetail', {project});
     };
 
     summaryProjectName = (projectName) => {
         const projectNameLength = projectName?.length;
 
-        if (projectNameLength > 14){
-            return projectName.substring(0, 14) + "...";
+        if (projectNameLength > 20){
+            return projectName.substring(0, 20) + "...";
         } else {
             return projectName;
         }
     };
 
     render(){
-        const {id, name, startDate} = this.props.project;
+        const {project, order, action} = this.props;
+        const {id, name, startDate} = project;
         return (
             <View style={styles.projectCard}>
-                <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center',}} onPress={() => this.goToProjectDetail()}>
-                    <View style={styles.projectOrder}>
-                        <Text style={styles.projectOrderText}>{this.props.order + 1}</Text>
-                    </View>
+                <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center',}} onPress={() => this.goToProjectDetail(project)}>
+                    {/*<View style={styles.projectOrder}>*/}
+                    {/*    <Text style={styles.projectOrderText}>{order + 1}</Text>*/}
+                    {/*</View>*/}
+
+                    <CardOrderContainer>
+                        <CardOrderText style={styles.projectOrderText}>{order + 1}</CardOrderText>
+                    </CardOrderContainer>
 
                     <View>
-                        <Text style={fonts.cardTitle}>{this.summaryProjectName(name)}</Text>
+                        <CardTitle>{this.summaryProjectName(name)}</CardTitle>
+                        {/*<Text style={fonts.cardTitle}>{this.summaryProjectName(name)}</Text>*/}
                         <View style={styles.projectDetail}>
-                            <Text style={fonts.normalText}>{startDate !== null ? "Başladı" : "Başlamadı"}</Text>
+                            <CardTitle light>{startDate !== null ? "Başladı" : "Başlamadı"}</CardTitle>
+                            {/*<Text style={fonts.normalText}>{startDate !== null ? "Başladı" : "Başlamadı"}</Text>*/}
                             <View style={{width: 5, height: 5, borderRadius: 100, backgroundColor: colors.gray, marginHorizontal: 8,}}/>
-                            <Text style={fonts.normalText}>37 Görev</Text>
+                            <CardTitle light>37 Görev</CardTitle>
+                            {/*<Text style={fonts.normalText}>37 Görev</Text>*/}
                         </View>
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.props.action(id)}>
+                <TouchableOpacity onPress={() => action(id)}>
                     <Icon name='more-vertical' size={24} />
                 </TouchableOpacity>
             </View>

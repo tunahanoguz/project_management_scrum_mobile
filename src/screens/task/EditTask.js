@@ -67,7 +67,8 @@ class EditTask extends Component {
     };
 
     render() {
-        const {id, title, description} = this.props.navigation.getParam('task', {});
+        // const {id, title, description} = this.props.navigation.getParam('task', {});
+        const {title, description, startDate, finishDate, priorityModalAnimatedValue} = this.state;
         return (
             <Container>
                 <TopBar isBack={true}/>
@@ -75,10 +76,10 @@ class EditTask extends Component {
                 <InnerContainer>
                     <Text style={fonts.title}>Görevi Düzenle</Text>
 
-                    <Input iconName='type' value={this.state.title} placeholder="Görev Adı" name='title'
+                    <Input iconName='type' value={title} placeholder="Görev Adı" name='title'
                            setStateFunc={this.setInputState} isValid={this.inputErrorControl}/>
 
-                    <Input iconName='type' value={this.state.description} placeholder="Görev Açıklaması"
+                    <Input iconName='type' value={description} placeholder="Görev Açıklaması"
                            name='description'
                            setStateFunc={this.setInputState} isValid={this.inputErrorControl}/>
 
@@ -94,11 +95,11 @@ class EditTask extends Component {
 
                     <DatePicker handleDateChange={this.setDate} name='startDate' text="Başlangıç Tarihi" />
                     <DatePicker handleDateChange={this.setDate} name='finishDate' text="Beklenen Bitiş Tarihi" />
-                    <Text>{this.state?.startDate?.toString()}</Text>
-                    <Text>{this.state?.finishDate?.toString()}</Text>
+                    <Text>{startDate?.toString()}</Text>
+                    <Text>{finishDate?.toString()}</Text>
                 </InnerContainer>
 
-                <FullScreenModal bottom={this.state.priorityModalAnimatedValue} toggleFunc={this.setIsPriorityModalOpen}>
+                <FullScreenModal bottom={priorityModalAnimatedValue} toggleFunc={this.setIsPriorityModalOpen}>
                     {this.priorityModalContainer()}
                 </FullScreenModal>
             </Container>

@@ -10,7 +10,6 @@ import ProjectDetail from "./src/screens/project/ProjectDetail";
 import ProjectNotes from "./src/screens/project/ProjectNotes";
 import ProjectDescription from "./src/screens/project/ProjectDescription";
 import ProjectMyTasks from "./src/screens/project/ProjectMyTasks";
-import ProjectOtherTasks from "./src/screens/project/ProjectOtherTasks";
 import MyProfile from "./src/screens/auth/MyProfile";
 import ChangePasswordFirstScreen from "./src/screens/auth/ChangePasswordFirstScreen";
 import ChangePasswordSecondScreen from "./src/screens/auth/ChangePasswordSecondScreen";
@@ -31,10 +30,29 @@ import ProjectCommentList from "./src/screens/project/ProjectCommentList";
 import ProjectFileList from "./src/screens/project/ProjectFileList";
 import ProjectFileUpload from "./src/screens/project/ProjectFileUpload";
 import ProjectSendComment from "./src/screens/project/ProjectSendComment";
+import CreateTask from "./src/screens/task/CreateTask";
+import CreateSprint from "./src/screens/sprint/CreateSprint";
+import SprintList from "./src/screens/sprint/SprintList";
+import EditSprint from "./src/screens/sprint/EditSprint";
+import SprintDetail from "./src/screens/sprint/SprintDetail";
+import MyTasks from "./src/screens/sprint/MyTasks";
+import TeamProjectsList from "./src/screens/team/TeamProjectsList";
+import ProjectTaskList from "./src/screens/task/ProjectTaskList";
+import TaskList from "./src/screens/task/TaskList";
+import CreateTaskComment from "./src/screens/task/CreateTaskComment";
+import TaskCommentList from "./src/screens/task/TaskCommentList";
+import TaskCommentDetail from "./src/screens/task/TaskCommentDetail";
+import TaskCommentReply from "./src/screens/task/TaskCommentReply";
+import ProjectCommentDetail from "./src/screens/project/ProjectCommentDetail";
+import CreateProjectComment from "./src/screens/project/CreateProjectComment";
+import ProjectCommentReply from "./src/screens/project/ProjectCommentReply";
+import CreateTaskFile from "./src/screens/task/CreateTaskFile";
+import TaskFileList from "./src/screens/task/TaskFileList";
+import StartTask from "./src/screens/task/StartTask";
 
 const stackNavigator = createStackNavigator(
     {
-        SplashScreen: {screen: SplashScreen},
+        // SplashScreen: {screen: SplashScreen},
         Home: {screen: Home},
         Register: {screen: Register},
         Login: {screen: Login},
@@ -45,25 +63,26 @@ const stackNavigator = createStackNavigator(
         EditProfile: EditProfile,
     },
     {
-        initialRouteName: 'SplashScreen',
+        initialRouteName: 'Home',
         headerMode: 'none',
     }
 );
 
-stackNavigator.navigationOptions = ({navigation}) => {
-    let tabBarVisible = true;
-    if (navigation.state.index === 0){
-        tabBarVisible = false;
-    }
-
-    return {tabBarVisible};
-};
+// stackNavigator.navigationOptions = ({navigation}) => {
+//     let tabBarVisible = true;
+//     if (navigation.state.index === 0){
+//         tabBarVisible = false;
+//     }
+//
+//     return {tabBarVisible};
+// };
 
 const teamNavigator = createStackNavigator(
     {
         TeamList: TeamList,
         TeamDetail: TeamDetail,
         TeamMembers: TeamMembers,
+        TeamProjectsList: TeamProjectsList,
         CreateTeam: CreateTeam,
         UserProfile: UserProfile,
     },
@@ -81,14 +100,31 @@ const projectNavigator = createStackNavigator(
         ProjectDescription: {screen: ProjectDescription},
         ProjectNotes: {screen: ProjectNotes},
         ProjectMyTasks: ProjectMyTasks,
-        ProjectOtherTasks: ProjectOtherTasks,
+        CreateProjectComment: CreateProjectComment,
         ProjectCommentList: ProjectCommentList,
+        ProjectCommentDetail: ProjectCommentDetail,
+        ProjectCommentReply: ProjectCommentReply,
         ProjectFileList: ProjectFileList,
         ProjectFileUpload: ProjectFileUpload,
         ProjectAllTasks: ProjectAllTasks,
+        ProjectTaskList: ProjectTaskList,
+        TaskList: TaskList,
+        CreateTask: CreateTask,
+        StartTask: StartTask,
+        CreateTaskFile: CreateTaskFile,
         TaskDetail: TaskDetail,
         EditTask: EditTask,
+        TaskFileList: TaskFileList,
+        TaskCommentList: TaskCommentList,
+        CreateTaskComment: CreateTaskComment,
+        TaskCommentDetail: TaskCommentDetail,
+        TaskCommentReply: TaskCommentReply,
         ProjectSendComment: ProjectSendComment,
+        CreateSprint: CreateSprint,
+        SprintList: SprintList,
+        EditSprint: EditSprint,
+        SprintDetail: SprintDetail,
+        MyTasks: MyTasks,
     },
     {
         initialRouteName: 'ProjectList',
@@ -124,10 +160,12 @@ const bottomBarNavigator = createMaterialBottomTabNavigator(
         },
     },
     {
-        activeColor: 'white',
+        activeColor: '#281C9D',
+        inactiveColor: '#A9ACB7',
         labeled: false,
         barStyle: {
-            backgroundColor: '#060518',
+            backgroundColor: 'white',
+            elevation: 30,
         },
     },
 );

@@ -1,0 +1,204 @@
+import firestore from '@react-native-firebase/firestore';
+import {
+    GET_ALL_SPRINTS_START,
+    GET_ALL_SPRINTS_SUCCESS,
+    GET_ALL_SPRINTS_FAILURE,
+    CREATE_SPRINT_START,
+    CREATE_SPRINT_SUCCESS,
+    CREATE_SPRINT_FAILURE,
+    EDIT_SPRINT_START,
+    EDIT_SPRINT_SUCCESS,
+    EDIT_SPRINT_FAILURE,
+    DELETE_SPRINT_START,
+    DELETE_SPRINT_SUCCESS,
+    DELETE_SPRINT_FAILURE,
+    FINISH_SPRINT_START,
+    FINISH_SPRINT_SUCCESS,
+    FINISH_SPRINT_FAILURE,
+    START_SPRINT_START,
+    START_SPRINT_SUCCESS,
+    START_SPRINT_FAILURE,
+    GET_SPRINTS_FOR_HOME_START,
+    GET_SPRINTS_FOR_HOME_SUCCESS,
+    GET_SPRINTS_FOR_HOME_FAILURE,
+    GET_SPRINTS_FOR_PROJECT_START,
+    GET_SPRINTS_FOR_PROJECT_SUCCESS,
+    GET_SPRINTS_FOR_PROJECT_FAILURE,
+    GET_SINGLE_SPRINT_START,
+    GET_SINGLE_SPRINT_SUCCESS, GET_SINGLE_SPRINT_FAILURE,
+} from "./types";
+
+export const getAllSprints = (projectID) => dispatch => {
+    dispatch({type: GET_ALL_SPRINTS_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const sprintQuery = sprintRef.where('projectID', '==', projectID);
+    sprintQuery.get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                dispatch({type: GET_ALL_SPRINTS_FAILURE, error: "Hiç Sprint yok."});
+            } else {
+                let sprints = [];
+                snapshot.forEach(doc => {
+                    const sprint = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    sprints.push(sprint);
+                });
+
+                dispatch({type: GET_ALL_SPRINTS_SUCCESS, sprints});
+            }
+        })
+        .catch(() => dispatch({type: GET_ALL_SPRINTS_FAILURE, error: "Sprint'ler getirilemedi."}));
+};
+
+export const getSprintsForProjectDetail = (projectID) => dispatch => {
+    dispatch({type: GET_SPRINTS_FOR_PROJECT_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const sprintQuery = sprintRef.where('projectID', '==', projectID).limit(3);
+    sprintQuery.get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                dispatch({type: GET_SPRINTS_FOR_PROJECT_FAILURE, error: "Hiç Sprint yok."});
+            } else {
+                let sprints = [];
+                snapshot.forEach(doc => {
+                    const sprint = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    sprints.push(sprint);
+                });
+
+                dispatch({type: GET_SPRINTS_FOR_PROJECT_SUCCESS, sprints});
+            }
+        })
+        .catch(() => dispatch({type: GET_SPRINTS_FOR_PROJECT_FAILURE, error: "Sprint'ler getirilemedi."}));
+};
+
+export const getSprintsForHomeScreen = (projectIDs) => dispatch => {
+    dispatch({type: GET_SPRINTS_FOR_HOME_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const sprintQuery = sprintRef.where('projectID', 'in', projectIDs).limit(3);
+    sprintQuery.get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                dispatch({type: GET_SPRINTS_FOR_HOME_FAILURE, error: "Hiç Sprint yok."});
+            } else {
+                let sprints = [];
+                snapshot.forEach(doc => {
+                    const sprint = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    sprints.push(sprint);
+                });
+
+                dispatch({type: GET_SPRINTS_FOR_HOME_SUCCESS, sprints});
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            dispatch({type: GET_SPRINTS_FOR_HOME_FAILURE, error: "Sprint'ler getirilemedi."});
+        });
+};
+
+export const getSingleSprint = (sprintID) => dispatch => {
+    dispatch({type: GET_SINGLE_SPRINT_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const sprintQuery = sprintRef.doc(sprintID);
+    sprintQuery.get()
+        .then(doc => {
+            const sprint = {
+                id: doc.id,
+                ...doc.data(),
+            };
+
+            dispatch({type: GET_SINGLE_SPRINT_SUCCESS, sprint})
+        })
+        .catch(() => dispatch({type: GET_SINGLE_SPRINT_FAILURE, error: "Sprint getirilemedi."}));
+};
+
+export const createSprint = (name, status, startDate, estimatedFinishDate, userID, projectID) => dispatch => {
+    dispatch({type: CREATE_SPRINT_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const nowDate = new Date();
+    sprintRef.add({
+        name,
+        status,
+        createdAt: nowDate,
+        startDate,
+        estimatedFinishDate,
+        finishDate: null,
+        createdBy: userID,
+        projectID,
+    })
+        .then(() => dispatch({type: CREATE_SPRINT_SUCCESS}))
+        .catch(() => dispatch({type: CREATE_SPRINT_FAILURE, error: "Sprint'ler getirilemedi."}));
+};
+
+export const startSprint = (sprintID) => dispatch => {
+    dispatch({type: START_SPRINT_START});
+    const sprintRef = firestore().collection('sprint');
+    const nowDate = new Date();
+    const sprintDoc = sprintRef.doc(sprintID);
+    sprintDoc.update({
+        status: 1,
+        startDate: nowDate,
+    })
+        .then(() => dispatch({type: START_SPRINT_SUCCESS}))
+        .catch(() => dispatch({type: START_SPRINT_FAILURE, error: "Sprint başlatılamadı."}));
+};
+
+export const finishSprint = (sprintID) => dispatch => {
+    dispatch({type: FINISH_SPRINT_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const nowDate = new Date();
+    const sprintDoc = sprintRef.doc(sprintID);
+    sprintDoc.update({
+        finishDate: nowDate,
+    })
+        .then(() => dispatch({type: FINISH_SPRINT_SUCCESS}))
+        .catch(() => dispatch({type: FINISH_SPRINT_FAILURE, error: "Sprint bitirilemedi."}));
+};
+
+export const editSprint = (projectID, sprintID, name, estimatedFinishDate) => dispatch => {
+    dispatch({type: EDIT_SPRINT_START});
+
+    const sprintRef = firestore().collection('sprint');
+    const sprintDoc = sprintRef.doc(sprintID);
+    sprintDoc.update({
+        name,
+        estimatedFinishDate,
+    })
+        .then(() => {
+            dispatch(getAllSprints(projectID));
+            dispatch({type: EDIT_SPRINT_SUCCESS});
+        })
+        .catch(() => dispatch({type: EDIT_SPRINT_FAILURE, error: "Sprint güncellenemedi."}));
+};
+
+export const deleteSprint = (projectID, sprintID) => dispatch => {
+    dispatch({type: DELETE_SPRINT_START});
+    console.log("projectID: " + projectID);
+    console.log("sprintID: " + sprintID);
+
+    const sprintRef = firestore().collection('sprint');
+    const sprintDoc = sprintRef.doc(sprintID);
+    sprintDoc.delete()
+        .then(() => {
+            console.log("Delete success");
+            dispatch(getAllSprints(projectID));
+            dispatch({type: DELETE_SPRINT_SUCCESS});
+        })
+        .catch(() => dispatch({type: DELETE_SPRINT_FAILURE, error: "Sprint güncellenemedi."}));
+};

@@ -201,7 +201,7 @@ class CreateTeam extends Component {
         this.setState({activeAddedMembersSlide: 0});
     };
 
-    renderFilteredUsersItem = ({item, index}) => {
+    renderFilteredUsersItem = ({item}) => {
         return (
             <FilteredUserCard user={item}
                               action={this.filteredUsersAction}
@@ -210,10 +210,11 @@ class CreateTeam extends Component {
     };
 
     filteredUsersList = () => {
+        const {filteredMembers, activeFilteredUsersSlide} = this.state;
         return (
             <SafeAreaView style={styles.usersListContainer}>
                 <Carousel
-                data={this.state.filteredMembers}
+                data={filteredMembers}
                 renderItem={this.renderFilteredUsersItem}
                 sliderWidth={sizes.deviceWidth}
                 sliderHeight={sizes.deviceHeight}
@@ -222,9 +223,8 @@ class CreateTeam extends Component {
                 />
 
                 <Pagination
-                    dotsLength={this.state.filteredMembers?.length}
-                    activeDotIndex={this.state.activeFilteredUsersSlide}
-                    // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                    dotsLength={filteredMembers?.length}
+                    activeDotIndex={activeFilteredUsersSlide}
                     dotStyle={{
                         width: 10,
                         height: 10,
@@ -232,9 +232,6 @@ class CreateTeam extends Component {
                         marginHorizontal: 8,
                         backgroundColor: 'rgba(0, 0, 0, 0.8)'
                     }}
-                    // inactiveDotStyle={{
-                    //     // Define styles for inactive dots here
-                    // }}
                     inactiveDotOpacity={0.4}
                     inactiveDotScale={0.6}
                 />
@@ -242,7 +239,7 @@ class CreateTeam extends Component {
         );
     };
 
-    renderAddedUsersItem = ({item, index}) => {
+    renderAddedUsersItem = ({item}) => {
         return (
             <AddedUserCard user={item}
                               action={this.addedMembersAction}/>
@@ -250,14 +247,11 @@ class CreateTeam extends Component {
     };
 
     addedMembersList = () => {
+        const {addedMembers, activeAddedMembersSlide} = this.state;
         return (
             <SafeAreaView style={styles.usersListContainer}>
-                {/*<FlatList data={this.state.addedMembers} numColumns={2}*/}
-                {/*          renderItem={({item}) => <AddedUserCard user={item} action={this.addedMembersAction}/>}*/}
-                {/*          keyExtractor={(item, index) => index.toString()}/>*/}
-
                 <Carousel
-                    data={this.state.addedMembers}
+                    data={addedMembers}
                     renderItem={this.renderAddedUsersItem}
                     sliderWidth={sizes.deviceWidth}
                     sliderHeight={sizes.deviceHeight}
@@ -266,9 +260,8 @@ class CreateTeam extends Component {
                 />
 
                 <Pagination
-                    dotsLength={this.state.addedMembers?.length}
-                    activeDotIndex={this.state.activeAddedMembersSlide}
-                    // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                    dotsLength={addedMembers?.length}
+                    activeDotIndex={activeAddedMembersSlide}
                     dotStyle={{
                         width: 10,
                         height: 10,
@@ -276,9 +269,6 @@ class CreateTeam extends Component {
                         marginHorizontal: 8,
                         backgroundColor: 'rgba(0, 0, 0, 0.8)'
                     }}
-                    // inactiveDotStyle={{
-                    //     // Define styles for inactive dots here
-                    // }}
                     inactiveDotOpacity={0.4}
                     inactiveDotScale={0.6}
                 />
@@ -324,17 +314,17 @@ class CreateTeam extends Component {
         this.setState(state => ({showAddedMembers: !state.showAddedMembers}));
     };
 
-    firstStepContainer = () => {
-        if (this.state.firstStep) {
+    firstStepContainer = ({firstStep, teamName, teamNameError, teamDescription, teamDescriptionError, searchValue, showAddedMembers}) => {
+        if (firstStep) {
             return (
                 <Fragment>
-                    <Input iconName='type' value={this.state.teamName} placeholder="Takım Adı" name='teamName'
+                    <Input iconName='type' value={teamName} placeholder="Takım Adı" name='teamName'
                            setStateFunc={this.setValue} isValid={this.validateTeamName}
-                           errorMessage={this.state.teamNameError}/>
-                    <Input iconName='align-left' value={this.state.teamDescription} placeholder="Takım Açıklaması"
+                           errorMessage={teamNameError}/>
+                    <Input iconName='align-left' value={teamDescription} placeholder="Takım Açıklaması"
                            name='teamDescription'
                            setStateFunc={this.setValue} isValid={this.validateTeamDescription}
-                           errorMessage={this.state.teamDescriptionError}/>
+                           errorMessage={teamDescriptionError}/>
 
                     <RoundedButton color='green' icon='arrow-right' pressFunc={() => this.handleSubmitFirstStep()}/>
                 </Fragment>
@@ -344,7 +334,7 @@ class CreateTeam extends Component {
                 <Fragment>
                     <View style={styles.searchActionAreaContainer}>
                         <View style={styles.searchActionAreaLeft}>
-                            <Input iconName='hash' value={this.state.searchValue} placeholder="Bir kullanıcı arayın"
+                            <Input iconName='hash' value={searchValue} placeholder="Bir kullanıcı arayın"
                                    isValid={this.inputErrorControl} name='searchValue' setStateFunc={this.setValue}
                                    errorMessage=""/>
                         </View>
@@ -359,7 +349,7 @@ class CreateTeam extends Component {
                                           onPress={() => this.toggleShowUsers()}>
                             <Icon name='eye' size={16} style={{marginRight: 8,}}/>
                             <Text
-                                style={fonts.mediumText}>{this.state.showAddedMembers ? "Arananları gör" : "Eklenenleri gör"}</Text>
+                                style={fonts.mediumText}>{showAddedMembers ? "Arananları gör" : "Eklenenleri gör"}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={[styles.showUsersButton, {flex: 0.5,}]}
@@ -371,9 +361,7 @@ class CreateTeam extends Component {
 
                     <Divider height={20}/>
 
-                    {this.state.showAddedMembers ? this.addedMembersList() : this.filteredUsersList()}
-
-                    {/*{console.log(Animated.divide(this.scrollX, sizes.deviceWidth))}*/}
+                    {showAddedMembers ? this.addedMembersList() : this.filteredUsersList()}
                 </Fragment>
             );
         }
@@ -391,6 +379,7 @@ class CreateTeam extends Component {
     // };
 
     render() {
+        const {firstStep, animatedValue} = this.state;
         return (
             <View style={styles.container}>
                 <TopBar isBack={true}/>
@@ -399,7 +388,7 @@ class CreateTeam extends Component {
                     <View style={styles.titleSection}>
                         <Text style={fonts.title}>Takım Oluştur</Text>
                         <View style={styles.rowContainer}>
-                            {!this.state.firstStep ? (
+                            {!firstStep ? (
                                 <TouchableOpacity style={styles.backButton} onPress={() => {
                                     this.setState({firstStep: true});
                                     this.runBackAnimated();
@@ -409,17 +398,17 @@ class CreateTeam extends Component {
                             ) : null}
 
                             <Text
-                                style={{color: 'rgba(0, 0, 0, 0.4)', ...fonts.title}}>{this.state.firstStep ? "1" : "2"}/2</Text>
+                                style={{color: 'rgba(0, 0, 0, 0.4)', ...fonts.title}}>{firstStep ? "1" : "2"}/2</Text>
                         </View>
                     </View>
 
                     <View style={styles.behindOfProgress}>
-                        <Animated.View style={[styles.insideOfProgress, {flex: this.state.animatedValue,}]}/>
+                        <Animated.View style={[styles.insideOfProgress, {flex: animatedValue,}]}/>
                     </View>
 
                     <Divider height={20}/>
 
-                    {this.firstStepContainer()}
+                    {this.firstStepContainer(this.state)}
                 </View>
             </View>
         );
@@ -451,7 +440,6 @@ const styles = StyleSheet.create({
     },
     usersListContainer: {
         flex: 1,
-        // marginHorizontal: -10,
     },
     searchActionAreaContainer: {
         flexDirection: 'row',

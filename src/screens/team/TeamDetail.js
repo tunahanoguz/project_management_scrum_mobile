@@ -1,52 +1,50 @@
 import React, {Component, Fragment} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TopBar from "../../components/TopBar";
-import {container, fonts} from "../../styles";
+import {Container, container, fonts, InnerContainer, Text, Title} from "../../styles";
 import Divider from "../../components/Divider";
-import {profiles} from "../../constants";
 import UserCard from "../../components/cards/UserCard";
 import Icon from "react-native-vector-icons/Feather";
 import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
 import {connect} from "react-redux";
-import ProfilePicture from "../../components/ProfilePicture";
 import {ActivityIndicator} from "react-native-paper";
+import DoubleButton from "../../components/buttons/DoubleButton";
+import {getProjectsForTeam} from "../../actions/projectActions";
 
 class TeamDetail extends Component {
-    componentDidMount() {
-        const teamID = this.props.navigation.getParam("teamID", "");
-        const members = this.props.navigation.getParam("members", "");
-        this.props.getSingleTeam(teamID);
-        this.props.getTeamMembers(members);
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            membersArray: [],
+        };
     }
 
-    // getMembers = () => {
-    //     const team = this.props.navigation.getParam("team", {});
-    //     const members = team.members;
-    //     const newMembers = profiles.filter(profile => {
-    //         return members.map(member => {
-    //             return member.id === profile.id;
-    //         });
-    //     });
-    //
-    //     let roles = [];
-    //     members.map(member => {
-    //         profiles.map(profile => {
-    //             if (member.id === profile.id) {
-    //                 roles.push(member.role);
-    //             }
-    //         });
-    //     });
-    //
-    //     return {newMembers, roles};
+    componentDidMount() {
+        const {getSingleTeam, getTeamMembers, getProjectsForTeam, navigation} = this.props;
+        const teamID = navigation.getParam("teamID", "");
+        const members = navigation.getParam("members", "");
+        getSingleTeam(teamID);
+        getTeamMembers(members);
+        getProjectsForTeam(teamID);
+    }
+
+    // setMembersArray = (members) => {
+    //     if (members.length !== 0)
+    //         this.setState({memberArray: members});
     // };
 
     members = () => {
+        // Get members from redux
         let teamMembers = this.props.teamMembers;
         teamMembers = teamMembers.slice(0, 5);
+
+        // Get member roles
         const members = this.props.navigation.getParam("members", "");
         let memberRoles = [];
         members.map(member => memberRoles.push(member.role));
 
+        // Create new members array with member roles
         let newMembers = [];
         teamMembers.map((tm) => {
             members.map(member => {
@@ -63,6 +61,7 @@ class TeamDetail extends Component {
             });
         });
 
+        // Render member list
         if (teamMembers.length === 0) {
             return <Text style={fonts.mediumText}>Henüz hiç üye yok.</Text>;
         } else {
@@ -72,9 +71,13 @@ class TeamDetail extends Component {
                               renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
                               keyExtractor={(item, index) => index.toString()}/>
 
+                    <Divider height={20} />
+
                     <TouchableOpacity style={styles.moreContainer} onPress={() => this.goToTeamMemberList(newMembers)}>
                         <Icon name='arrow-down' size={24} color='rgba(0, 0, 0, 0.4)'/>
                     </TouchableOpacity>
+
+                    <Divider height={10} />
                 </Fragment>
             );
         }
@@ -84,50 +87,65 @@ class TeamDetail extends Component {
         this.props.navigation.navigate('TeamMembers', {members});
     };
 
-    render() {
-        const {name, description, members} = this.props.team;
+    goToTeamProjects = (teamID) => {
+        this.props.navigation.navigate('TeamProjectsList', {teamID});
+    };
 
+    render() {
+        const {newMembers} = this.state;
+        const {loading, team, projects} = this.props;
+        const {id, name, description, members} = team;
         return (
-            <View style={styles.container}>
+            <Container>
                 <TopBar isBack={true}/>
 
-                <View style={styles.secondContainer}>
-                    <View style={styles.titleContainer}>
-                        <Text style={{...fonts.title, color: 'white'}}>{name}</Text>
-                        <Text style={{...fonts.normalText, color: 'white'}}>{description}</Text>
+                <InnerContainer space nonRadius>
+                    <Title>{name}</Title>
+                    <Divider height={10} />
+                    <Text medium>{description}</Text>
+                </InnerContainer>
 
-                        <Divider height={10}/>
+                <Container space>
+                    <DoubleButton firstText={members ? `🤝 ${members.length} ÜYE` : 0 + " ÜYE"} secondText={`💼 ${projects?.length} Proje`} firstColor='purple' secondColor='orange' firstAction={() => this.goToTeamMemberList(newMembers)} secondAction={() => this.goToTeamProjects(id)}/>
 
-                        <View style={styles.numbersContainer}>
-                            <TouchableOpacity style={styles.numberContainer} onPress={() => this.goToTeamMemberList()}>
-                                <View style={styles.iconContainer}>
-                                    <Icon name='users' size={18} color='white'/>
-                                </View>
-                                <View style={styles.numberRightContainer}>
-                                    <Text style={styles.numberText}>{members ? members.length : 0}</Text>
-                                    <Text style={styles.numberCategoryText}>Üye</Text>
-                                </View>
-                            </TouchableOpacity>
+                    <Divider height={30} />
 
-                            <View style={styles.divider}/>
-                            <View style={styles.numberContainer}>
-                                <View style={styles.iconContainer}>
-                                    <Icon name='briefcase' size={18} color='white'/>
-                                </View>
-                                <View style={styles.numberRightContainer}>
-                                    <Text style={styles.numberText}>23</Text>
-                                    <Text style={styles.numberCategoryText}>Proje</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
+                    <InnerContainer>
+                        {loading ? <View style={container.centerContainer}><ActivityIndicator/></View> : this.members()}
+                    </InnerContainer>
+                </Container>
 
-                    <View style={styles.thirdContainer}>
-                        {/*{this.props.error ? alert(this.props.error) : null}*/}
-                        {this.props.loading ? <View style={container.centerContainer}><ActivityIndicator/></View> : this.members()}
-                    </View>
-                </View>
-            </View>
+                {/*<View style={styles.secondContainer}>*/}
+                {/*    <View style={styles.titleContainer}>*/}
+                {/*        <Text style={{...fonts.title, color: 'white'}}>{name}</Text>*/}
+                {/*        <Text style={{...fonts.normalText, color: 'white'}}>{description}</Text>*/}
+
+                {/*        <Divider height={10}/>*/}
+
+                {/*        <View style={styles.numbersContainer}>*/}
+                {/*            <TouchableOpacity style={styles.numberContainer} onPress={() => this.goToTeamMemberList()}>*/}
+                {/*                <View style={styles.iconContainer}>*/}
+                {/*                    <Icon name='users' size={18} color='white'/>*/}
+                {/*                </View>*/}
+                {/*                <View style={styles.numberRightContainer}>*/}
+                {/*                    <Text style={styles.numberText}>{members ? members.length : 0}</Text>*/}
+                {/*                    <Text style={styles.numberCategoryText}>Üye</Text>*/}
+                {/*                </View>*/}
+                {/*            </TouchableOpacity>*/}
+
+                {/*            <View style={styles.divider}/>*/}
+                {/*            <View style={styles.numberContainer}>*/}
+                {/*                <View style={styles.iconContainer}>*/}
+                {/*                    <Icon name='briefcase' size={18} color='white'/>*/}
+                {/*                </View>*/}
+                {/*                <View style={styles.numberRightContainer}>*/}
+                {/*                    <Text style={styles.numberText}>23</Text>*/}
+                {/*                    <Text style={styles.numberCategoryText}>Proje</Text>*/}
+                {/*                </View>*/}
+                {/*            </View>*/}
+                {/*        </View>*/}
+                {/*    </View>*/}
+            </Container>
         );
     }
 }
@@ -213,6 +231,7 @@ const mapStateToProps = state => {
         teamMembers: state.teamReducer.teamMembers,
         loading: state.teamReducer.loading,
         error: state.teamReducer.error,
+        projects: state.projectReducer.projects,
     };
 };
 
@@ -220,6 +239,7 @@ const mapDispatchToProps = dispatch => {
     return {
         getSingleTeam: (teamID) => dispatch(getSingleTeam(teamID)),
         getTeamMembers: (teamID) => dispatch(getTeamMembers(teamID)),
+        getProjectsForTeam: (teamID) => dispatch(getProjectsForTeam(teamID)),
     };
 };
 

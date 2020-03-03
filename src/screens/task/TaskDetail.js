@@ -1,222 +1,214 @@
-import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, Animated, Easing, Dimensions, StyleSheet} from 'react-native';
-import Container from "../../components/Container";
+import React, {Fragment, useState, useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux";
 import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
-import {colors, fonts,} from "../../styles";
-import Icon from "react-native-vector-icons/Feather";
-import AbsoluteButton from "../../components/buttons/AbsoluteButton";
+import {Container, DirectionContainer, Divider, InnerContainer, Text, Title} from "../../styles";
+import Button from "../../components/buttons/Button";
+import {getSingleProject} from "../../actions/projectActions";
+import moment from "moment";
+import TabContent from "../../components/tab/TabContent";
 import ProfilePicture from "../../components/ProfilePicture";
-import {profiles} from "../../constants";
-import Divider from "../../components/Divider";
+import {getUserById} from "../../actions/authActions";
+import {getSingleSprint} from "../../actions/sprintActions";
+import List from "../../components/list/List";
+import {getAllTaskComments, getAllTaskFiles} from "../../actions/taskActions";
+import DoubleButton from "../../components/buttons/DoubleButton";
 
-class TaskDetail extends Component {
+const TaskDetail = ({navigation}) => {
+    const [selectedTab, setSelectedTab] = useState(0);
 
-    initialHeight = Dimensions.get('window').height - 114;
+    const taskObj = navigation.getParam('task', {});
+    const {id, task, description, projectID, sprintID, assignedUserID, startDate, estimatedFinishDate} = taskObj;
 
-    constructor(props) {
-        super(props);
+    const dispatch = useDispatch();
+    const project = useSelector(state => state.projectReducer.project);
+    const foundUser = useSelector(state => state.projectReducer.foundUser);
+    const sprint = useSelector(state => state.sprintReducer.sprint);
+    const taskLoading = useSelector(state => state.taskReducer.loading);
+    const taskError = useSelector(state => state.taskReducer.error);
+    const files = useSelector(state => state.taskReducer.files);
+    const comments = useSelector(state => state.taskReducer.comments);
 
-        this.state = {
-            editAnimatedValue: new Animated.Value(this.initialHeight),
-            confirmAnimatedValue: new Animated.Value(this.initialHeight),
-            isOpenAbsoluteButtons: false,
-        };
-    }
+    useEffect(() => {
+        dispatch(getSingleProject(projectID));
+        dispatch(getUserById(assignedUserID ? assignedUserID : ""));
+        dispatch(getSingleSprint(sprintID));
+        dispatch(getAllTaskFiles(id));
+        dispatch(getAllTaskComments(id));
+    }, []);
 
-    componentDidUpdate() {
-        const editAnimatedValue = this.state.isOpenAbsoluteButtons ? this.initialHeight - 60 : this.initialHeight;
-        const confirmAnimatedValue = this.state.isOpenAbsoluteButtons ? this.initialHeight - 120 : this.initialHeight;
-        Animated.sequence([
-            Animated.timing(this.state.editAnimatedValue, {
-                toValue: editAnimatedValue,
-                duration: 1000,
-                easing: Easing.bounce,
-                useNativeDriver: true,
-            }),
-            Animated.timing(this.state.confirmAnimatedValue, {
-                toValue: confirmAnimatedValue,
-                duration: 1000,
-                easing: Easing.bounce,
-                useNativeDriver: true,
-            }),
-        ]).start();
-    }
-
-    priorityDotStyle = priority => {
-        return {
-            ...styles.priorityDot,
-            backgroundColor: priority === 1 ? colors.green : (priority === 0 ? colors.gray : colors.red),
-        };
+    const goToStartTask = () => {
+        navigation.navigate('StartTask', {project: project, task: taskObj});
     };
 
-    priorityText = priority => {
-        if (priority === 1) {
-            const fontStyle = {...fonts.mediumText, color: colors.green};
-            return <Text style={fontStyle}>Yüksek Öncelikli</Text>;
-        } else if (priority === 0) {
-            const fontStyle = {...fonts.mediumText, color: colors.gray};
-            return <Text style={fontStyle}>Orta Öncelikli</Text>;
-        } else {
-            const fontStyle = {...fonts.mediumText, color: colors.red};
-            return <Text style={fontStyle}>Düşük Öncelikli</Text>;
+    const goToAssignSprint = () => {
+        navigation.navigate('AssignSprintToTask', {task: taskObj});
+    };
+
+    const renderMomentDate = (date) => {
+        moment.locale('tr-TR');
+        return moment(date).format('LLL');
+    };
+
+    const renderDateContainer = (title, date) => {
+        return (
+            <DirectionContainer row>
+                <Text medium>{title}</Text>
+                <Text normal>{renderMomentDate(date.toDate())}</Text>
+            </DirectionContainer>
+        );
+    };
+
+    const descriptionDetail = () => {
+        if (description?.length !== 0){
+            return (
+                <InnerContainer>
+                    <Text medium>Açıklama: </Text>
+                    <Text normal>{description.substring(0, 32) + "..."}</Text>
+                </InnerContainer>
+            );
         }
     };
 
-    settingsButtonClickHandler = () => {
-        this.setState((state) => ({isOpenAbsoluteButtons: !state.isOpenAbsoluteButtons}));
-    };
-
-    goToEditTask = () => {
-        this.props.navigation.navigate('EditTask');
-    };
-
-    render() {
-        const {title, priority, startedAt, goalFinishDate, description} = this.props.navigation.getParam('task', {});
-        return (
-            <Container>
-                <TopBar isBack={true}/>
-
+    const projectDetail = () => {
+        const {name} = project;
+        if (projectID !== null){
+            return (
                 <InnerContainer>
-                    <Text style={styles.taskTitle}>{title}</Text>
-                    <View style={styles.rowContainer}>
-                        <View style={styles.priorityContainer}>
-                            <Icon name='arrow-up' size={24} color='white'/>
-                        </View>
-
-                        <View style={styles.datesContainer}>
-                            <View style={styles.dateInnerContainer}>
-                                <Text style={styles.dateText}>13.01.20 09.46</Text>
-                            </View>
-
-                            <Icon name='arrow-right' size={20} color='#E43D3D'/>
-
-                            <View style={styles.dateInnerContainer}>
-                                <Text style={styles.dateText}>15.01.20 09.46</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <Divider height={10}/>
-
-                    <View style={{flexDirection: 'row',}}>
-                        <TouchableOpacity style={styles.taskFullDetail} activeOpacity={0.6}>
-                            {/*<View style={{width: 20, height: 20, position: 'absolute', backgroundColor: 'rgba(0, 0, 0, 0.1)', top: 20, right: 20, borderRadius: 100,}} />*/}
-                            {/*<View style={{width: 14, height: 14, position: 'absolute', backgroundColor: 'rgba(0, 0, 0, 0.08)', top: 32, right: 44, borderRadius: 100,}} />*/}
-                            {/*<View style={{width: 10, height: 10, position: 'absolute', backgroundColor: 'rgba(0, 0, 0, 0.06)', top: 28, right: 64, borderRadius: 100,}} />*/}
-                            <ProfilePicture size={48} picture={profiles[0].profilePhoto} borderRadius={15}/>
-                            <View style={{marginLeft: 10,}}>
-                                <Text style={styles.authorText}>{profiles[0].fullName}</Text>
-                                <Text style={styles.roleText}>Sorumlu Kişi</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={{
-                            flex: 0.3,
-                            flexDirection: 'row',
-                            justifyContent: 'space-evenly',
-                            alignItems: 'center',
-                            backgroundColor: colors.purple,
-                            marginLeft: 10,
-                            paddingVertical: 4,
-                            paddingHorizontal: 10,
-                            borderRadius: 15,
-                        }}>
-                            <TouchableOpacity style={{alignItems: 'center',}}>
-                                <Icon name='message-circle' size={24} color='white'/>
-                                <Text style={styles.authorText}>23</Text>
-                            </TouchableOpacity>
-                            <View style={{width: 2, height: '80%', backgroundColor: 'rgba(255, 255, 255, 0.1)'}}/>
-                            <TouchableOpacity style={{alignItems: 'center',}}>
-                                <Icon name='file' size={22} color='white'/>
-                                <Text style={styles.authorText}>23</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={styles.descriptionContainer}>
-                        <Text style={fonts.normalText}>{description}</Text>
-                    </View>
+                    <Text medium>Proje: </Text>
+                    <Text normal>{name}</Text>
                 </InnerContainer>
+            );
+        }
+    };
 
-                <AbsoluteButton backgroundColor={colors.darkGreen} icon='edit-2' iconColor='white' animated={true}
-                                style={{right: 10, translateY: this.state.editAnimatedValue}}
-                                pressFunc={this.goToEditTask}/>
-                <AbsoluteButton backgroundColor={colors.orange} icon='check' iconColor='white' animated={true}
-                                style={{right: 10, translateY: this.state.confirmAnimatedValue}}
-                                pressFunc={() => alert('asdasdasd')}/>
-                <AbsoluteButton backgroundColor={colors.purple} icon='more-vertical' style={{right: 10, bottom: 10}}
-                                pressFunc={this.settingsButtonClickHandler}/>
-            </Container>
+    const renderAllDates = () => {
+        if (startDate !== null){
+            return (
+                <InnerContainer>
+                    <Fragment>
+                        {renderDateContainer("Başlangıç Tarihi: ", startDate)}
+                        <Divider height={10}/>
+                        {renderDateContainer("Bitiş Tarihi: ", estimatedFinishDate)}
+                    </Fragment>
+                </InnerContainer>
+            );
+        } else {
+            return (
+                <Button color='green' text="👍 BAŞLAT" action={() => goToStartTask()} />
+            );
+        }
+    };
+
+    const assignedUserDetail = () => {
+        if (assignedUserID !== null){
+            return (
+                <InnerContainer>
+                    <DirectionContainer row>
+                        <ProfilePicture size={50} picture={foundUser ? foundUser.photoURL : ""} />
+                        <Divider width={20}/>
+                        <Text middle>{foundUser?.fullName}</Text>
+                    </DirectionContainer>
+                </InnerContainer>
+            );
+        } else {
+            return (
+                <InnerContainer>
+                    <Text medium>Kişi: Henüz hiç kimse atanmamış.</Text>
+                </InnerContainer>
+            );
+        }
+    };
+
+    const generalDetail = () => {
+        return (
+            <Fragment>
+                {descriptionDetail()}
+
+                <Divider height={10}/>
+
+                {projectDetail()}
+
+                <Divider height={10}/>
+
+                {renderAllDates()}
+
+                <Divider height={10}/>
+
+                {assignedUserDetail()}
+            </Fragment>
         );
-    }
-}
+    };
 
-const styles = StyleSheet.create({
-    taskTitle: {
-        fontFamily: 'Poppins-Medium',
-        fontSize: 20,
-        includeFontPadding: false,
-        marginBottom: 10,
-    },
-    rowContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    priorityContainer: {
-        flex: 0.1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.highPriorityDark,
-        padding: 12,
-        borderRadius: 15,
-    },
-    datesContainer: {
-        flex: 0.9,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.purple,
-        marginLeft: 10,
-        paddingVertical: 14.4,
-        paddingHorizontal: 12,
-        borderRadius: 15,
-    },
-    dateInnerContainer: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    dateText: {
-        ...fonts.mediumText,
-        color: 'white',
-    },
-    taskFullDetail: {
-        flex: 0.7,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#E43D3D',
-        padding: 10,
-        borderRadius: 15,
-    },
-    authorText: {
-        ...fonts.mediumText,
-        color: 'white',
-    },
-    roleText: {
-        ...fonts.normalText,
-        color: 'white',
-    },
-    priorityDot: {
-        width: 16,
-        height: 16,
-        marginRight: 6,
-        borderRadius: 100,
-    },
-    iconStyle: {
-        marginRight: 6,
-    },
-    descriptionContainer: {
-        marginTop: 10,
-    },
-});
+    const sprintDetail = () => {
+        const {name} = sprint;
+        if (sprintID !== null){
+            return (
+                <InnerContainer>
+                    <Text medium>Sprint: </Text>
+                    <Text normal>{name}</Text>
+                </InnerContainer>
+            );
+        } else {
+            return (
+                <Button color='purple' text="👊 BİR SPRINT'E ATA" action={() => goToAssignSprint()} />
+            );
+        }
+    };
+
+    const fileDetail = () => {
+        return (
+            <Fragment>
+                <Container flex={0.8}>
+                    <List data={files} type='file' loading={taskLoading} error={taskError} orderColor='orangered' isFunctioned={false}/>
+                </Container>
+
+                <Container flex={0.2} verticalMiddle>
+                    <DoubleButton firstText="🤙 Yeni Dosya" firstColor='green' firstAction={() => navigation.navigate('CreateTaskFile', {taskID: taskObj.id})} secondText="📁 Tüm Dosyalar" secondColor='purple' secondAction={() => navigation.navigate('TaskFileList', {taskID: taskObj.id})}/>
+                </Container>
+            </Fragment>
+        );
+    };
+
+    const commentDetail = () => {
+        return (
+            <Fragment>
+                <Container flex={0.8}>
+                    <List data={comments} type='comment' loading={taskLoading} error={taskError} orderColor='orangered' isFunctioned={false}/>
+                </Container>
+
+                <Container flex={0.2} verticalMiddle>
+                    <DoubleButton firstText="🤙 YENİ YORUM" firstColor='green' firstAction={() => navigation.navigate('CreateTaskComment', {taskID: id})} secondText="💬 TÜM YORUMLAR" secondColor='purple' secondAction={() => navigation.navigate('TaskCommentList', {taskID: id,})}/>
+                </Container>
+            </Fragment>
+        );
+    };
+
+    const tabs = [{icon: '💼', name: 'Genel'}, {icon: '🏃', name: 'Sprint'}, {icon: '📁', name: 'Dosya'}, {icon: '💬', name: 'Yorum'}];
+
+    const renderTabContents = () => {
+        if (selectedTab === 0) {
+            return generalDetail();
+        } else if (selectedTab === 1) {
+            return sprintDetail();
+        } else if (selectedTab === 2) {
+            return fileDetail();
+        } else {
+            return commentDetail();
+        }
+    };
+
+    return (
+        <Container>
+            <TopBar isBack={true} />
+
+            <Container space>
+                <Title>{task}</Title>
+
+                <TabContent tabs={tabs} selectedTab={selectedTab} tabButtonAction={setSelectedTab}
+                            tabContents={renderTabContents}/>
+            </Container>
+        </Container>
+    );
+};
 
 export default TaskDetail;

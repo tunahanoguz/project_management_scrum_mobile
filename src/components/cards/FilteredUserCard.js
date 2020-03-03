@@ -67,8 +67,6 @@ class FilteredUserCard extends Component {
                     <ProfilePicture picture={photoURL} size={60} />
                     <Text style={[fonts.mediumText, {fontSize: 16, marginLeft: 10,}]}>{fullName}</Text>
                 </View>
-                {/*<Divider height={10}/>*/}
-                {/*<Icon name='plus' size={24}/>*/}
                 {this.state.isOpen ? this.roleSelectionContainer() : null}
             </TouchableOpacity>
         );
@@ -81,8 +79,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: 'white',
-        // marginBottom: 20,
-        // marginHorizontal: 10,
         paddingVertical: 12,
         borderRadius: 10,
     },

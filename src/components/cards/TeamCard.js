@@ -8,25 +8,26 @@ import Icon from "react-native-vector-icons/Feather";
 
 class TeamCard extends Component {
 
-    goToTeamDetail = () => {
-        const {id, members} = this.props.team;
+    goToTeamDetail = (team) => {
+        const {id, members} = team;
         this.props.navigation.navigate('TeamDetail', {teamID: id, members: members});
     };
 
     render(){
-        const {id, name, members} = this.props.team;
+        const {team, order, style, openActionModal} = this.props;
+        const {id, name, members} = team;
         return (
-            <View style={{...styles.container, ...this.props.style}}>
-                <TouchableOpacity style={styles.rowContainer} onPress={() => this.goToTeamDetail()}>
+            <View style={{...styles.container, ...style}}>
+                <TouchableOpacity style={styles.rowContainer} onPress={() => this.goToTeamDetail(team)}>
                     <View style={styles.projectOrder}>
-                        <Text style={styles.projectOrderText}>{this.props.order + 1}</Text>
+                        <Text style={styles.projectOrderText}>{order + 1}</Text>
                     </View>
                     <View>
                         <Text style={fonts.cardTitle}>{name}</Text>
                         <Text style={fonts.normalText}>{members?.length} Üye</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.props.openActionModal(id)}>
+                <TouchableOpacity onPress={() => openActionModal(id)}>
                     <Icon name='more-vertical' size={24} />
                 </TouchableOpacity>
             </View>

@@ -5,9 +5,10 @@ import {colors, fonts} from "../../styles";
 
 class ProjectNoteCard extends Component {
     render(){
+        const {note} = this.props;
         return (
             <TouchableOpacity style={styles.cardContainer}>
-                <Text style={fonts.mediumText}>{this.props.note.note}</Text>
+                <Text style={fonts.mediumText}>{note.note}</Text>
             </TouchableOpacity>
         );
     }

@@ -6,23 +6,25 @@ import Icon from "react-native-vector-icons/Feather";
 import {gradients} from "../../styles";
 
 class BlockButton extends Component {
-    gradient = () => {
-        if (this.props.color === "green"){
+    gradient = (color) => {
+        if (color === "green"){
             return gradients.greenGradient;
-        } else if (this.props.color === "gray"){
+        } else if (color === "gray"){
             return gradients.grayGradient;
+        } else if (color === "orange"){
+            return gradients.orangeGradient;
         } else {
             return gradients.purpleGradient;
         }
     };
 
-    sideStyle = () => {
-        if (this.props.side === "left"){
+    sideStyle = (side) => {
+        if (side === "left"){
             return {
                 ...styles.buttonContainer,
                 marginRight: 10,
             };
-        } else if (this.props.side === "right"){
+        } else if (side === "right"){
             return {
                 ...styles.buttonContainer,
                 marginLeft: 10,
@@ -33,11 +35,12 @@ class BlockButton extends Component {
     };
 
     render() {
+        const {color, side, icon, iconColor, iconSize, text, textColor, pressFunc} = this.props;
         return (
-            <TouchableOpacity onPress={() => this.props.pressFunc()} style={this.sideStyle()}>
-                <LinearGradient colors={this.gradient()} start={{x: 0, y: 0}} end={{x: 1, y: 1}} style={styles.buttonInnerContainer}>
-                    <Icon name={this.props.icon} size={this.props.iconSize ? this.props.iconSize : 24} color={this.props.iconColor} style={styles.buttonIcon}/>
-                    <Text style={{color: this.props.textColor, ...styles.buttonText}}>{this.props.text}</Text>
+            <TouchableOpacity onPress={() => pressFunc()} style={this.sideStyle(side)}>
+                <LinearGradient colors={this.gradient(color)} start={{x: 0, y: 0}} end={{x: 1, y: 1}} style={styles.buttonInnerContainer}>
+                    <Icon name={icon} size={iconSize ? iconSize : 24} color={iconColor} style={styles.buttonIcon}/>
+                    <Text style={{color: textColor, ...styles.buttonText}}>{text}</Text>
                 </LinearGradient>
             </TouchableOpacity>
         );

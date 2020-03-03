@@ -40,19 +40,15 @@ class SplashScreen extends Component {
         });
     }
 
-    // componentDidUpdate(){
-    //     this.props.getAllTeams(this.props.user.id);
-    // }
-
-    splashScreen = () => {
-        if (this.state.splash) {
+    splashScreen = ({splash, splashLogoAnimation}) => {
+        if (splash) {
             return (
                 <View style={styles.splashScreen}>
                     <StatusBar backgroundColor='transparent' translucent={true}/>
 
                     <Animated.View style={{
-                        opacity: this.state.splashLogoAnimation,
-                        top: this.state.splashLogoAnimation.interpolate({inputRange: [0, 1], outputRange: [80, 0],})
+                        opacity: splashLogoAnimation,
+                        top: splashLogoAnimation.interpolate({inputRange: [0, 1], outputRange: [80, 0],})
                     }}>
                         <Icon name='briefcase' size={48} color='white'/>
                     </Animated.View>
@@ -74,7 +70,7 @@ class SplashScreen extends Component {
     };
 
     render() {
-        return this.splashScreen();
+        return this.splashScreen(this.state);
     }
 }
 

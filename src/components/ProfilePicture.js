@@ -1,28 +1,34 @@
 import React, {Component} from 'react';
-import {View, Image} from 'react-native';
 import PropTypes from 'prop-types';
-import {colors} from "../styles";
+import {profilePhotoColors} from "../styles";
 import Icon from "react-native-vector-icons/Feather";
+import styled from 'styled-components';
 
 class ProfilePicture extends Component {
-    imageStyle = {
-        width: this.props.size,
-        height: this.props.size,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: this.props.borderRadius,
-        backgroundColor: colors.lightGray,
-    };
-
     render() {
-        const {picture, iconColor} = this.props;
+        const {picture, size} = this.props;
         if (picture === null || picture === "") {
-            return <View style={this.imageStyle}><Icon name='user' size={24} color={iconColor}/></View>;
+            return <ProfilePicturePresenter size={size}><Icon name='user' size={24} color='white'/></ProfilePicturePresenter>;
         } else {
-            return <Image source={{uri: picture}} style={this.imageStyle}/>;
+            return <StyledProfilePicture size={size} source={{uri: picture}}/>;
         }
     }
 }
+
+const ProfilePicturePresenter = styled.View`
+    width: ${({size}) => size ? size : 50}px;
+    height: ${({size}) => size ? size : 50}px;
+    justify-content: center;
+    align-items: center;
+    background-color: ${profilePhotoColors[0]};
+    border-radius: ${({radius}) => radius ? radius : 100}px;
+`;
+
+const StyledProfilePicture = styled.Image`
+    width: ${({size}) => size ? size : 50}px;
+    height: ${({size}) => size ? size : 50}px;
+    border-radius: ${({radius}) => radius ? radius : 100}px;
+`;
 
 ProfilePicture.defaultProps = {
     iconColor: 'rgba(0, 0, 0, 0.6)',
@@ -30,7 +36,7 @@ ProfilePicture.defaultProps = {
 };
 
 ProfilePicture.propTypes = {
-    picture: PropTypes.string.isRequired,
+    picture: PropTypes.any.isRequired,
     size: PropTypes.number.isRequired,
     iconColor: PropTypes.string,
     borderRadius: PropTypes.number,

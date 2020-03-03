@@ -8,6 +8,7 @@ import AbsoluteButton from "../../components/buttons/AbsoluteButton";
 import {getAllProjectFiles} from "../../actions/projectActions";
 import {connect} from "react-redux";
 import {ActivityIndicator} from "react-native-paper";
+import List from "../../components/list/List";
 
 class ProjectFileList extends Component {
     constructor(props) {
@@ -27,18 +28,19 @@ class ProjectFileList extends Component {
 
     listOfFiles = () => {
         const {loading, error, files} = this.props;
-        const projectID = this.props.navigation.getParam('projectID', "");
-        if (loading){
-            return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator size='large'/></View>;
-        } else if (error !== null){
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text style={fonts.mediumText}>{error}</Text></View>
-            );
-        } else {
-            return (
-                <FlatList data={files} renderItem={({item}) => <ProjectFileCard file={item} projectID={projectID}/>} />
-            );
-        }
+        // const projectID = this.props.navigation.getParam('projectID', "");
+        // if (loading){
+        //     return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator size='large'/></View>;
+        // } else if (files.length !== 0){
+        //     return (
+        //         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text style={fonts.mediumText}>{error}</Text></View>
+        //     );
+        // } else {
+        //     return (
+        //         <FlatList data={files} renderItem={({item}) => <ProjectFileCard file={item} projectID={projectID}/>} />
+        //     );
+        // }
+        return <List loading={loading} error={error} data={files} type='file' isFunctioned={true} orderColor='orangered' modalFunc={() => alert("asdasd")} />
     };
 
     render(){

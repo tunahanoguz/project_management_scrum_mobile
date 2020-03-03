@@ -32,11 +32,16 @@ class ListActionsModal extends Component {
         this.props.navigation.navigate('EditTeam', {teamID});
     };
 
+    deleteTeam = () => {
+        const {user, selectedItemID, deleteTeam, action} = this.props;
+        deleteTeam(user.uid, selectedItemID);
+        action();
+    };
+
     render() {
-        const {isOpen, selectedItemID, deleteTeam, action} = this.props;
+        const {action} = this.props;
         return (
             <Animated.View style={[styles.outerContainer, {transform: [{translateY: this.state.animatedValue,}]}]}>
-                {/*<View style={styles.topLine}/>*/}
                 <View style={styles.modalContainer}>
                     <View style={styles.innerContainer}>
                         <TouchableOpacity onPress={() => this.goToEditTeam()}>
@@ -46,7 +51,7 @@ class ListActionsModal extends Component {
                             <Text style={styles.modalText}>Takımı düzenle</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => deleteTeam(selectedItemID)}>
+                        <TouchableOpacity onPress={() => this.deleteTeam()}>
                             <View style={styles.actionIconContainer}>
                                 <Icon name='trash-2' size={20} style={styles.modalIcon}/>
                             </View>
@@ -149,10 +154,16 @@ ListActionsModal.propTypes = {
     action: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
     return {
-        deleteTeam: (teamID) => dispatch(deleteTeam(teamID)),
+        user: state.authReducer.user,
     };
 };
 
-export default connect(null, mapDispatchToProps())(ListActionsModal);
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteTeam: (userID, teamID) => dispatch(deleteTeam(userID, teamID)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListActionsModal);

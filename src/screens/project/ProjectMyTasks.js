@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
 import TopBar from "../../components/TopBar";
-import MyTaskCard from "../../components/cards/MyTaskCard";
+import MyTaskCard from "../../components/cards/TaskCard";
 import {tasks} from "../../constants";
 
 class ProjectMyTasks extends Component {

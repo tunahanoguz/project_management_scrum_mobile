@@ -24,18 +24,22 @@ class DatePicker extends Component {
     };
 
     handleDateChange = (event, date) => {
+        const {name, handleDateChange} = this.props;
         this.setState({show: false});
-        this.props.handleDateChange(this.props.name, date);
+        handleDateChange(name, date);
     };
+
     render(){
+        const {show, date} = this.state;
+        const {text} = this.props;
         return (
             <Fragment>
                 <TouchableOpacity onPress={() => this.openDatePicker()} style={styles.datePickerButton}>
                     <Icon name='calendar' size={24} style={styles.iconStyle} color='rgba(100, 100, 100, 1)'/>
-                    <Text style={styles.datePickerButtonText}>{this.props.text}</Text>
+                    <Text style={styles.datePickerButtonText}>{text}</Text>
                 </TouchableOpacity>
 
-                {this.state.show && <DateTimePicker value={this.state.date} is24Hour={true} display='default' onChange={this.handleDateChange}/>}
+                {show && <DateTimePicker value={date} is24Hour={true} display='default' onChange={this.handleDateChange}/>}
             </Fragment>
         );
     }

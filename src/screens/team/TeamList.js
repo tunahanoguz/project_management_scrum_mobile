@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, FlatList, StyleSheet,} from 'react-native';
+// import {View, Text,} from 'react-native';
 import TopBar from "../../components/TopBar";
-import TeamCard from "../../components/cards/TeamCard";
-import Icon from "react-native-vector-icons/Feather";
 import {connect} from "react-redux";
-import {getAllTeams} from "../../actions/teamActions";
+import {deleteTeam, getAllTeams} from "../../actions/teamActions";
 import {getAllUsers} from "../../actions/authActions";
-import {ActivityIndicator} from "react-native-paper";
-import {colors} from "../../styles";
-import ListActionsModal from "../../components/modals/ListActionsModal";
+import {Container} from "../../styles";
+import List from "../../components/list/List";
+import Button from "../../components/buttons/Button";
+import ListActionModal from "../../components/modals/ListActionModal";
 
 class TeamList extends Component {
     constructor(props) {
@@ -24,66 +23,59 @@ class TeamList extends Component {
         this.setState(state => ({isModalOpen: !state.isModalOpen, selectedItemID: itemID}));
     };
 
-    componentDidMount(){
+    toggleModal = () => {
+        this.setState(state => ({isModalOpen: !state.isModalOpen}));
+    };
+
+    editTeamAction = () => {
+        const {navigation} = this.props;
+        const {selectedItemID} = this.state;
+        navigation.navigate('EditTeam', {teamID: selectedItemID});
+    };
+
+    deleteTeamAction = () => {
+        const {user, deleteTeam} = this.props;
+        const {selectedItemID} = this.state;
+        deleteTeam(user.uid, selectedItemID);
+        this.toggleModal();
+    };
+
+    componentDidMount() {
         this.props.getAllTeams(this.props.user.uid);
         this.props.getAllUsers();
     }
 
-    teamList = (teams) => (
-        <FlatList data={teams} renderItem={({item, index}) => {
-            let style = {};
-            if (index === 0){
-                style = {marginTop: 15};
-            }
-
-            return (<TeamCard team={item} order={index} style={style} openActionModal={this.setIsOpenModal}/>);
-        }}
-                  keyExtractor={(item, index) => index.toString()}/>
+    teamList = (loading, error, teams) => (
+        <List orderColor='orangered' isFunctioned={true} modalFunc={this.setIsOpenModal} data={teams} type='team' loading={loading} error={error}/>
     );
 
     goToCreateTeam = () => {
         this.props.navigation.navigate('CreateTeam');
     };
 
-    renderTeamList = () => {
-        const {loading, error, teams} = this.props;
-        if (loading){
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator size='large'/></View>
-            );
-        } else if (teams !== []) {
-            return this.teamList(teams);
-        } else {
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text>{error}</Text></View>
-            );
-        }
-    };
-
     render() {
+        const {isModalOpen} = this.state;
+        const {loading, error, teams} = this.props;
         return (
-            <View style={styles.container}>
+            <Container>
                 <TopBar isBack={false} title="Takımlar"/>
 
-                {this.renderTeamList()}
+                <Container space>
+                    <Container flex={0.8}>
+                        {this.teamList(loading, error, teams)}
+                    </Container>
+                    <Container flex={0.2} verticalMiddle>
+                        <Button color='purple' text="🤙 Takım Oluştur" action={this.goToCreateTeam}/>
+                    </Container>
+                </Container>
 
-                <TouchableOpacity style={{width: 50, height: 50, backgroundColor: colors.purple, justifyContent: 'center', alignItems: 'center', position: 'absolute', right: 10, bottom: 10, borderRadius: 100}} activeOpacity={0.6} onPress={() => this.goToCreateTeam()}>
-                    <Icon name='plus' size={24} color='white' />
-                </TouchableOpacity>
-
-                <ListActionsModal isOpen={this.state.isModalOpen} action={this.setIsOpenModal} selectedItemID={this.state.selectedItemID} name='Süper takım' />
-            </View>
+                <ListActionModal isOpen={isModalOpen} toggleFunc={this.setIsOpenModal} editText="Takımı Düzenle"
+                                 editAction={this.editTeamAction} deleteText="Takımı Sil"
+                                 deleteAction={this.deleteTeamAction}/>
+            </Container>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-    },
-});
 
 const mapStateToProps = state => {
     return {
@@ -99,6 +91,7 @@ const mapDispatchToProps = dispatch => {
     return {
         getAllTeams: (userID) => dispatch(getAllTeams(userID)),
         getAllUsers: () => dispatch(getAllUsers()),
+        deleteTeam: (userID, teamID) => dispatch(deleteTeam(userID, teamID)),
     };
 };
 

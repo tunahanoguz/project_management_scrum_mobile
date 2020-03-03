@@ -90,16 +90,17 @@ class Login extends Component {
     };
 
     render() {
+        const {email, emailError, password, passwordError} = this.state;
         return (
             <View style={styles.container}>
                 <Text style={fonts.title}>Giriş Yap</Text>
 
-                <Input iconName='mail' value={this.state.email} placeholder="Email" name='email'
+                <Input iconName='mail' value={email} placeholder="Email" name='email'
                        setStateFunc={this.setStateFunc} isValid={this.validateEmail}
-                       errorMessage={this.state.emailError} isEmail={true}/>
-                <Input iconName='key' value={this.state.password} placeholder="Password" name='password'
+                       errorMessage={emailError} isEmail={true}/>
+                <Input iconName='key' value={password} placeholder="Password" name='password'
                        setStateFunc={this.setStateFunc} isValid={this.validatePassword} secureTextEntry={true}
-                       errorMessage={this.state.passwordError}/>
+                       errorMessage={passwordError}/>
 
                 <RoundedButton color='green' icon='arrow-right' pressFunc={this.handleSubmit}/>
 

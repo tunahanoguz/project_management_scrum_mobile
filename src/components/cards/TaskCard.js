@@ -2,21 +2,39 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from "react-native-vector-icons/Feather";
+import moment from "moment";
+import {withNavigation} from 'react-navigation';
+import {fonts} from "../../styles";
 
-class MyTaskCard extends Component {
-    render(){
-        const {id, title} = this.props.task;
+class TaskCard extends Component {
+    goToTaskDetail = () => {
+        const {navigation, task} = this.props;
+        navigation.navigate('TaskDetail', {task});
+    };
+
+    renderDate = (date) => {
+        moment.locale('tr-TR');
+        return moment(date).format('LLL');
+    };
+
+    renderDateContainer = (estimatedFinishDate) => {
         return (
-            <TouchableOpacity key={id} style={styles.taskContainer}>
+            <View style={styles.dateContainer}>
+                <Icon name='calendar' size={16} style={styles.dateIcon}/>
+                <Text style={styles.dateText}>{this.renderDate(estimatedFinishDate.toDate())}</Text>
+            </View>
+        );
+    };
+
+    render(){
+        const {id, task, startDate, estimatedFinishDate} = this.props.task;
+        return (
+            <TouchableOpacity key={id} style={styles.taskContainer} onPress={() => this.goToTaskDetail()}>
                 <View style={styles.taskInnerContainer}>
-                    <View style={styles.taskDot}/>
-                    <Text style={styles.taskText}>{title}</Text>
+                    <Text style={styles.taskText}>{task}</Text>
                 </View>
 
-                <View style={styles.dateContainer}>
-                    <Icon name='calendar' size={16} style={styles.dateIcon}/>
-                    <Text style={styles.dateText}>1 Ocak 2019 13:15</Text>
-                </View>
+                {startDate !== null ? this.renderDateContainer(estimatedFinishDate) : <View style={styles.dateContainer}><Text style={fonts.mediumText}>Henüz başlamamış.</Text></View>}
             </TouchableOpacity>
         );
     }
@@ -28,7 +46,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
         marginBottom: 20,
-        marginHorizontal: 30,
+        // marginHorizontal: 30,
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 15,
@@ -64,8 +82,8 @@ const styles = StyleSheet.create({
     },
 });
 
-MyTaskCard.propTypes = {
+TaskCard.propTypes = {
     task: PropTypes.object.isRequired,
 };
 
-export default MyTaskCard;
+export default withNavigation(TaskCard);

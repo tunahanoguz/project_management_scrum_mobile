@@ -1,54 +1,43 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Animated} from 'react-native';
-import PropTypes from 'prop-types';
-import {colors, fonts, sizes} from "../../styles";
-import Divider from "../Divider";
-import Icon from "react-native-vector-icons/Feather";
-import {deleteProject} from "../../actions/projectActions";
 import {connect} from "react-redux";
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import Icon from "react-native-vector-icons/Feather";
+import {colors, Divider, fonts, sizes} from "../../styles";
+import {deleteProject} from "../../actions/projectActions";
 
 class ProjectActionsModal extends Component {
-    deleteProject = (teamIDs, selectedProjectID) => {
-        this.props.toggleFunc();
-        this.props.deleteProject(teamIDs, selectedProjectID);
+    deleteProject = (toggleFunc, teamIDs, selectedProjectID, deleteProject) => {
+        toggleFunc();
+        deleteProject(teamIDs, selectedProjectID);
     };
 
-    renderContainer = (teamIDs, selectedProjectID) => {
-        if (this.props.isOpen){
+    renderContainer = ({isOpen, animatedValue, toggleFunc, teamIDs, selectedProjectID, deleteProject}) => {
+        if (isOpen){
             return (
                 <Animated.View style={styles.container}>
-                    <TouchableOpacity onPress={() => this.props.toggleFunc()} style={{flex: 1, justifyContent: 'flex-end', transform: [{translateY: this.props.animatedValue}],}} activeOpacity={1}>
+                    <TouchableOpacity onPress={() => toggleFunc()} style={{flex: 1, justifyContent: 'center', transform: [{translateY: animatedValue}],}} activeOpacity={1}>
                         <Animated.View style={{
-                            height: sizes.deviceHeight / 6,
+                            height: sizes.deviceWidth / 3,
                             justifyContent: 'center',
-                            bottom: 0,
-                            backgroundColor: colors.darkGreen,
-                            paddingHorizontal: 30,
-                            transform: [{translateY: this.props.animatedValue}],
+                            transform: [{translateY: animatedValue}],
                         }}>
-                            <View style={{position: 'absolute', backgroundColor: 'rgba(255, 255, 255, 0.08)', width: 60, height: 60, borderRadius: 100, right: -20, bottom: -20}} />
-                            <View style={{position: 'absolute', backgroundColor: 'rgba(255, 255, 255, 0.03)', width: 80, height: 80, borderRadius: 100, left: -20,}} />
-                            <View style={{
-                                width: '30%',
-                                height: 4,
-                                alignSelf: 'center',
-                                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                                borderRadius: 100,
-                            }}/>
-                            <Divider height={20}/>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
-                                <TouchableOpacity style={{alignItems: 'center',}}>
+                            <ModalButtonContainer>
+                                <ModalButton onPress={() => console.log("asdasdasd")}>
                                     <Icon name='edit' size={24} color='white'/>
-                                    <Divider height={10}/>
+                                    <Divider height={10} />
                                     <Text style={[fonts.mediumText, {color: 'white'}]}>Projeyi düzenle</Text>
-                                </TouchableOpacity>
+                                </ModalButton>
 
-                                <TouchableOpacity style={{alignItems: 'center',}} onPress={() => this.deleteProject(teamIDs, selectedProjectID)}>
+                                <Divider width={30} />
+
+                                <ModalButton onPress={() => this.deleteProject(toggleFunc, teamIDs, selectedProjectID, deleteProject)}>
                                     <Icon name='trash-2' size={24} color='white'/>
-                                    <Divider height={10}/>
+                                    <Divider height={10} />
                                     <Text style={[fonts.mediumText, {color: 'white'}]}>Projeyi kaldır</Text>
-                                </TouchableOpacity>
-                            </View>
+                                </ModalButton>
+                            </ModalButtonContainer>
                         </Animated.View>
                     </TouchableOpacity>
                 </Animated.View>
@@ -59,10 +48,27 @@ class ProjectActionsModal extends Component {
     };
 
     render(){
-        const {teamIDs, selectedProjectID} = this.props;
-        return (this.renderContainer(teamIDs, selectedProjectID));
+        return (this.renderContainer(this.props));
     }
 }
+
+const ModalButtonContainer = styled.View`
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ModalButton = styled.TouchableOpacity`
+    width: ${sizes.deviceWidth / 3}px;
+    height: ${sizes.deviceWidth / 3}px;
+    justify-content: center;
+    align-items: center;
+    background-color: teal;
+    border-width: 1px;
+    border-style: dashed;
+    border-color: teal;
+    border-radius: 15px;
+`;
 
 const styles = StyleSheet.create({
     container: {
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
         width: sizes.deviceWidth,
         height: sizes.deviceHeight - 54,
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
 });
 

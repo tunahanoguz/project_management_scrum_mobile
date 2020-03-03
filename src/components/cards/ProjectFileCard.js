@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/Feather";
 import RNFetchBlob from 'rn-fetch-blob'
 import {colors, fonts} from "../../styles";
 import uuid from "rn-fetch-blob/utils/uuid";
-import {deleteProjectFile, getAllProjectFiles} from "../../actions/projectActions";
+import {deleteProjectFile} from "../../actions/projectActions";
 import {connect} from "react-redux";
 
 class ProjectFileCard extends Component {
@@ -25,12 +25,13 @@ class ProjectFileCard extends Component {
             .catch(() => console.log("Başarısız"));
     };
 
-    deleteFile = (id) => {
-        this.props.deleteProjectFile(this.props.projectID, id);
+    deleteFile = (projectID, id) => {
+        this.props.deleteProjectFile(projectID, id);
     };
 
     render(){
-        const {id, fileName, size, downloadURL, contentType} = this.props.file;
+        const {projectID, file} = this.props;
+        const {id, fileName, size, downloadURL, contentType} = file;
         const type = contentType.split('/')[1];
         return (
             <View style={styles.fileContainer}>
@@ -50,7 +51,7 @@ class ProjectFileCard extends Component {
                         <Icon name='download' size={20} color='rgba(0, 0, 0, 0.6)' />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => this.deleteFile(id)}>
+                    <TouchableOpacity onPress={() => this.deleteFile(projectID, id)}>
                         <Icon name='trash-2' size={20} color='rgba(0, 0, 0, 0.6)' />
                     </TouchableOpacity>
                 </View>

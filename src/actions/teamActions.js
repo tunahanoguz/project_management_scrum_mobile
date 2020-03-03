@@ -8,7 +8,12 @@ import {
     GET_ALL_CREATED_TEAMS_SUCCESS,
     GET_ALL_CREATED_TEAMS_FAILURE,
     CREATE_TEAM_SUCCESS,
-    CREATE_TEAM_FAILURE, GET_TEAM_MEMBERS_SUCCESS, GET_TEAM_MEMBERS_FAILURE, GET_TEAM_MEMBERS_START,
+    CREATE_TEAM_FAILURE,
+    GET_TEAM_MEMBERS_SUCCESS,
+    GET_TEAM_MEMBERS_FAILURE,
+    GET_TEAM_MEMBERS_START,
+    DELETE_TEAM_START,
+    DELETE_TEAM_FAILURE, GET_TEAMS_FOR_HOME_START, GET_TEAMS_FOR_HOME_SUCCESS, GET_TEAMS_FOR_HOME_FAILURE,
 } from "./types";
 import firestore from '@react-native-firebase/firestore';
 
@@ -16,7 +21,7 @@ export const getSingleTeam = teamID => dispatch => {
     const teamsRef = firestore().collection('teams');
     teamsRef.doc(teamID).get()
         .then(doc => {
-            const team = doc.data();
+            const team = {id: doc.id, ...doc.data()};
             dispatch({type: GET_SINGLE_TEAM_SUCCESS, team: team})
         })
         .catch(() => dispatch({type: GET_SINGLE_TEAM_FAILURE, error: "Takım getirilemedi."}));
@@ -24,6 +29,7 @@ export const getSingleTeam = teamID => dispatch => {
 
 export const getAllTeams = (userID) => dispatch => {
     dispatch({type: GET_ALL_TEAMS_START, loading: true});
+
     let teams = [];
     let teamIDs = [];
     firestore().collection('teams').get()
@@ -46,6 +52,31 @@ export const getAllTeams = (userID) => dispatch => {
             dispatch({type: GET_ALL_TEAMS_SUCCESS, teams: teams, teamIDs: teamIDs});
         })
         .catch(() => dispatch({type: GET_ALL_TEAMS_FAILURE, error: "Takımlar getirilemedi."}));
+};
+
+export const getTeamsForHomeScreen = (userID) => dispatch => {
+    dispatch({type: GET_TEAMS_FOR_HOME_START, loading: true});
+
+    firestore().collection('teams').limit(3).get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+                dispatch({type: GET_TEAMS_FOR_HOME_FAILURE, error: "Hiç takımınız yok."})
+            }
+
+            let teams = [];
+            snapshot.forEach(doc => {
+                const docID = doc.id;
+                const teamData = doc.data();
+
+                if (teamData.members[0].id === userID) {
+                    const team = {id: docID, ...teamData};
+                    teams.push(team);
+                }
+            });
+
+            dispatch({type: GET_TEAMS_FOR_HOME_SUCCESS, teams});
+        })
+        .catch(() => dispatch({type: GET_TEAMS_FOR_HOME_FAILURE, error: "Takımlar getirilemedi."}));
 };
 
 export const getAllCreatedTeams = (userID) => dispatch => {
@@ -101,7 +132,9 @@ export const getTeamMembers = (members) => dispatch => {
     let userIDs = [];
     members.map(member => userIDs.push(member.id));
 
-    firestore().collection('users').where('id', 'in', userIDs).get()
+    const userRef = firestore().collection('users');
+    const userQuery = userRef.where('id', 'in', userIDs);
+    userQuery.get()
         .then(snapshot => {
             snapshot.forEach(doc => users.push(doc.data()));
         })
@@ -109,9 +142,11 @@ export const getTeamMembers = (members) => dispatch => {
         .catch(() => dispatch({type: GET_TEAM_MEMBERS_FAILURE, error: "Takım üyeleri getirilemedi."}));
 };
 
-export const deleteTeam = (projectID) => dispatch => {
+export const deleteTeam = (userID, teamID) => dispatch => {
+    dispatch({type: DELETE_TEAM_START});
+
     const teamRef = firestore().collection('teams');
-    teamRef.doc(projectID).delete()
-        .then(() => console.log("Success!"))
-        .catch(() => console.log("Failure!"));
+    teamRef.doc(teamID).delete()
+        .then(() => dispatch(getAllTeams(userID)))
+        .catch(() => dispatch({type: DELETE_TEAM_FAILURE, error: "Takım silinirken bir hata oluştu."}));
 };

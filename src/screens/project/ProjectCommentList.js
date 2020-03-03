@@ -1,73 +1,50 @@
-import React, {Component} from 'react';
-import {View, TouchableOpacity, FlatList, Text, StyleSheet} from 'react-native';
-import {withNavigation} from 'react-navigation';
-import Container from "../../components/Container";
+import React, {useEffect} from 'react';
+import {FlatList} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import TopBar from "../../components/TopBar";
-import {colors, fonts} from "../../styles";
-import ParentCommentCard from "../../components/cards/ParentCommentCard";
-import ChildCommentCard from "../../components/cards/ChildCommentCard";
-import AbsoluteButton from "../../components/buttons/AbsoluteButton";
-import {getAllChildComments, getAllProjectComments, getAllProjectParentComments} from "../../actions/projectActions";
-import {connect} from "react-redux";
-import {ActivityIndicator} from "react-native-paper";
+import {Container, Divider, Title} from "../../styles";
+import {getAllTaskComments} from "../../actions/taskActions";
+import Button from "../../components/buttons/Button";
+import {getUserById} from "../../actions/authActions";
+import CommentCard from "../../components/cards/CommentCard";
+import {getAllProjectComments} from "../../actions/projectActions";
 
-class ProjectCommentList extends Component {
-    projectID = this.props.navigation.getParam('projectID', "");
+const TaskCommentList = ({navigation}) => {
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.projectReducer.loading);
+    const error = useSelector(state => state.projectReducer.error);
+    const comments = useSelector(state => state.projectReducer.comments);
 
-    componentDidMount(){
-        this.props.getAllProjectParentComments(this.projectID);
-    }
+    const projectID = navigation.getParam('projectID', "");
 
-    goToSendComment = () => {
-        this.props.navigation.navigate('ProjectSendComment', {projectID: this.projectID});
+    useEffect(() => {
+        dispatch(getAllProjectComments(projectID));
+    }, []);
+
+    const goToCreateComment = () => {
+        navigation.navigate('CreateProjectComment', {projectID});
     };
 
-    renderComments = () => {
-        let {loading, error, comments} = this.props;
-        if (loading){
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator size='large'/></View>
-            );
-        } else if (comments !== []) {
-            return (
-                <FlatList data={comments} renderItem={({item}) => <ParentCommentCard comment={item} />} />
-            );
-        } else {
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text style={fonts.mediumText}>{error}</Text></View>
-            );
-        }
-    };
+    return (
+        <Container>
+            <TopBar isBack={true}/>
 
-    render() {
-        return (
-            <Container>
-                <TopBar isBack={true}/>
+            <Container space>
+                <Title>Yorumlar</Title>
 
-                {this.renderComments()}
+                <Divider height={20}/>
 
-                <AbsoluteButton icon='plus' backgroundColor={colors.purple} pressFunc={this.goToSendComment} style={{bottom: 10, left: 10,}}/>
+                <Container flex={0.8}>
+                    <FlatList data={comments} renderItem={({item}) => !item.parentCommentID ? <CommentCard comment={item} itemID={projectID} type='project'/> : null}/>
+                </Container>
+
+                <Container flex={0.2} verticalMiddle>
+                    <Button color='purple' text="💬 YENİ YORUM GÖNDER" action={goToCreateComment}/>
+                </Container>
+
             </Container>
-        );
-    }
-}
-
-const styles = StyleSheet.create({});
-
-const mapStateToProps = state => {
-    return {
-        loading: state.projectReducer.loading,
-        error: state.projectReducer.error,
-        comments: state.projectReducer.comments,
-        childComments: state.projectReducer.childComments,
-    };
+        </Container>
+    );
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        getAllProjectParentComments: (projectID) => dispatch(getAllProjectParentComments(projectID)),
-        getAllChildComments: (parentCommentID) => dispatch(getAllChildComments(parentCommentID)),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(ProjectCommentList));
+export default TaskCommentList;

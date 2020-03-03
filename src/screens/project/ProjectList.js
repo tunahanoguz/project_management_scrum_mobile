@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {View, FlatList, StyleSheet, Animated, Text,} from 'react-native';
-import Container from "../../components/Container";
+import {View, Animated, Text, ActivityIndicator,} from 'react-native';
 import TopBar from "../../components/TopBar";
-import {colors, sizes} from "../../styles";
-import ProjectListCard from "../../components/cards/ProjectListCard";
+import {Container, sizes} from "../../styles";
 import ProjectActionsModal from "../../components/modals/ProjectActionsModal";
-import AbsoluteButton from "../../components/buttons/AbsoluteButton";
 import {getAllProjects} from "../../actions/projectActions";
 import {connect} from "react-redux";
-import {ActivityIndicator} from "react-native-paper";
 import FlashMessage from "react-native-flash-message";
+import List from "../../components/list/List";
+import Button from "../../components/buttons/Button";
 
 class ProjectList extends Component {
     constructor(props) {
@@ -19,12 +17,7 @@ class ProjectList extends Component {
             animatedValue: new Animated.Value(sizes.deviceHeight),
             isActionsModalOpen: false,
             selectedProjectID: "",
-            // projects: [],
         };
-
-        // this.props.navigation.addListener("didFocus", () => {
-        //     this.props.getAllProjects(this.props.teamIDs);
-        // });
     }
 
     componentDidMount() {
@@ -46,41 +39,27 @@ class ProjectList extends Component {
         this.props.navigation.navigate('CreateProject');
     };
 
-    projectListContainer = (projects) => {
+    renderProjectList = (loading, error, projects) => {
         return (
-            <View style={[styles.innerContainer, {paddingVertical: 15,}]}>
-                <FlatList data={projects} renderItem={({item, index}) => <ProjectListCard project={item} order={index}
-                                                                                          action={this.toggleActionsContainer}/>}
-                          keyExtractor={(item, index) => index.toString()}/>
-            </View>
+            <Container flex={0.8}>
+                <List data={projects} loading={loading} error={error} orderColor='orangered' type='project' isFunctioned={true} modalFunc={this.toggleActionsContainer}/>
+            </Container>
         );
     };
 
-    renderProjectList = () => {
-        const {loading, error, projects} = this.props;
-        if (loading) {
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator
-                    size='large'/></View>
-            );
-        } else if (projects !== []) {
-            return this.projectListContainer(projects);
-        } else {
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text>{error}</Text></View>
-            );
-        }
-    };
-
     render() {
+        const {loading, error, projects} = this.props;
         return (
             <Container>
                 <TopBar title='Projeler' isBack={false}/>
 
-                {this.renderProjectList()}
+                <Container space>
+                    {this.renderProjectList(loading, error, projects)}
+                    <Container flex={0.2} verticalMiddle>
+                        <Button color='purple' text="🤙 Proje Oluştur" action={this.goToCreateProjectScreen}/>
+                    </Container>
+                </Container>
 
-                <AbsoluteButton icon='plus' backgroundColor={colors.purple}
-                                pressFunc={() => this.goToCreateProjectScreen()} style={{bottom: 10, left: 10,}}/>
                 <ProjectActionsModal isOpen={this.state.isActionsModalOpen} animatedValue={this.state.animatedValue}
                                      toggleFunc={this.toggleActionsContainer} selectedProjectID={this.state.selectedProjectID} teamIDs={this.props.teamIDs}/>
                 <FlashMessage position="top" />
@@ -88,12 +67,6 @@ class ProjectList extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    innerContainer: {
-        flex: 1,
-    },
-});
 
 const mapStateToProps = state => {
     return {
@@ -107,7 +80,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         getAllProjects: (teamIDs) => dispatch(getAllProjects(teamIDs)),
     };

@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types'
 import {withNavigation} from 'react-navigation';
 import ProfilePicture from "../ProfilePicture";
-import {fonts} from "../../styles";
+import {fonts, sizes} from "../../styles";
 
 class UserCard extends Component {
 
@@ -12,9 +12,10 @@ class UserCard extends Component {
     };
 
     render() {
-        const {fullName, photoURL, role} = this.props.user;
+        const {user, style} = this.props;
+        const {fullName, photoURL, role} = user;
         return (
-            <TouchableOpacity style={{...styles.container, ...this.props.style}} onPress={() => this.goToUserProfile(this.props.user)}>
+            <TouchableOpacity style={{...styles.container, ...style}} onPress={() => this.goToUserProfile(user)}>
                 <ProfilePicture picture={photoURL} size={54}/>
                 <View style={styles.innerContainer}>
                     <Text style={fonts.cardTitle}>{fullName}</Text>
@@ -29,11 +30,13 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        marginBottom: 10,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F3F5FA',
     },
     innerContainer: {
         justifyContent: 'center',
-        marginLeft: 10,
+        marginLeft: 20,
     },
 });
 

@@ -6,12 +6,12 @@ import Icon from "react-native-vector-icons/Feather";
 import {gradients} from "../../styles";
 
 class RoundedButton extends Component {
-    gradient = () => {
-        if (this.props.color === "green") {
+    gradient = (color) => {
+        if (color === "green") {
             return gradients.greenGradient;
-        } else if (this.props.color === 'purple') {
+        } else if (color === 'purple') {
             return gradients.purpleGradient;
-        } else if (this.props.color === 'dark') {
+        } else if (color === 'dark') {
             return gradients.darkGradient;
         } else {
             return gradients.grayGradient
@@ -19,11 +19,12 @@ class RoundedButton extends Component {
     };
 
     render() {
+        const {size, color, icon, iconSize, disabled, pressFunc} = this.props;
         return (
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => this.props.pressFunc()} disabled={this.props.disabled}>
-                    <LinearGradient colors={this.gradient()} style={[styles.buttonLinearGradient, {width: this.props.size, height: this.props.size}]}>
-                        <Icon name={this.props.icon} size={this.props.iconSize ? this.props.iconSize : 24}
+                <TouchableOpacity onPress={() => pressFunc()} disabled={disabled}>
+                    <LinearGradient colors={this.gradient(color)} style={[styles.buttonLinearGradient, {width: size, height: size}]}>
+                        <Icon name={icon} size={iconSize ? iconSize : 24}
                               color="white"/>
                     </LinearGradient>
                 </TouchableOpacity>

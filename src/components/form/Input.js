@@ -6,37 +6,38 @@ import {colors, fonts} from "../../styles";
 
 class Input extends Component {
 
-    errorMessageContainer = () => {
-        if (this.props.errorMessage === "") {
+    errorMessageContainer = (errorMessage) => {
+        if (errorMessage === "") {
             return null;
         } else {
-            return <Text style={styles.errorMessage}>{this.props.errorMessage}</Text>;
+            return <Text style={styles.errorMessage}>{errorMessage}</Text>;
         }
     };
 
-    handleChangeText = (text) => {
-        this.props.isValid(text)
+    handleChangeText = (isValid, text) => {
+        isValid(text)
     };
 
     render() {
+        const {name, placeholder, value, iconName, iconColor, setStateFunc, isValid, secureTextEntry, isEmail, errorMessage} = this.props;
         return (
             <Fragment>
                 <View style={styles.inputContainer}>
-                    <Icon name={this.props.iconName} size={18} color={this.props.iconColor}/>
+                    <Icon name={iconName} size={18} color={iconColor}/>
                     <TextInput
-                        name={this.props.name}
-                        placeholder={this.props.placeholder}
-                        value={this.props.value}
-                        onChangeText={text => this.props.setStateFunc(this.props.name, text)}
-                        onEndEditing={e => this.handleChangeText(e.nativeEvent.text)}
+                        name={name}
+                        placeholder={placeholder}
+                        value={value}
+                        onChangeText={text => setStateFunc(name, text)}
+                        onEndEditing={e => this.handleChangeText(isValid, e.nativeEvent.text)}
                         style={styles.input}
-                        secureTextEntry={this.props.secureTextEntry}
-                        keyboardType={this.props.isEmail ? 'email-address' : 'default'}
-                        autoCapitalize={this.props.isEmail ? 'none' : 'words'}
+                        secureTextEntry={secureTextEntry}
+                        keyboardType={isEmail ? 'email-address' : 'default'}
+                        autoCapitalize={isEmail ? 'none' : 'words'}
                         autoCompleteType='off'
                     />
                 </View>
-                {this.errorMessageContainer()}
+                {this.errorMessageContainer(errorMessage)}
             </Fragment>
         );
     }

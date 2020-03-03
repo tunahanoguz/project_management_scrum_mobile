@@ -1,15 +1,22 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import {View, Text, FlatList, Animated, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {Text, Animated, StyleSheet, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import {withNavigation} from 'react-navigation';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import styled, {css} from 'styled-components';
 import TopBar from "../components/TopBar";
-import ProjectCard from "../components/cards/ProjectCards";
 import Icon from "react-native-vector-icons/Feather";
-import {colors, fonts} from "../styles";
-import {getAllTasks} from "../actions/taskActions";
-import {getAllTeams} from "../actions/teamActions";
-import {getAllProjects} from "../actions/projectActions";
+import {Container} from "../styles";
+import {getTasksForHome} from "../actions/taskActions";
+import {getAllTeams, getTeamsForHomeScreen} from "../actions/teamActions";
+import {getAllProjects, getProjectsForHomeScreen} from "../actions/projectActions";
+import Divider from "../components/Divider";
+import moment from "moment";
+import {getSprintsForHomeScreen} from "../actions/sprintActions";
+import SplashScreen from 'react-native-splash-screen';
+import {getUser} from "../actions/authActions";
+import auth from "@react-native-firebase/auth";
+import List from "../components/list/List";
 
 const Home = (props) => {
     const [isOpenAbsoluteButtons, setIsOpenAbsoluteButtons] = useState(false);
@@ -17,58 +24,54 @@ const Home = (props) => {
     const [animatedValueSecond, setAnimatedValueSecond] = useState(new Animated.Value(0));
     const [animatedValueThird, setAnimatedValueThird] = useState(new Animated.Value(0));
     const [teamIDsValue, setTeamIDsValue] = useState([]);
-    const [isProjectsExist, setIsProjectsExist] = useState(false);
+    const [projectIDsValue, setProjectIDsValue] = useState([]);
+    const [selectedTab, setSelectedTab] = useState(0);
     const dispatch = useDispatch();
     const authState = useSelector(state => state.authReducer.authState);
     const user = useSelector(state => state.authReducer.user);
-    const tasks = useSelector(state => state.taskReducer.tasks);
+    const homeTasks = useSelector(state => state.taskReducer.homeTasks);
     const teamIDs = useSelector(state => state.teamReducer.teamIDs);
-    const projects = useSelector(state => state.projectReducer.projects);
+    const projectIDs = useSelector(state => state.projectReducer.projectIDs);
+    const homeProjects = useSelector(state => state.projectReducer.homeProjects);
+    const homeTeams = useSelector(state => state.teamReducer.homeTeams);
+    const homeSprints = useSelector(state => state.sprintReducer.homeSprints);
+    const projectLoading = useSelector(state => state.projectReducer.loading);
+    const projectError = useSelector(state => state.projectReducer.error);
+    const teamLoading = useSelector(state => state.teamReducer.loading);
+    const teamError = useSelector(state => state.teamReducer.error);
+    const sprintLoading = useSelector(state => state.sprintReducer.loading);
+    const sprintError = useSelector(state => state.sprintReducer.error);
+    const taskLoading = useSelector(state => state.taskReducer.loading);
+    const taskError = useSelector(state => state.taskReducer.error);
 
     useEffect(() => {
-        changeNavigationBarColor('#3f38dd');
-        dispatch(getAllTasks());
-        dispatch(getAllTeams(user.uid));
+        dispatch(getUser());
+        changeNavigationBarColor('#281C9D');
     }, []);
 
     useEffect(() => {
+        auth().onAuthStateChanged(function (user) {
+            if (user) {
+                SplashScreen.hide();
+                dispatch(getAllTeams(user.uid));
+            } else {
+                props.navigation.navigate('Login');
+                SplashScreen.hide();
+            }
+        });
+    }, [authState]);
+
+    useEffect(() => {
         setTeamIDsValue(teamIDs);
+        setProjectIDsValue(projectIDs);
     });
 
     useEffect(() => {
-        if (teamIDs.length !== 0){
-            setIsProjectsExist(true);
+        if (teamIDs.length !== 0) {
+            dispatch(getProjectsForHomeScreen(teamIDs));
             dispatch(getAllProjects(teamIDs));
         }
     }, [teamIDsValue]);
-
-    const projectContainer = () => (
-        <View style={{marginRight: -30}}>
-            <FlatList
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                data={projects}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({item, index}) => {
-                    let color = "#FFB129";
-                    if (index % 2 !== 0) {
-                        color = "#024630";
-                    }
-
-                    return <ProjectCard project={item} color={color}/>;
-                }}/>
-        </View>
-    );
-
-    const priorityValues = (priority) => {
-        if (priority === 1) {
-            return [colors.highPriorityDark, colors.highPriorityLight, 'arrow-up'];
-        } else if (priority === 2) {
-            return [colors.mediumPriorityDark, colors.mediumPriorityLight, 'arrow-right'];
-        } else {
-            return [colors.lowPriorityDark, colors.lowPriorityLight, 'arrow-down'];
-        }
-    };
 
     const absoluteButtonStyle = (color) => {
         return {
@@ -101,78 +104,107 @@ const Home = (props) => {
         ]).start();
     };
 
-    const goToTaskDetail = (task) => {
-        props.navigation.navigate('TaskDetail', {task});
-    };
-
-    const jobsContainer = () => (
-        tasks.slice(0, 3).map(task => {
-            const colors = priorityValues(task.priority);
-            const title = () => {
-                const title = task.title;
-                const titleLength = title.length;
-
-                if (titleLength > 28) {
-                    return title.substring(0, 30) + "...";
-                } else {
-                    return title;
-                }
-            };
-
-            return (
-                <TouchableOpacity key={task.id} style={{
-                    ...styles.taskContainer,
-                    // borderLeftWidth: 10,
-                    // borderLeftColor: priorityDotColor(task.priority)
-                }} onPress={() => goToTaskDetail(task)}>
-                    <View style={{
-                        width: 50,
-                        height: 50,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: colors[0],
-                        marginRight: 10,
-                        borderRadius: 20
-                    }}>
-                        <Icon name={colors[2]} size={20} color='rgba(255, 255, 255, 0.8)'/>
-                    </View>
-                    <View>
-                        <View style={styles.taskTitleContainer}>
-                            <Text style={styles.taskTitle}>{title()}</Text>
-                        </View>
-                        <View style={styles.dateContainer}>
-                            <Icon name='calendar' size={16} style={styles.dateIcon}/>
-                            <Text style={styles.dateText}>{task.goalFinishDate}</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            );
-        })
-    );
-
     const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
     const goToScreen = (screenName) => {
         return props.navigation.navigate(screenName);
     };
 
-    const goToLogin = () => {
-        return props.navigation.navigate('Login');
+    const tabButtonAction = (order) => {
+        setSelectedTab(order);
+
+        if (order === 1){
+            dispatch(getTeamsForHomeScreen(user.uid));
+        } else if (order === 2){
+            dispatch(getSprintsForHomeScreen(projectIDs));
+        } else if (order === 3){
+            dispatch(getTasksForHome(projectIDs));
+        }
+    };
+
+    const renderTabItem = (icon, name, order) => {
+        return (
+            <Tab selected={order === selectedTab} onPress={() => tabButtonAction(order)}>
+                <Text style={{fontSize: 16,}}>{icon}</Text>
+                <Divider height={6}/>
+                <TabText selected={order === selectedTab}>{name}</TabText>
+            </Tab>
+        );
+    };
+
+    const renderTitle = (title) => {
+        const titleLength = title.length;
+        if (titleLength > 20) {
+            return title.substring(0, 20) + "...";
+        } else {
+            return title;
+        }
+    };
+
+    const renderDate = (date) => {
+        moment.locale('tr-TR');
+        return moment(date).format('LLL');
+    };
+
+    const renderProjectList = () => {
+        return (
+            <List loading={projectLoading} error={projectError} data={homeProjects} type='project' orderColor='orangered' isFunctioned={false} />
+        );
+    };
+
+    const renderTeamList = () => {
+        return (
+            <List loading={teamLoading} error={teamError} data={homeTeams} type='team' orderColor='teal' isFunctioned={false} />
+        );
+    };
+
+    const renderSprintList = () => {
+        return (
+            <List loading={sprintLoading} error={sprintError} data={homeSprints} type='sprint' orderColor='indigo' isFunctioned={false} />
+        );
+    };
+
+    const renderTaskList = () => {
+        return (
+            <List loading={taskLoading} error={taskError} data={homeTasks} type='task' orderColor='midnightblue' isFunctioned={false} />
+        );
+    };
+
+    const renderLists = () => {
+        if (selectedTab === 0){
+            return renderProjectList();
+        } else if (selectedTab === 1){
+            return renderTeamList();
+        } else if (selectedTab === 2){
+            return renderSprintList();
+        } else {
+            return renderTaskList();
+        }
     };
 
     const authenticatedHome = () => {
         return (
             <Fragment>
                 <TopBar isBack={false} title="Anasayfa" profilePhoto={user.photoURL}/>
-                <View style={styles.container}>
-                    <Text style={fonts.title}>Son Projeler</Text>
-                    {isProjectsExist ? projectContainer() : <ActivityIndicator size='large'/>}
-                    <View style={styles.space}/>
-                    <Text style={fonts.title}>Yaklaşan İşler</Text>
-                    {jobsContainer()}
-                </View>
+                <HelloContainer>
+                    <HelloText large>Merhaba,</HelloText>
+                    <HelloText normal>{user.displayName}</HelloText>
+                </HelloContainer>
 
-                <AnimatedTouchable style={[absoluteButtonStyle(colors.orange), {
+                <Container space>
+                    <TabContainer>
+                        {renderTabItem('💼', 'Proje', 0)}
+                        {renderTabItem('🤝', 'Takım', 1)}
+                        {renderTabItem('🏃', 'Sprint', 2)}
+                        {renderTabItem('💪', 'İş', 3)}
+                    </TabContainer>
+
+                    <Container flex={0.8}>
+                        {renderLists()}
+                    </Container>
+                </Container>
+
+                <AnimatedTouchable style={[absoluteButtonStyle('orangered'), {
                     bottom: 10,
                     transform: [{translateY: animatedValueFirst}],
                     alignSelf: 'flex-end'
@@ -181,7 +213,7 @@ const Home = (props) => {
                                    onPress={() => goToScreen('CreateProject')}>
                     <Icon name='briefcase' size={24} color='white'/>
                 </AnimatedTouchable>
-                <AnimatedTouchable style={[absoluteButtonStyle(colors.darkGreen), {
+                <AnimatedTouchable style={[absoluteButtonStyle('mediumseagreen'), {
                     bottom: 10,
                     transform: [{translateY: animatedValueSecond}]
                 }]}
@@ -189,14 +221,14 @@ const Home = (props) => {
                                    onPress={() => goToScreen('CreateTeam')}>
                     <Icon name='users' size={20} color='white'/>
                 </AnimatedTouchable>
-                <AnimatedTouchable style={[absoluteButtonStyle(colors.yellow), {
+                <AnimatedTouchable style={[absoluteButtonStyle('midnightblue'), {
                     bottom: 10,
                     transform: [{translateY: animatedValueThird}]
                 }]}
                                    activeOpacity={0.6} onPress={() => alert("asd")}>
                     <Icon name='plus' size={24} color='white'/>
                 </AnimatedTouchable>
-                <TouchableOpacity style={[absoluteButtonStyle(colors.purple), {bottom: 10,}]} activeOpacity={0.6}
+                <TouchableOpacity style={[absoluteButtonStyle('indigo'), {bottom: 10,}]} activeOpacity={0.6}
                                   onPress={() => absoluteButtonsAnimate()}>
                     <Icon name='plus' size={24} color='white'/>
                 </TouchableOpacity>
@@ -205,36 +237,68 @@ const Home = (props) => {
     };
 
     return (
-        authState ? authenticatedHome() : goToLogin()
+        authenticatedHome()
     );
 };
+
+const HelloContainer = styled.View`
+    padding: 30px 0 0 30px;
+`;
+
+const HelloText = styled.Text`
+    font-family: Poppins-Medium;
+    font-size: 24px;
+    color: #282D41;
+    ${({large}) => large && css`
+        font-size: 32px;
+    `};
+    ${({normal}) => normal && css`
+        font-family: Poppins-Regular;
+    `};
+`;
+
+const TabContainer = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 -10px 30px 0;
+`;
+
+const Tab = styled.TouchableOpacity`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    padding-vertical: 15px;
+    border-radius: 15px;
+    border-width: 2px;
+    border-style: dashed;
+    border-color: #E6E8EE;
+    ${({selected}) => selected && css`
+        background-color: white;
+        border-style: solid;
+        border-color: white;
+    `}
+`;
+
+const TabText = styled.Text`
+    font-family: Poppins-Medium;
+    font-size: 14px;
+    color: #8A929B;
+    ${({selected}) => selected && css`
+        color: #282D41;
+    `}
+`;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        paddingVertical: 20,
-        paddingHorizontal: 30,
+        backgroundColor: '#F3F5FA',
     },
     title: {
         fontFamily: 'Poppins-Bold',
         fontSize: 24
-    },
-    taskContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        // backgroundColor: 'rgba(0, 0, 0, 0.05)',
-        marginBottom: 10,
-        paddingVertical: 10,
-        // paddingHorizontal: 10,
-        borderRadius: 5,
-    },
-    taskTitleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        marginBottom: 2
     },
     highPriorityDot: {
         width: 8,
@@ -247,18 +311,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 14,
         marginTop: 2
-    },
-    dateContainer: {
-        flexDirection: 'row',
-        marginTop: 4,
-    },
-    dateIcon: {
-        marginRight: 4,
-    },
-    dateText: {
-        fontFamily: 'Poppins-Medium',
-        fontSize: 14,
-        marginTop: -1,
     },
     space: {
         height: 20,

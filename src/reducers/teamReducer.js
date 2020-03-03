@@ -8,12 +8,17 @@ import {
     CREATE_TEAM_FAILURE,
     GET_TEAM_MEMBERS_START,
     GET_TEAM_MEMBERS_SUCCESS,
-    GET_TEAM_MEMBERS_FAILURE, GET_ALL_CREATED_TEAMS_START, GET_ALL_CREATED_TEAMS_SUCCESS, GET_ALL_CREATED_TEAMS_FAILURE,
+    GET_TEAM_MEMBERS_FAILURE,
+    GET_ALL_CREATED_TEAMS_START,
+    GET_ALL_CREATED_TEAMS_SUCCESS,
+    GET_ALL_CREATED_TEAMS_FAILURE,
+    GET_TEAMS_FOR_HOME_START, GET_TEAMS_FOR_HOME_SUCCESS, GET_TEAMS_FOR_HOME_FAILURE,
 } from "../actions/types";
 
 const initialState = {
     team: {},
     teams: [],
+    homeTeams: [],
     createdTeams: [],
     teamIDs: [],
     teamMembers: [],
@@ -46,6 +51,23 @@ const teamReducer = (state = initialState, action) => {
                 loading: false,
             };
         case GET_ALL_TEAMS_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_TEAMS_FOR_HOME_START:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_TEAMS_FOR_HOME_SUCCESS:
+            return {
+                ...state,
+                homeTeams: action.teams,
+                loading: false,
+            };
+        case GET_TEAMS_FOR_HOME_FAILURE:
             return {
                 ...state,
                 error: action.error,

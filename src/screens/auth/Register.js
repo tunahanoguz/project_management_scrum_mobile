@@ -23,9 +23,9 @@ class Register extends Component {
     }
 
     componentDidUpdate(){
-        const {authState} = this.props;
+        const {authState, navigation} = this.props;
         if (authState === true){
-            this.props.navigation.navigate('Home');
+            navigation.navigate('Home');
         }
     }
 
@@ -118,19 +118,20 @@ class Register extends Component {
     };
 
     render() {
+        const {fullName, fullNameError, email, emailError, password, passwordError} = this.state;
         return (
             <View style={styles.container}>
                 <Text style={fonts.title}>Kayıt Ol</Text>
 
-                <Input iconName='type' value={this.state.fullName} placeholder="Ad Soyad" name='fullName'
+                <Input iconName='type' value={fullName} placeholder="Ad Soyad" name='fullName'
                        setStateFunc={this.setStateFunc} isValid={this.validateFullName}
-                       errorMessage={this.state.fullNameError}/>
-                <Input iconName='mail' value={this.state.email} placeholder="Email" name='email'
+                       errorMessage={fullNameError}/>
+                <Input iconName='mail' value={email} placeholder="Email" name='email'
                        setStateFunc={this.setStateFunc} isValid={this.validateEmail}
-                       errorMessage={this.state.emailError}/>
-                <Input iconName='key' value={this.state.password} placeholder="Password" name='password'
+                       errorMessage={emailError}/>
+                <Input iconName='key' value={password} placeholder="Password" name='password'
                        setStateFunc={this.setStateFunc} isValid={this.validatePassword} secureTextEntry={true}
-                       errorMessage={this.state.passwordError}/>
+                       errorMessage={passwordError}/>
 
                 <RoundedButton color='green' icon='arrow-right' pressFunc={this.handleSubmit}/>
 

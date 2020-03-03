@@ -19,8 +19,8 @@ class TopBar extends Component {
         this.props.navigation.navigate('MyProfile');
     };
 
-    topBarLeft = () => {
-        if (this.props.isBack){
+    topBarLeft = (isBack, title) => {
+        if (isBack){
             return (
                 <TouchableOpacity onPress={() => this.goToBack()}>
                     <Icon name='arrow-left' size={24} color='white' />
@@ -28,18 +28,16 @@ class TopBar extends Component {
             );
         } else {
             return (
-                <Text style={styles.topBarTitle}>{this.props.title}</Text>
+                <Text style={styles.topBarTitle}>{title}</Text>
             );
         }
     };
 
-    topBarRight = () => {
-        const photo = this.props.user.photoURL;
-
-        if (photo){
+    topBarRight = ({photoURL}) => {
+        if (photoURL){
             return (
                 <TouchableOpacity onPress={() => this.goToProfile()}>
-                    <Image source={{uri: photo}} style={styles.profilePhoto} />
+                    <Image source={{uri: photoURL}} style={styles.profilePhoto} />
                 </TouchableOpacity>
             );
         } else {
@@ -52,11 +50,12 @@ class TopBar extends Component {
     };
 
     render(){
+        const {isBack, title, user} = this.props;
         return (
             <View style={styles.topBarContainer}>
-                <StatusBar backgroundColor='transparent' translucent={true} />
-                {this.topBarLeft()}
-                {this.topBarRight()}
+                {/*<StatusBar backgroundColor='transparent' translucent={true} />*/}
+                {this.topBarLeft(isBack, title)}
+                {this.topBarRight(user)}
             </View>
         );
     }
@@ -68,8 +67,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#060518',
-        paddingTop: 10 + sizes.statusBarHeight,
+        backgroundColor: '#281C9D',
+        paddingTop: 10,
         paddingBottom: 10,
         paddingHorizontal: 30
     },
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
     profilePhoto: {
         width: 40,
         height: 40,
-        borderRadius: 100,
+        borderRadius: 15,
     },
     profileView: {
         width: 40,

@@ -3,21 +3,14 @@ import {View, StyleSheet, FlatList} from 'react-native';
 import UserCard from "../../components/cards/UserCard";
 import TopBar from "../../components/TopBar";
 import {connect} from "react-redux";
+import {Container, Divider, InnerContainer, Title} from "../../styles";
 
 class TeamMembers extends Component {
     members = () => {
-        // const usersInfo = this.props.teamMembers;
         const members = this.props.navigation.getParam("members", "");
 
         return <FlatList data={members}
-                         renderItem={({item, index}) => {
-                             let style = {};
-                             if (index === 0) {
-                                 style = {marginTop: 30};
-                             }
-
-                             return <UserCard user={item} role={members[index]?.role} style={style}/>;
-                         }}
+                         renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
                          keyExtractor={(item) => item.id.toString()}/>
     };
 
@@ -26,9 +19,19 @@ class TeamMembers extends Component {
             <View style={styles.container}>
                 <TopBar isBack={true}/>
 
-                <View style={styles.innerContainer}>
-                    {this.members()}
-                </View>
+                <Container space>
+                    <Title>Takım Üyeleri</Title>
+                    <Divider height={10}/>
+                    <InnerContainer>
+                        {this.members()}
+                        <Divider height={10} />
+                    </InnerContainer>
+                </Container>
+
+
+                {/*<View style={styles.innerContainer}>*/}
+                {/*    {this.members()}*/}
+                {/*</View>*/}
             </View>
         );
     }

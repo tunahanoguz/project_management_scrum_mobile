@@ -12,4 +12,12 @@ class EmptyScreen extends Component {
 
 const styles = StyleSheet.create({});
 
+// const mapStateToProps = state => {
+//     return {};
+// };
+//
+// const mapDispatchToProps = dispatch => {
+//     return {};
+// };
+
 export default EmptyScreen;
