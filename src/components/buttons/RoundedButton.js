@@ -22,10 +22,19 @@ class RoundedButton extends Component {
         const {size, color, icon, iconSize, disabled, pressFunc} = this.props;
         return (
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => pressFunc()} disabled={disabled}>
-                    <LinearGradient colors={this.gradient(color)} style={[styles.buttonLinearGradient, {width: size, height: size}]}>
-                        <Icon name={icon} size={iconSize ? iconSize : 24}
-                              color="white"/>
+                <TouchableOpacity
+                    onPress={() => pressFunc()}
+                    disabled={disabled}
+                >
+                    <LinearGradient
+                        colors={this.gradient(color)}
+                        style={[styles.buttonLinearGradient, {width: size, height: size}]}
+                    >
+                        <Icon
+                            name={icon}
+                            size={iconSize ? iconSize : 24}
+                            color="white"
+                        />
                     </LinearGradient>
                 </TouchableOpacity>
             </View>

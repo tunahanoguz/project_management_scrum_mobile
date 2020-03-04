@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {withNavigation} from 'react-navigation';
 import {getAllProjectTasks} from "../../actions/taskActions";
@@ -24,7 +24,14 @@ const ProjectTaskList = ({navigation}) => {
 
     const renderTaskList = () => {
         return (
-            <List loading={loading} error={error} data={tasks} orderColor='orange' type='task' isFunctioned={false}/>
+            <List
+                loading={loading}
+                error={error}
+                data={tasks}
+                orderColor='orange'
+                type='task'
+                isFunctioned={false}
+            />
         );
     };
 
@@ -42,7 +49,11 @@ const ProjectTaskList = ({navigation}) => {
                 </Container>
 
                 <Container flex={0.2} verticalMiddle>
-                    <Button action={goToCreateTask} color='purple' text="💪 Yeni İş Oluştur"/>
+                    <Button
+                        action={goToCreateTask}
+                        color='purple'
+                        text="💪 Yeni İş Oluştur"
+                    />
                 </Container>
             </Container>
         </Container>

@@ -30,8 +30,18 @@ const TeamProjectsList = ({navigation}) => {
             <TopBar isBack={true} />
             <Container space flex={0.92}>
                 <Title>Takım Projeleri</Title>
+
                 <Divider height={10}/>
-                <List loading={loading} error={error} data={projects} orderColor='orange' type='project' isFunctioned={false} modalFunc={setIsOpenModal} />
+
+                <List
+                    loading={loading}
+                    error={error}
+                    data={projects}
+                    orderColor='orange'
+                    type='project'
+                    isFunctioned={false}
+                    modalFunc={setIsOpenModal}
+                />
             </Container>
 
             {/*<ListActionModal isOpen={isModalOpen} toggleFunc={this.setIsOpenModal} editText="Takımı Düzenle"*/}

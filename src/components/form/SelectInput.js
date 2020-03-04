@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {View, FlatList, TouchableOpacity, Picker, Text, StyleSheet} from 'react-native';
-import Icon from "react-native-vector-icons/Feather";
+import {View, Picker, Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {colors, fonts, sizes} from "../../styles";
 
@@ -22,7 +21,15 @@ class SelectInput extends Component {
     };
 
     renderSelections = (selections) => {
-        return (selections.map(selection => <Picker.Item key={selection.id} label={selection.text} value={selection.id} />));
+        return (selections.map(selection => {
+            return (
+                <Picker.Item
+                    key={selection.id}
+                    label={selection.text}
+                    value={selection.id}
+                />
+            );
+        }));
     };
 
     render(){
@@ -95,13 +102,5 @@ SelectInput.propTypes = {
     setSelectedItem: PropTypes.func.isRequired,
     errorMessage: PropTypes.string.isRequired,
 };
-
-// const mapStateToProps = state => {
-//     return {};
-// };
-//
-// const mapDispatchToProps = dispatch => {
-//     return {};
-// };
 
 export default SelectInput;

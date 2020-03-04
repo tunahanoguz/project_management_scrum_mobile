@@ -1,10 +1,11 @@
 import React, {Fragment, useState, useEffect} from 'react';
+import {TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
+import moment from "moment";
 import TopBar from "../../components/TopBar";
 import {Container, DirectionContainer, Divider, InnerContainer, Text, Title} from "../../styles";
 import Button from "../../components/buttons/Button";
 import {getSingleProject} from "../../actions/projectActions";
-import moment from "moment";
 import TabContent from "../../components/tab/TabContent";
 import ProfilePicture from "../../components/ProfilePicture";
 import {getUserById} from "../../actions/authActions";
@@ -17,11 +18,11 @@ const TaskDetail = ({navigation}) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const taskObj = navigation.getParam('task', {});
-    const {id, task, description, projectID, sprintID, assignedUserID, startDate, estimatedFinishDate} = taskObj;
+    const {id, task, description, projectID, sprintID, userID, startDate, estimatedFinishDate} = taskObj;
 
     const dispatch = useDispatch();
     const project = useSelector(state => state.projectReducer.project);
-    const foundUser = useSelector(state => state.projectReducer.foundUser);
+    const foundUser = useSelector(state => state.authReducer.foundUser);
     const sprint = useSelector(state => state.sprintReducer.sprint);
     const taskLoading = useSelector(state => state.taskReducer.loading);
     const taskError = useSelector(state => state.taskReducer.error);
@@ -30,7 +31,7 @@ const TaskDetail = ({navigation}) => {
 
     useEffect(() => {
         dispatch(getSingleProject(projectID));
-        dispatch(getUserById(assignedUserID ? assignedUserID : ""));
+        dispatch(getUserById(userID ? userID : ""));
         dispatch(getSingleSprint(sprintID));
         dispatch(getAllTaskFiles(id));
         dispatch(getAllTaskComments(id));
@@ -100,13 +101,13 @@ const TaskDetail = ({navigation}) => {
     };
 
     const assignedUserDetail = () => {
-        if (assignedUserID !== null){
+        if (userID !== null){
             return (
                 <InnerContainer>
-                    <DirectionContainer row>
-                        <ProfilePicture size={50} picture={foundUser ? foundUser.photoURL : ""} />
+                    <DirectionContainer row alignCenter>
+                        <ProfilePicture size={50} picture={foundUser.photoURL ? foundUser.photoURL : ""} />
                         <Divider width={20}/>
-                        <Text middle>{foundUser?.fullName}</Text>
+                        <Text medium size={16}>{foundUser?.fullName}</Text>
                     </DirectionContainer>
                 </InnerContainer>
             );
@@ -143,14 +144,16 @@ const TaskDetail = ({navigation}) => {
         const {name} = sprint;
         if (sprintID !== null){
             return (
-                <InnerContainer>
-                    <Text medium>Sprint: </Text>
-                    <Text normal>{name}</Text>
-                </InnerContainer>
+                <TouchableOpacity onPress={() => navigation.navigate('SprintDetail', {sprint})}>
+                    <InnerContainer>
+                        <Text medium>Sprint: </Text>
+                        <Text normal>{name}</Text>
+                    </InnerContainer>
+                </TouchableOpacity>
             );
         } else {
             return (
-                <Button color='purple' text="👊 BİR SPRINT'E ATA" action={() => goToAssignSprint()} />
+                <Button color='purple' text="👊 BİR SPRINT'E ATA" action={() => navigation.navigate('StartTask', {task, project})} />
             );
         }
     };
@@ -159,11 +162,25 @@ const TaskDetail = ({navigation}) => {
         return (
             <Fragment>
                 <Container flex={0.8}>
-                    <List data={files} type='file' loading={taskLoading} error={taskError} orderColor='orangered' isFunctioned={false}/>
+                    <List
+                        loading={taskLoading}
+                        error={taskError}
+                        data={files}
+                        type='file'
+                        orderColor='orangered'
+                        isFunctioned={false}
+                    />
                 </Container>
 
                 <Container flex={0.2} verticalMiddle>
-                    <DoubleButton firstText="🤙 Yeni Dosya" firstColor='green' firstAction={() => navigation.navigate('CreateTaskFile', {taskID: taskObj.id})} secondText="📁 Tüm Dosyalar" secondColor='purple' secondAction={() => navigation.navigate('TaskFileList', {taskID: taskObj.id})}/>
+                    <DoubleButton
+                        firstText="🤙 Yeni Dosya"
+                        firstColor='green'
+                        firstAction={() => navigation.navigate('CreateTaskFile', {taskID: taskObj.id})}
+                        secondText="📁 Tüm Dosyalar"
+                        secondColor='purple'
+                        secondAction={() => navigation.navigate('TaskFileList', {taskID: taskObj.id})}
+                    />
                 </Container>
             </Fragment>
         );
@@ -173,11 +190,25 @@ const TaskDetail = ({navigation}) => {
         return (
             <Fragment>
                 <Container flex={0.8}>
-                    <List data={comments} type='comment' loading={taskLoading} error={taskError} orderColor='orangered' isFunctioned={false}/>
+                    <List
+                        loading={taskLoading}
+                        error={taskError}
+                        data={comments}
+                        type='comment'
+                        orderColor='orangered'
+                        isFunctioned={false}
+                    />
                 </Container>
 
                 <Container flex={0.2} verticalMiddle>
-                    <DoubleButton firstText="🤙 YENİ YORUM" firstColor='green' firstAction={() => navigation.navigate('CreateTaskComment', {taskID: id})} secondText="💬 TÜM YORUMLAR" secondColor='purple' secondAction={() => navigation.navigate('TaskCommentList', {taskID: id,})}/>
+                    <DoubleButton
+                        firstText="🤙 YENİ YORUM"
+                        firstColor='green'
+                        firstAction={() => navigation.navigate('CreateTaskComment', {taskID: id})}
+                        secondText="💬 TÜM YORUMLAR"
+                        secondColor='purple'
+                        secondAction={() => navigation.navigate('TaskCommentList', {taskID: id,})}
+                    />
                 </Container>
             </Fragment>
         );
@@ -204,8 +235,12 @@ const TaskDetail = ({navigation}) => {
             <Container space>
                 <Title>{task}</Title>
 
-                <TabContent tabs={tabs} selectedTab={selectedTab} tabButtonAction={setSelectedTab}
-                            tabContents={renderTabContents}/>
+                <TabContent
+                    tabs={tabs}
+                    selectedTab={selectedTab}
+                    tabButtonAction={setSelectedTab}
+                    tabContents={renderTabContents}
+                />
             </Container>
         </Container>
     );

@@ -5,15 +5,19 @@ import TopBar from "../../components/TopBar";
 import {colors, fonts} from "../../styles";
 import ProjectFileCard from "../../components/cards/ProjectFileCard";
 import AbsoluteButton from "../../components/buttons/AbsoluteButton";
-import {getAllProjectFiles} from "../../actions/projectActions";
+import {deleteProjectFile, getAllProjectFiles} from "../../actions/projectActions";
 import {connect} from "react-redux";
 import {ActivityIndicator} from "react-native-paper";
 import List from "../../components/list/List";
+import ListActionModal from "../../components/modals/ListActionModal";
 
 class ProjectFileList extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isModalOpen: false,
+            selectedItemID: "",
+        };
     }
 
     componentDidMount() {
@@ -21,26 +25,37 @@ class ProjectFileList extends Component {
         this.props.getAllProjectFiles(projectID);
     }
 
+    setIsOpenModal = (itemID) => {
+        this.setState(state => ({isModalOpen: !state.isModalOpen, selectedItemID: itemID}));
+    };
+
     goToUploadProjectFile = () => {
         const projectID = this.props.navigation.getParam('projectID', "");
         this.props.navigation.navigate('ProjectFileUpload', {projectID});
     };
 
+    editFile = () => {
+        // this.props.deleteProjectFile(this.state.selectedItemID);
+        alert("asdasdasd");
+    };
+
+    deleteFile = () => {
+        this.props.deleteProjectFile(this.state.selectedItemID);
+    };
+
     listOfFiles = () => {
         const {loading, error, files} = this.props;
-        // const projectID = this.props.navigation.getParam('projectID', "");
-        // if (loading){
-        //     return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator size='large'/></View>;
-        // } else if (files.length !== 0){
-        //     return (
-        //         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><Text style={fonts.mediumText}>{error}</Text></View>
-        //     );
-        // } else {
-        //     return (
-        //         <FlatList data={files} renderItem={({item}) => <ProjectFileCard file={item} projectID={projectID}/>} />
-        //     );
-        // }
-        return <List loading={loading} error={error} data={files} type='file' isFunctioned={true} orderColor='orangered' modalFunc={() => alert("asdasd")} />
+        return (
+            <List
+                loading={loading}
+                error={error}
+                data={files}
+                type='file'
+                isFunctioned={true}
+                orderColor='orangered'
+                modalFunc={this.setIsOpenModal}
+            />
+        );
     };
 
     render(){
@@ -50,13 +65,25 @@ class ProjectFileList extends Component {
 
                 {this.listOfFiles()}
 
-                <AbsoluteButton icon='plus' backgroundColor={colors.purple} pressFunc={() => this.goToUploadProjectFile()} style={{bottom: 10, left: 10,}} />
+                <AbsoluteButton
+                    icon='plus'
+                    backgroundColor={colors.purple}
+                    pressFunc={() => this.goToUploadProjectFile()}
+                    style={{bottom: 10, left: 10,}}
+                />
+
+                <ListActionModal
+                    isOpen={this.state.isModalOpen}
+                    toggleFunc={this.setIsOpenModal}
+                    editText="Dosyayı Düzenle"
+                    editAction={this.editFile}
+                    deleteText="Dosyayı Sil"
+                    deleteAction={this.deleteFile}
+                />
             </Container>
         );
     }
 }
-
-const styles = StyleSheet.create({});
 
 const mapStateToProps = state => {
     return {
@@ -70,6 +97,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getAllProjectFiles: (projectID) => dispatch(getAllProjectFiles(projectID)),
+        deleteProjectFile: (projectFileID) => dispatch(deleteProjectFile(projectFileID)),
     };
 };
 

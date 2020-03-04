@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 
 const Button = ({color, half, leftRounded, rightRounded, text, action}) => {
     return (
-        <ButtonContainer color={color} onPress={() => action()} half={!!half} leftRounded={!!leftRounded} rightRounded={!!rightRounded}>
+        <ButtonContainer
+            color={color}
+            onPress={() => action()}
+            half={!!half}
+            leftRounded={!!leftRounded}
+            rightRounded={!!rightRounded}
+        >
             <ButtonText>{text}</ButtonText>
         </ButtonContainer>
     );

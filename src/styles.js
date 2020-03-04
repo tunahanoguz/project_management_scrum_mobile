@@ -134,6 +134,9 @@ export const InnerContainer = styled.View`
 `;
 
 export const DirectionContainer = styled.View`
+    ${({flex}) => flex && css`
+        flex: ${flex};
+    `};
     ${({row}) => row && css`
         flex-direction: row;
     `};

@@ -14,15 +14,31 @@ class AbsoluteButton extends Component {
         const {animated, icon, iconColor, pressFunc} = this.props;
         if (animated) {
             return (
-                <TouchableOpacity style={this.buttonStyle} onPress={() => pressFunc()} activeOpacity={0.8}>
-                    <Icon name={icon} size={20} color={iconColor}/>
+                <TouchableOpacity
+                    style={this.buttonStyle}
+                    onPress={() => pressFunc()}
+                    activeOpacity={0.8}
+                >
+                    <Icon
+                        name={icon}
+                        size={20}
+                        color={iconColor}
+                    />
                 </TouchableOpacity>
             );
         } else {
             const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
             return (
-                <AnimatedTouchableOpacity style={this.buttonStyle} onPress={() => pressFunc()} activeOpacity={0.8}>
-                    <Icon name={icon} size={20} color={iconColor}/>
+                <AnimatedTouchableOpacity
+                    style={this.buttonStyle}
+                    onPress={() => pressFunc()}
+                    activeOpacity={0.8}
+                >
+                    <Icon
+                        name={icon}
+                        size={20}
+                        color={iconColor}
+                    />
                 </AnimatedTouchableOpacity>
             );
         }

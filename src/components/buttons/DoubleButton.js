@@ -1,13 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DirectionContainer, Divider} from "../../styles";
+import {DirectionContainer} from "../../styles";
 import Button from "./Button";
 
 const DoubleButton = ({firstColor, secondColor, firstText, secondText, firstAction, secondAction}) => {
     return (
         <DirectionContainer row>
-            <Button color={firstColor} text={firstText} action={firstAction} half leftRounded/>
-            <Button color={secondColor} text={secondText} action={secondAction} half rightRounded/>
+            <Button
+                color={firstColor}
+                text={firstText}
+                action={firstAction}
+                half
+                leftRounded
+            />
+
+            <Button
+                color={secondColor}
+                text={secondText}
+                action={secondAction}
+                half
+                rightRounded
+            />
         </DirectionContainer>
     );
 };

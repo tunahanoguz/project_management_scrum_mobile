@@ -9,9 +9,13 @@ class TeamMembers extends Component {
     members = () => {
         const members = this.props.navigation.getParam("members", "");
 
-        return <FlatList data={members}
-                         renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
-                         keyExtractor={(item) => item.id.toString()}/>
+        return (
+            <FlatList
+                data={members}
+                renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
+                keyExtractor={(item) => item.id.toString()}
+            />
+        );
     };
 
     render() {

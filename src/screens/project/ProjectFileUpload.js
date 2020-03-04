@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Keyboard} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {connect} from 'react-redux';
+import validate from "validate.js";
+import {withNavigation} from 'react-navigation';
+import uuid from "uuid";
 import Container from "../../components/Container";
 import TopBar from "../../components/TopBar";
 import InnerContainer from "../../components/InnerContainer";
@@ -9,11 +12,7 @@ import {createProjectFile} from "../../actions/projectActions";
 import RoundedButton from "../../components/buttons/RoundedButton";
 import {colors, fonts} from "../../styles";
 import storage from "@react-native-firebase/storage";
-import uuid from "uuid";
-// import Input from "../../components/form/Input";
 import {fileValidations} from "../../validations";
-import validate from "validate.js";
-import {withNavigation} from 'react-navigation';
 
 class ProjectFileUpload extends Component {
     constructor(props) {
@@ -61,7 +60,7 @@ class ProjectFileUpload extends Component {
             });
 
             const {uri, type, name, size} = res;
-            this.setState({fileUri: uri});
+            this.setState({fileUri: uri, fileName: name});
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
             } else {
@@ -121,12 +120,18 @@ class ProjectFileUpload extends Component {
                 <InnerContainer>
                     {/*<Input iconName='file' value={fileName} placeholder="Dosya adı" isValid={this.validateFileName} errorMessage={fileNameError === undefined ? "" : fileNameError} name='fileName' setStateFunc={this.setValue}/>*/}
 
-                    <TouchableOpacity onPress={() => this.openFilePicker()} style={buttonStyle}>
+                    <TouchableOpacity
+                        onPress={() => this.openFilePicker()}
+                        style={buttonStyle}
+                    >
                         <Text style={textStyle}>Bir dosya seçin</Text>
                     </TouchableOpacity>
 
-                    <RoundedButton color='green' icon='upload'
-                                   pressFunc={() => this.handleSubmit(fileName, fileUri, this.props)}/>
+                    <RoundedButton
+                        color='green'
+                        icon='upload'
+                        pressFunc={() => this.handleSubmit(fileName, fileUri, this.props)}
+                    />
                 </InnerContainer>
             </Container>
         );

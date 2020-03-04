@@ -193,16 +193,19 @@ export const editTask = (taskID, task, priority, status, startDate, estimatedFin
         .catch(() => dispatch({type: EDIT_TASK_FAILURE, error: "Task oluşturulamadı."}));
 };
 
-export const startTask = (taskID, startDate, estimatedFinishDate) => dispatch => {
+export const startTask = (taskID, sprintID, userID, estimatedFinishDate) => dispatch => {
     dispatch({type: START_TASK_START});
 
     const taskRef = firestore().collection('task');
     const taskDoc = taskRef.doc(taskID);
     const nowDate = new Date();
     taskDoc.update({
+        sprintID,
+        userID,
         updatedAt: nowDate,
-        startDate,
+        startDate: nowDate,
         estimatedFinishDate,
+        status: 1,
     })
         .then(() => {
             dispatch(getAllTasks());

@@ -108,17 +108,27 @@ const List = ({navigation, loading, error, data, type, orderColor, isFunctioned,
                 );
             } else {
                 return (
-                    <FlatList data={data} renderItem={({item, index}) => <ListItem item={item} itemID={item.id}
-                                                                                   goToScreenFunc={renderGoToFunc()}
-                                                                                   topTitle={renderTopTitle(item)}
-                                                                                   order={index + 1}
-                                                                                   orderColor={orderColor}
-                                                                                   bottomTitle={renderBottomTitle(item)}
-                                                                                   isFunctioned={isFunctioned}
-                                                                                   modalFunc={modalFunc ? modalFunc : () => alert("asdasdasd")}
-                                                                                   type={type}
-                    />}
-                              keyExtractor={(item, index) => index.toString()} showsVerticalScrollIndicator={false}/>
+                    <FlatList
+                        data={data}
+                        renderItem={({item, index}) => {
+                            return (
+                                <ListItem
+                                    item={item}
+                                    itemID={item.id}
+                                    goToScreenFunc={renderGoToFunc()}
+                                    topTitle={renderTopTitle(item)}
+                                    order={index + 1}
+                                    orderColor={orderColor}
+                                    bottomTitle={renderBottomTitle(item)}
+                                    isFunctioned={isFunctioned}
+                                    modalFunc={modalFunc ? modalFunc : () => alert("asdasdasd")}
+                                    type={type}
+                                />
+                            );
+                        }}
+                        keyExtractor={(item, index) => index.toString()}
+                        showsVerticalScrollIndicator={false}
+                    />
                 );
             }
         }

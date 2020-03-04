@@ -67,14 +67,23 @@ class TeamDetail extends Component {
         } else {
             return (
                 <Fragment>
-                    <FlatList data={newMembers}
-                              renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
-                              keyExtractor={(item, index) => index.toString()}/>
+                    <FlatList
+                        data={newMembers}
+                        renderItem={({item, index}) => <UserCard user={item} role={members[index]?.role}/>}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
 
                     <Divider height={20} />
 
-                    <TouchableOpacity style={styles.moreContainer} onPress={() => this.goToTeamMemberList(newMembers)}>
-                        <Icon name='arrow-down' size={24} color='rgba(0, 0, 0, 0.4)'/>
+                    <TouchableOpacity
+                        style={styles.moreContainer}
+                        onPress={() => this.goToTeamMemberList(newMembers)}
+                    >
+                        <Icon
+                            name='arrow-down'
+                            size={24}
+                            color='rgba(0, 0, 0, 0.4)'
+                        />
                     </TouchableOpacity>
 
                     <Divider height={10} />
@@ -106,7 +115,14 @@ class TeamDetail extends Component {
                 </InnerContainer>
 
                 <Container space>
-                    <DoubleButton firstText={members ? `🤝 ${members.length} ÜYE` : 0 + " ÜYE"} secondText={`💼 ${projects?.length} Proje`} firstColor='purple' secondColor='orange' firstAction={() => this.goToTeamMemberList(newMembers)} secondAction={() => this.goToTeamProjects(id)}/>
+                    <DoubleButton
+                        firstText={members ? `🤝 ${members.length} ÜYE` : 0 + " ÜYE"}
+                        secondText={`💼 ${projects?.length} Proje`}
+                        firstColor='purple'
+                        secondColor='orange'
+                        firstAction={() => this.goToTeamMemberList(newMembers)}
+                        secondAction={() => this.goToTeamProjects(id)}
+                    />
 
                     <Divider height={30} />
 

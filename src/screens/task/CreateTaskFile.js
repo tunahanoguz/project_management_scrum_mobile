@@ -103,7 +103,11 @@ const CreateTaskFile = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                <Formik initialValues={{name: "", description: ""}} validationSchema={validationSchema} onSubmit={values => handleSubmit(values)}>
+                <Formik
+                    initialValues={{name: "", description: ""}}
+                    validationSchema={validationSchema}
+                    onSubmit={values => handleSubmit(values)}
+                >
                     {({values, handleChange, errors, setFieldValue, setFieldTouched, touched, isValid, handleSubmit}) => {
                         return (
                             <Fragment>
@@ -127,11 +131,19 @@ const CreateTaskFile = ({navigation}) => {
                                     errorMessage={touched.description && errors.description ? errors.description: ""}
                                 />
 
-                                <TouchableOpacity onPress={() => openFilePicker()} style={buttonStyle}>
+                                <TouchableOpacity
+                                    onPress={() => openFilePicker()}
+                                    style={buttonStyle}
+                                >
                                     <Text>Bir dosya seçin</Text>
                                 </TouchableOpacity>
 
-                                <RoundedButton disabled={!isValid} color='green' icon='arrow-right' pressFunc={handleSubmit} />
+                                <RoundedButton
+                                    disabled={!isValid}
+                                    color='green'
+                                    icon='arrow-right'
+                                    pressFunc={handleSubmit}
+                                />
                             </Fragment>
                         );
                     }}

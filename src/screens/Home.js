@@ -11,7 +11,6 @@ import {getTasksForHome} from "../actions/taskActions";
 import {getAllTeams, getTeamsForHomeScreen} from "../actions/teamActions";
 import {getAllProjects, getProjectsForHomeScreen} from "../actions/projectActions";
 import Divider from "../components/Divider";
-import moment from "moment";
 import {getSprintsForHomeScreen} from "../actions/sprintActions";
 import SplashScreen from 'react-native-splash-screen';
 import {getUser} from "../actions/authActions";
@@ -26,23 +25,30 @@ const Home = (props) => {
     const [teamIDsValue, setTeamIDsValue] = useState([]);
     const [projectIDsValue, setProjectIDsValue] = useState([]);
     const [selectedTab, setSelectedTab] = useState(0);
+
     const dispatch = useDispatch();
+
     const authState = useSelector(state => state.authReducer.authState);
     const user = useSelector(state => state.authReducer.user);
-    const homeTasks = useSelector(state => state.taskReducer.homeTasks);
+
     const teamIDs = useSelector(state => state.teamReducer.teamIDs);
     const projectIDs = useSelector(state => state.projectReducer.projectIDs);
-    const homeProjects = useSelector(state => state.projectReducer.homeProjects);
-    const homeTeams = useSelector(state => state.teamReducer.homeTeams);
-    const homeSprints = useSelector(state => state.sprintReducer.homeSprints);
+
     const projectLoading = useSelector(state => state.projectReducer.loading);
     const projectError = useSelector(state => state.projectReducer.error);
+    const homeProjects = useSelector(state => state.projectReducer.homeProjects);
+
     const teamLoading = useSelector(state => state.teamReducer.loading);
     const teamError = useSelector(state => state.teamReducer.error);
+    const homeTeams = useSelector(state => state.teamReducer.homeTeams);
+
     const sprintLoading = useSelector(state => state.sprintReducer.loading);
     const sprintError = useSelector(state => state.sprintReducer.error);
+    const homeSprints = useSelector(state => state.sprintReducer.homeSprints);
+
     const taskLoading = useSelector(state => state.taskReducer.loading);
     const taskError = useSelector(state => state.taskReducer.error);
+    const homeTasks = useSelector(state => state.taskReducer.homeTasks);
 
     useEffect(() => {
         dispatch(getUser());
@@ -85,6 +91,7 @@ const Home = (props) => {
         const toValueFirst = isOpenAbsoluteButtons ? 0 : -60;
         const toValueSecond = isOpenAbsoluteButtons ? 0 : -120;
         const toValueThird = isOpenAbsoluteButtons ? 0 : -180;
+
         Animated.parallel([
             Animated.timing(animatedValueFirst, {
                 toValue: toValueFirst,
@@ -132,41 +139,69 @@ const Home = (props) => {
         );
     };
 
-    const renderTitle = (title) => {
-        const titleLength = title.length;
-        if (titleLength > 20) {
-            return title.substring(0, 20) + "...";
-        } else {
-            return title;
-        }
-    };
-
-    const renderDate = (date) => {
-        moment.locale('tr-TR');
-        return moment(date).format('LLL');
-    };
+    // const renderTitle = (title) => {
+    //     const titleLength = title.length;
+    //     if (titleLength > 20) {
+    //         return title.substring(0, 20) + "...";
+    //     } else {
+    //         return title;
+    //     }
+    // };
+    //
+    // const renderDate = (date) => {
+    //     moment.locale('tr-TR');
+    //     return moment(date).format('LLL');
+    // };
 
     const renderProjectList = () => {
         return (
-            <List loading={projectLoading} error={projectError} data={homeProjects} type='project' orderColor='orangered' isFunctioned={false} />
+            <List
+                loading={projectLoading}
+                error={projectError}
+                data={homeProjects}
+                type='project'
+                orderColor='orangered'
+                isFunctioned={false}
+            />
         );
     };
 
     const renderTeamList = () => {
         return (
-            <List loading={teamLoading} error={teamError} data={homeTeams} type='team' orderColor='teal' isFunctioned={false} />
+            <List
+                loading={teamLoading}
+                error={teamError}
+                data={homeTeams}
+                type='team'
+                orderColor='teal'
+                isFunctioned={false}
+            />
         );
     };
 
     const renderSprintList = () => {
         return (
-            <List loading={sprintLoading} error={sprintError} data={homeSprints} type='sprint' orderColor='indigo' isFunctioned={false} />
+            <List
+                loading={sprintLoading}
+                error={sprintError}
+                data={homeSprints}
+                type='sprint'
+                orderColor='indigo'
+                isFunctioned={false}
+            />
         );
     };
 
     const renderTaskList = () => {
         return (
-            <List loading={taskLoading} error={taskError} data={homeTasks} type='task' orderColor='midnightblue' isFunctioned={false} />
+            <List
+                loading={taskLoading}
+                error={taskError}
+                data={homeTasks}
+                type='task'
+                orderColor='midnightblue'
+                isFunctioned={false}
+            />
         );
     };
 
@@ -185,7 +220,12 @@ const Home = (props) => {
     const authenticatedHome = () => {
         return (
             <Fragment>
-                <TopBar isBack={false} title="Anasayfa" profilePhoto={user.photoURL}/>
+                <TopBar
+                    isBack={false}
+                    title="Anasayfa"
+                    profilePhoto={user.photoURL}
+                />
+
                 <HelloContainer>
                     <HelloText large>Merhaba,</HelloText>
                     <HelloText normal>{user.displayName}</HelloText>
@@ -204,33 +244,46 @@ const Home = (props) => {
                     </Container>
                 </Container>
 
-                <AnimatedTouchable style={[absoluteButtonStyle('orangered'), {
+                <AnimatedTouchable
+                    style={[absoluteButtonStyle('orangered'), {
                     bottom: 10,
                     transform: [{translateY: animatedValueFirst}],
                     alignSelf: 'flex-end'
                 }]}
-                                   activeOpacity={0.6}
-                                   onPress={() => goToScreen('CreateProject')}>
-                    <Icon name='briefcase' size={24} color='white'/>
+                    activeOpacity={0.6}
+                    onPress={() => goToScreen('CreateProject')}
+                >
+                    <Icon
+                        name='briefcase'
+                        size={24}
+                        color='white'
+                    />
                 </AnimatedTouchable>
-                <AnimatedTouchable style={[absoluteButtonStyle('mediumseagreen'), {
+
+                <AnimatedTouchable
+                    style={[absoluteButtonStyle('mediumseagreen'), {
                     bottom: 10,
                     transform: [{translateY: animatedValueSecond}]
                 }]}
-                                   activeOpacity={0.6}
-                                   onPress={() => goToScreen('CreateTeam')}>
-                    <Icon name='users' size={20} color='white'/>
+                    activeOpacity={0.6}
+                    onPress={() => goToScreen('CreateTeam')}>
+                    <Icon
+                        name='users'
+                        size={20}
+                        color='white'
+                    />
                 </AnimatedTouchable>
-                <AnimatedTouchable style={[absoluteButtonStyle('midnightblue'), {
-                    bottom: 10,
-                    transform: [{translateY: animatedValueThird}]
-                }]}
-                                   activeOpacity={0.6} onPress={() => alert("asd")}>
-                    <Icon name='plus' size={24} color='white'/>
-                </AnimatedTouchable>
-                <TouchableOpacity style={[absoluteButtonStyle('indigo'), {bottom: 10,}]} activeOpacity={0.6}
-                                  onPress={() => absoluteButtonsAnimate()}>
-                    <Icon name='plus' size={24} color='white'/>
+
+                <TouchableOpacity
+                    style={[absoluteButtonStyle('indigo'), {bottom: 10,}]}
+                    activeOpacity={0.6}
+                    onPress={() => absoluteButtonsAnimate()}
+                >
+                    <Icon
+                        name='plus'
+                        size={24}
+                        color='white'
+                    />
                 </TouchableOpacity>
             </Fragment>
         );

@@ -33,11 +33,11 @@ const ListItem = ({order, orderColor, item, itemID, topTitle, bottomTitle, isFun
                     <ListItemText normal>{renderTitle(topTitle)}</ListItemText>
                     <ListItemText light>{bottomTitle}</ListItemText>
                 </ListItemEndLeft>
-                {isFunctioned ? (
+                {isFunctioned && (
                     <ListItemEndRight onPress={() => modalFunc(itemID)}>
                         <Icon name='more-vertical' size={24} color='midnightblue' />
                     </ListItemEndRight>
-                ) : null}
+                )}
             </ListItemEnd>
         </StyledListItem>
     );

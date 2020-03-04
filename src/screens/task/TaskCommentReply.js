@@ -46,7 +46,11 @@ const TaskCommentReply = ({navigation}) => {
 
                 <Divider height={30}/>
 
-                <Button color='purple' text="💬 CEVABI GÖNDER" action={sendReply} />
+                <Button
+                    color='purple'
+                    text="💬 CEVABI GÖNDER"
+                    action={sendReply}
+                />
             </Container>
         </Container>
     );

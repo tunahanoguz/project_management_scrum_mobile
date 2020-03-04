@@ -38,8 +38,17 @@ class BlockButton extends Component {
         const {color, side, icon, iconColor, iconSize, text, textColor, pressFunc} = this.props;
         return (
             <TouchableOpacity onPress={() => pressFunc()} style={this.sideStyle(side)}>
-                <LinearGradient colors={this.gradient(color)} start={{x: 0, y: 0}} end={{x: 1, y: 1}} style={styles.buttonInnerContainer}>
-                    <Icon name={icon} size={iconSize ? iconSize : 24} color={iconColor} style={styles.buttonIcon}/>
+                <LinearGradient
+                    colors={this.gradient(color)}
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 1}}
+                    style={styles.buttonInnerContainer}
+                >
+                    <Icon
+                        name={icon}
+                        size={iconSize ? iconSize : 24}
+                        color={iconColor}
+                        style={styles.buttonIcon}/>
                     <Text style={{color: textColor, ...styles.buttonText}}>{text}</Text>
                 </LinearGradient>
             </TouchableOpacity>

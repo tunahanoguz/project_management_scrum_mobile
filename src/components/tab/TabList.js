@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
-import {View, FlatList} from "react-native";
-import styled, {css} from "styled-components";
+import React from 'react';
+import styled from "styled-components";
 import PropTypes from 'prop-types';
 import TabItem from "./TabItem";
 
@@ -8,7 +7,15 @@ const TabList = ({tabs, selectedTab, tabButtonAction}) => {
 
     return (
         <TabContainer>
-            {tabs.map((tab, index) => <TabItem key={index} item={tab} tabButtonAction={tabButtonAction} selectedTab={selectedTab} order={index}/>)}
+            {tabs.map((tab, index) => (
+                <TabItem
+                    key={index}
+                    item={tab}
+                    tabButtonAction={tabButtonAction}
+                    selectedTab={selectedTab}
+                    order={index}
+                />
+            ))}
         </TabContainer>
     );
 };

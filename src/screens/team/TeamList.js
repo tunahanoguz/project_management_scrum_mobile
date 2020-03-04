@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import {View, Text,} from 'react-native';
 import TopBar from "../../components/TopBar";
 import {connect} from "react-redux";
 import {deleteTeam, getAllTeams} from "../../actions/teamActions";
@@ -46,7 +45,15 @@ class TeamList extends Component {
     }
 
     teamList = (loading, error, teams) => (
-        <List orderColor='orangered' isFunctioned={true} modalFunc={this.setIsOpenModal} data={teams} type='team' loading={loading} error={error}/>
+        <List
+            orderColor='orangered'
+            isFunctioned={true}
+            modalFunc={this.setIsOpenModal}
+            data={teams}
+            type='team'
+            loading={loading}
+            error={error}
+        />
     );
 
     goToCreateTeam = () => {
@@ -55,7 +62,10 @@ class TeamList extends Component {
 
     render() {
         const {isModalOpen} = this.state;
-        const {loading, error, teams} = this.props;
+        const {
+            loading,
+            error,
+            teams} = this.props;
         return (
             <Container>
                 <TopBar isBack={false} title="Takımlar"/>
@@ -64,14 +74,27 @@ class TeamList extends Component {
                     <Container flex={0.8}>
                         {this.teamList(loading, error, teams)}
                     </Container>
-                    <Container flex={0.2} verticalMiddle>
-                        <Button color='purple' text="🤙 Takım Oluştur" action={this.goToCreateTeam}/>
+
+                    <Container
+                        flex={0.2}
+                        verticalMiddle
+                    >
+                        <Button
+                            color='purple'
+                            text="🤙 Takım Oluştur"
+                            action={this.goToCreateTeam}
+                        />
                     </Container>
                 </Container>
 
-                <ListActionModal isOpen={isModalOpen} toggleFunc={this.setIsOpenModal} editText="Takımı Düzenle"
-                                 editAction={this.editTeamAction} deleteText="Takımı Sil"
-                                 deleteAction={this.deleteTeamAction}/>
+                <ListActionModal
+                    isOpen={isModalOpen}
+                    toggleFunc={this.setIsOpenModal}
+                    editText="Takımı Düzenle"
+                    editAction={this.editTeamAction}
+                    deleteText="Takımı Sil"
+                    deleteAction={this.deleteTeamAction}
+                />
             </Container>
         );
     }

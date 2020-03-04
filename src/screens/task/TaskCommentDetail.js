@@ -27,7 +27,11 @@ const TaskCommentDetail = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                <CommentCard comment={commentParam} itemID={taskID} type='task'/>
+                <CommentCard
+                    comment={commentParam}
+                    itemID={taskID}
+                    type='task'
+                />
 
                 <Divider height={10}/>
 
@@ -35,8 +39,10 @@ const TaskCommentDetail = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                <FlatList data={replyComments}
-                          renderItem={({item}) => <CommentCard comment={item} itemID={taskID} type='task'/>}/>
+                <FlatList
+                    data={replyComments}
+                    renderItem={({item}) => <CommentCard comment={item} itemID={taskID} type='task'/>}
+                />
             </Container>
         </Container>
     );

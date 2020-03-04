@@ -1,13 +1,13 @@
 import React, {Component, Fragment} from 'react';
+import {connect} from "react-redux";
 import * as yup from 'yup';
 import {Formik} from 'formik';
 import {
     taskTitle,
     taskPriority,
-    taskDescription, taskProject
+    taskDescription
 } from '../../validationSchema';
 import {createTask} from "../../actions/taskActions";
-import {connect} from "react-redux";
 import RoundedButton from "../../components/buttons/RoundedButton";
 import ExampleInput from "../../components/ExampleInput";
 import TopBar from "../../components/TopBar";
@@ -47,7 +47,11 @@ class EmptyScreen extends Component {
 
                     <Divider height={10}/>
 
-                    <Formik initialValues={{task: "", description: "",  priority: 0, project: ""}} validationSchema={this.validationSchema} onSubmit={values => this.handleSubmit(values)}>
+                    <Formik
+                        initialValues={{task: "", description: "",  priority: 0, project: ""}}
+                        validationSchema={this.validationSchema}
+                        onSubmit={values => this.handleSubmit(values)}
+                    >
                         {({values, handleChange, errors, setFieldValue, setFieldTouched, touched, isValid, handleSubmit}) => {
                             return (
                                 <Fragment>

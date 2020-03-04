@@ -13,7 +13,6 @@ import ProjectMyTasks from "./src/screens/project/ProjectMyTasks";
 import MyProfile from "./src/screens/auth/MyProfile";
 import ChangePasswordFirstScreen from "./src/screens/auth/ChangePasswordFirstScreen";
 import ChangePasswordSecondScreen from "./src/screens/auth/ChangePasswordSecondScreen";
-import SplashScreen from "./src/screens/SplashScreen";
 import ProjectAllTasks from "./src/screens/project/ProjectAllTasks";
 import EditProfile from "./src/screens/auth/EditProfile";
 import TeamList from "./src/screens/team/TeamList";
@@ -52,7 +51,6 @@ import StartTask from "./src/screens/task/StartTask";
 
 const stackNavigator = createStackNavigator(
     {
-        // SplashScreen: {screen: SplashScreen},
         Home: {screen: Home},
         Register: {screen: Register},
         Login: {screen: Login},

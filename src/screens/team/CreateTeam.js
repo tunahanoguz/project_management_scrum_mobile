@@ -203,9 +203,11 @@ class CreateTeam extends Component {
 
     renderFilteredUsersItem = ({item}) => {
         return (
-            <FilteredUserCard user={item}
-                              action={this.filteredUsersAction}
-                              setStateFunc={this.setValue}/>
+            <FilteredUserCard
+                user={item}
+                action={this.filteredUsersAction}
+                setStateFunc={this.setValue}
+            />
         );
     };
 
@@ -214,12 +216,12 @@ class CreateTeam extends Component {
         return (
             <SafeAreaView style={styles.usersListContainer}>
                 <Carousel
-                data={filteredMembers}
-                renderItem={this.renderFilteredUsersItem}
-                sliderWidth={sizes.deviceWidth}
-                sliderHeight={sizes.deviceHeight}
-                itemWidth={sizes.deviceWidth}
-                onSnapToItem={(index) => this.setState({activeFilteredUsersSlide: index})}
+                    data={filteredMembers}
+                    renderItem={this.renderFilteredUsersItem}
+                    sliderWidth={sizes.deviceWidth}
+                    sliderHeight={sizes.deviceHeight}
+                    itemWidth={sizes.deviceWidth}
+                    onSnapToItem={(index) => this.setState({activeFilteredUsersSlide: index})}
                 />
 
                 <Pagination
@@ -241,8 +243,10 @@ class CreateTeam extends Component {
 
     renderAddedUsersItem = ({item}) => {
         return (
-            <AddedUserCard user={item}
-                              action={this.addedMembersAction}/>
+            <AddedUserCard
+                user={item}
+                action={this.addedMembersAction}
+            />
         );
     };
 
@@ -318,15 +322,31 @@ class CreateTeam extends Component {
         if (firstStep) {
             return (
                 <Fragment>
-                    <Input iconName='type' value={teamName} placeholder="Takım Adı" name='teamName'
-                           setStateFunc={this.setValue} isValid={this.validateTeamName}
-                           errorMessage={teamNameError}/>
-                    <Input iconName='align-left' value={teamDescription} placeholder="Takım Açıklaması"
-                           name='teamDescription'
-                           setStateFunc={this.setValue} isValid={this.validateTeamDescription}
-                           errorMessage={teamDescriptionError}/>
+                    <Input
+                        iconName='type'
+                        value={teamName}
+                        placeholder="Takım Adı"
+                        name='teamName'
+                        setStateFunc={this.setValue}
+                        isValid={this.validateTeamName}
+                        errorMessage={teamNameError}
+                    />
 
-                    <RoundedButton color='green' icon='arrow-right' pressFunc={() => this.handleSubmitFirstStep()}/>
+                    <Input
+                        iconName='align-left'
+                        value={teamDescription}
+                        placeholder="Takım Açıklaması"
+                        name='teamDescription'
+                        setStateFunc={this.setValue}
+                        isValid={this.validateTeamDescription}
+                        errorMessage={teamDescriptionError}
+                    />
+
+                    <RoundedButton
+                        color='green'
+                        icon='arrow-right'
+                        pressFunc={() => this.handleSubmitFirstStep()}
+                    />
                 </Fragment>
             );
         } else {
@@ -334,27 +354,49 @@ class CreateTeam extends Component {
                 <Fragment>
                     <View style={styles.searchActionAreaContainer}>
                         <View style={styles.searchActionAreaLeft}>
-                            <Input iconName='hash' value={searchValue} placeholder="Bir kullanıcı arayın"
-                                   isValid={this.inputErrorControl} name='searchValue' setStateFunc={this.setValue}
-                                   errorMessage=""/>
+                            <Input
+                                iconName='hash'
+                                value={searchValue}
+                                placeholder="Bir kullanıcı arayın"
+                                isValid={this.inputErrorControl}
+                                name='searchValue'
+                                setStateFunc={this.setValue}
+                                errorMessage=""
+                            />
                         </View>
 
                         <View style={styles.searchActionAreaRight}>
-                            <RoundedButton color='green' icon='search' pressFunc={this.searchUsers} size={52}/>
+                            <RoundedButton
+                                color='green'
+                                icon='search'
+                                pressFunc={this.searchUsers}
+                                size={52}
+                            />
                         </View>
                     </View>
 
                     <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity style={[styles.showUsersButton, {flex: 0.5, marginRight: 10,}]}
-                                          onPress={() => this.toggleShowUsers()}>
-                            <Icon name='eye' size={16} style={{marginRight: 8,}}/>
-                            <Text
-                                style={fonts.mediumText}>{showAddedMembers ? "Arananları gör" : "Eklenenleri gör"}</Text>
+                        <TouchableOpacity
+                            style={[styles.showUsersButton, {flex: 0.5, marginRight: 10,}]}
+                            onPress={() => this.toggleShowUsers()}
+                        >
+                            <Icon
+                                name='eye'
+                                size={16}
+                                style={{marginRight: 8,}}
+                            />
+                            <Text style={fonts.mediumText}>{showAddedMembers ? "Arananları gör" : "Eklenenleri gör"}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.showUsersButton, {flex: 0.5,}]}
-                                          onPress={() => this.handleSubmit()}>
-                            <Icon name='check' size={16} style={{marginRight: 8,}}/>
+                        <TouchableOpacity
+                            style={[styles.showUsersButton, {flex: 0.5,}]}
+                            onPress={() => this.handleSubmit()}
+                        >
+                            <Icon
+                                name='check'
+                                size={16}
+                                style={{marginRight: 8,}}
+                            />
                             <Text style={fonts.mediumText}>Takımı oluştur</Text>
                         </TouchableOpacity>
                     </View>
@@ -388,17 +430,22 @@ class CreateTeam extends Component {
                     <View style={styles.titleSection}>
                         <Text style={fonts.title}>Takım Oluştur</Text>
                         <View style={styles.rowContainer}>
-                            {!firstStep ? (
-                                <TouchableOpacity style={styles.backButton} onPress={() => {
+                            {!firstStep && (
+                                <TouchableOpacity
+                                    style={styles.backButton}
+                                    onPress={() => {
                                     this.setState({firstStep: true});
                                     this.runBackAnimated();
                                 }}>
-                                    <Icon name='chevron-left' size={32} color='rgba(0, 0, 0, 0.4)'/>
+                                    <Icon
+                                        name='chevron-left'
+                                        size={32}
+                                        color='rgba(0, 0, 0, 0.4)'
+                                    />
                                 </TouchableOpacity>
-                            ) : null}
+                            )}
 
-                            <Text
-                                style={{color: 'rgba(0, 0, 0, 0.4)', ...fonts.title}}>{firstStep ? "1" : "2"}/2</Text>
+                            <Text style={{color: 'rgba(0, 0, 0, 0.4)', ...fonts.title}}>{firstStep ? "1" : "2"}/2</Text>
                         </View>
                     </View>
 

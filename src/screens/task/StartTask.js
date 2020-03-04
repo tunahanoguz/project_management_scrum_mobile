@@ -1,22 +1,20 @@
 import React, {Fragment, useState, useEffect} from 'react';
-import {Animated, Keyboard, View} from 'react-native';
+import {Animated, Keyboard, View, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import * as yup from 'yup';
-import {Formik} from 'formik';
 import styled, {css} from 'styled-components';
 import {getAllSprints} from "../../actions/sprintActions";
-import {Container, Divider, InnerContainer, sizes, Text, Title} from "../../styles";
+import {Container, DirectionContainer, Divider, InnerContainer, sizes, Text, Title} from "../../styles";
 import TopBar from "../../components/TopBar";
 import SelectInput from "../../components/form/SelectInput";
 import RoundedButton from "../../components/buttons/RoundedButton";
 import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
-import {getSingleProject} from "../../actions/projectActions";
 import {taskSprint} from "../../validationSchema";
 import Icon from "react-native-vector-icons/Feather";
-import {SvgUri, SvgXml} from "react-native-svg";
-import WaveSvg from '../../../assets/images/wave.svg';
 import ProfilePicture from "../../components/ProfilePicture";
 import Carousel, {Pagination} from "react-native-snap-carousel";
+import {startTask} from "../../actions/taskActions";
+import ExampleDatePicker from "../../components/form/ExampleDatePicker";
 
 const StartTask = ({navigation}) => {
     const dispatch = useDispatch();
@@ -29,6 +27,10 @@ const StartTask = ({navigation}) => {
     const [members, setMembers] = useState([]);
     const [searchedMembers, setSearchedMembers] = useState([]);
     const [activeSlide, setActiveSlide] = useState(0);
+    const [selectedUser, setSelectedUser] = useState({});
+
+    const [selectedSprintID, setSelectedSprintID] = useState("");
+    const [estimatedFinishDate, setEstimatedFinishDate] = useState(new Date());
 
     const [step, setStep] = useState(0);
 
@@ -79,43 +81,47 @@ const StartTask = ({navigation}) => {
         return list;
     };
 
-    const firstStepValidationSchema = yup.object().shape({
-        sprint: taskSprint
-    });
-
-    const firstStepHandleSubmit = (values) => {
+    const firstStepHandleSubmit = () => {
         setStep(1);
+    };
+
+    const secondStepHandleSubmit = () => {
+        dispatch(startTask(task.id, selectedSprintID, selectedUser.id, estimatedFinishDate));
+        navigation.navigate('TaskDetail', {task});
+    };
+
+    const setSprint = (name, value) => {
+        setSelectedSprintID(value);
+    };
+
+    const setDate = (name, value) => {
+        setEstimatedFinishDate(value);
     };
 
     const renderFirstStep = () => {
         return (
-            <Formik
-                initialValues={{sprint: 0}}
-                validationSchema={firstStepValidationSchema}
-                onSubmit={values => firstStepHandleSubmit(values)}
-            >
-                {({values, handleChange, errors, setFieldValue, setFieldTouched, touched, isValid, handleSubmit}) => {
-                    return (
-                        <Fragment>
-                            <SelectInput
-                                value={values.sprint}
-                                name='sprint'
-                                text="Sprint seçiniz (*)"
-                                selections={sprintList()}
-                                setSelectedItem={setFieldValue}
-                                errorMessage={touched.sprint && errors.sprint ? errors.sprint : ""}
-                            />
+            <Fragment>
+                <SelectInput
+                    value={selectedSprintID}
+                    name='sprint'
+                    text="Sprint seçiniz (*)"
+                    selections={sprintList()}
+                    setSelectedItem={setSprint}
+                    errorMessage={""}
+                />
 
-                            <RoundedButton
-                                disabled={!isValid}
-                                color='green'
-                                icon='arrow-right'
-                                pressFunc={handleSubmit}
-                            />
-                        </Fragment>
-                    );
-                }}
-            </Formik>
+                <ExampleDatePicker
+                    name='estimatedFinishDate'
+                    value={estimatedFinishDate}
+                    handleChange={setDate} text="Tahmini Bitiş Tarihi (*)"
+                />
+
+                <RoundedButton
+                    color='green'
+                    icon='arrow-right'
+                    pressFunc={firstStepHandleSubmit}
+                />
+            </Fragment>
         );
     };
 
@@ -128,11 +134,18 @@ const StartTask = ({navigation}) => {
 
     const memberItem = ({item}) => {
         return (
-            <InnerContainer horizontalCenter>
-                <ProfilePicture size={80} picture={item.photoURL !== null ? item.photoURL : ""}/>
-                <Divider height={10}/>
-                <Text medium size={20}>{item.fullName}</Text>
-            </InnerContainer>
+            <TouchableOpacity onPress={() => setSelectedUser(item)}>
+                <InnerContainer horizontalCenter>
+                    <ProfilePicture
+                        size={80}
+                        picture={item.photoURL !== null ? item.photoURL : ""}
+                    />
+
+                    <Divider height={10}/>
+
+                    <Text medium size={20}>{item.fullName}</Text>
+                </InnerContainer>
+            </TouchableOpacity>
         );
     };
 
@@ -165,9 +178,42 @@ const StartTask = ({navigation}) => {
                         inactiveDotScale={0.6}
                     />
 
-                    <BackButton onPress={() => setStep(0)}>
-                        <Icon name='arrow-left' size={24} color='white' />
-                    </BackButton>
+                    {Object.keys(selectedUser).length !== 0 && (
+                        <InnerContainer>
+                            <DirectionContainer row alignCenter>
+                                <ProfilePicture size={50} picture={selectedUser.photoURL}/>
+
+                                <Divider width={20} />
+
+                                <Text medium size={16}>{selectedUser.fullName}</Text>
+                            </DirectionContainer>
+                        </InnerContainer>
+                    )}
+
+                    <Divider height={20} />
+
+                    <DirectionContainer row justifyCenter>
+                        <SquareButton onPress={() => setStep(0)}>
+                            <Icon
+                                name='arrow-left'
+                                size={24}
+                                color='white'
+                            />
+                        </SquareButton>
+
+                        <Divider width={20} />
+
+                        <SquareButton
+                            color='teal'
+                            onPress={() => secondStepHandleSubmit()}
+                        >
+                            <Icon
+                                name='check'
+                                size={24}
+                                color='white'
+                            />
+                        </SquareButton>
+                    </DirectionContainer>
                 </Fragment>
             );
         }
@@ -182,8 +228,13 @@ const StartTask = ({navigation}) => {
                         value={searchValue}
                         onChangeText={text => setSearchValue(text)}
                     />
+
                     <SearchButton onPress={() => searchTeamMember()}>
-                        <Icon name='search' size={20} color='white'/>
+                        <Icon
+                            name='search'
+                            size={20}
+                            color='white'
+                        />
                     </SearchButton>
                 </SearchContainer>
 
@@ -260,13 +311,16 @@ const SearchButton = styled.TouchableOpacity`
     border-radius: 15px;
 `;
 
-const BackButton = styled.TouchableOpacity`
+const SquareButton = styled.TouchableOpacity`
     width: 50px;
     height: 50px;
     align-self: center;
     justify-content: center;
     align-items: center;
     background-color: black;
+    ${({color}) => color && css`
+        background-color: ${color};
+    `};
 `;
 
 const AnimatedProgressBarInner = Animated.createAnimatedComponent(ProgressBarInner);

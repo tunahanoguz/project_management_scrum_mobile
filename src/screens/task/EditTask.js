@@ -58,7 +58,11 @@ class EditTask extends Component {
 
     priorityModalContainer = () => {
         return (
-            <FlatList data={priorities} renderItem={({item, index}) => <Text>{item.name}</Text>} keyExtractor={(item, index) => index.toString()} />
+            <FlatList
+                data={priorities}
+                renderItem={({item, index}) => <Text>{item.name}</Text>}
+                keyExtractor={(item, index) => index.toString()}
+            />
         );
     };
 
@@ -76,30 +80,68 @@ class EditTask extends Component {
                 <InnerContainer>
                     <Text style={fonts.title}>Görevi Düzenle</Text>
 
-                    <Input iconName='type' value={title} placeholder="Görev Adı" name='title'
-                           setStateFunc={this.setInputState} isValid={this.inputErrorControl}/>
+                    <Input
+                        iconName='type'
+                        value={title}
+                        placeholder="Görev Adı"
+                        name='title'
+                        setStateFunc={this.setInputState}
+                        isValid={this.inputErrorControl}/>
 
-                    <Input iconName='type' value={description} placeholder="Görev Açıklaması"
-                           name='description'
-                           setStateFunc={this.setInputState} isValid={this.inputErrorControl}/>
+                    <Input
+                        iconName='type'
+                        value={description}
+                        placeholder="Görev Açıklaması"
+                        name='description'
+                        setStateFunc={this.setInputState}
+                        isValid={this.inputErrorControl}
+                    />
 
                     <View>
-                        <TouchableOpacity style={styles.priorityModalButton} onPress={() => this.togglePriorityModal()}>
+                        <TouchableOpacity
+                            style={styles.priorityModalButton}
+                            onPress={() => this.togglePriorityModal()}
+                        >
                             <View style={styles.priorityModalButtonInnerContainer}>
-                                <Icon name='award' size={24} style={{marginRight: 10,}} color='rgba(100, 100, 100, 1)'/>
+                                <Icon
+                                    name='award'
+                                    size={24}
+                                    style={{marginRight: 10,}}
+                                    color='rgba(100, 100, 100, 1)'
+                                />
+
                                 <Text style={styles.priorityModalButtonText}>Öncelik</Text>
                             </View>
-                            <Icon name='chevron-down' size={24} color='rgba(0, 0, 0, 0.4)'/>
+
+                            <Icon
+                                name='chevron-down'
+                                size={24}
+                                color='rgba(0, 0, 0, 0.4)'
+                            />
                         </TouchableOpacity>
                     </View>
 
-                    <DatePicker handleDateChange={this.setDate} name='startDate' text="Başlangıç Tarihi" />
-                    <DatePicker handleDateChange={this.setDate} name='finishDate' text="Beklenen Bitiş Tarihi" />
+                    <DatePicker
+                        handleDateChange={this.setDate}
+                        name='startDate'
+                        text="Başlangıç Tarihi"
+                    />
+
+                    <DatePicker
+                        handleDateChange={this.setDate}
+                        name='finishDate'
+                        text="Beklenen Bitiş Tarihi"
+                    />
+
                     <Text>{startDate?.toString()}</Text>
+
                     <Text>{finishDate?.toString()}</Text>
                 </InnerContainer>
 
-                <FullScreenModal bottom={priorityModalAnimatedValue} toggleFunc={this.setIsPriorityModalOpen}>
+                <FullScreenModal
+                    bottom={priorityModalAnimatedValue}
+                    toggleFunc={this.setIsPriorityModalOpen}
+                >
                     {this.priorityModalContainer()}
                 </FullScreenModal>
             </Container>
@@ -131,7 +173,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         tasks: state.taskReducer.tasks,
     };

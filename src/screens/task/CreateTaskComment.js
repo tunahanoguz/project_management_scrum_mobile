@@ -39,7 +39,11 @@ const CreateTaskComment = ({navigation}) => {
 
                 <Divider height={30}/>
 
-                <Button color='purple' text="💬 YORUMU GÖNDER" action={sendComment} />
+                <Button
+                    color='purple'
+                    text="💬 YORUMU GÖNDER"
+                    action={sendComment}
+                />
             </Container>
         </Container>
     );

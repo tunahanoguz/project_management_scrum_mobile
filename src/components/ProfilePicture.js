@@ -8,7 +8,11 @@ class ProfilePicture extends Component {
     render() {
         const {picture, size} = this.props;
         if (picture === null || picture === "") {
-            return <ProfilePicturePresenter size={size}><Icon name='user' size={24} color='white'/></ProfilePicturePresenter>;
+            return (
+                <ProfilePicturePresenter size={size}>
+                    <Icon name='user' size={24} color='white'/>
+                </ProfilePicturePresenter>
+            );
         } else {
             return <StyledProfilePicture size={size} source={{uri: picture}}/>;
         }
