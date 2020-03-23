@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import {Text, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
 import Container from "../../components/Container";
 import TopBar from "../../components/TopBar";
 import InnerContainer from "../../components/InnerContainer";
@@ -15,12 +14,8 @@ import {connect} from "react-redux";
 import * as yup from "yup";
 import {
     sprintEstimatedFinishDate,
-    sprintName, sprintStatus,
-    taskEstimatedFinishDate,
-    taskPriority,
-    taskStartDate,
-    taskStatus,
-    taskTitle
+    sprintName,
+    sprintStatus,
 } from "../../validationSchema";
 
 class CreateSprint extends Component {
@@ -34,12 +29,13 @@ class CreateSprint extends Component {
     handleSubmit = (values) => {
         const {navigation, createSprint, user} = this.props;
         const projectID = navigation.getParam('projectID', "");
-        const {name, status, estimatedFinishDate} = values;
+        let {name, status, estimatedFinishDate} = values;
         const startDate = status === 0 ? null : new Date();
+        estimatedFinishDate = status === 0 ? null : new Date();
 
         try {
             createSprint(name, status, startDate, estimatedFinishDate, user.uid, projectID);
-            navigation('SprintList');
+            navigation.navigate('SprintList');
         } catch (err) {
             alert('Error!');
         }
@@ -68,7 +64,7 @@ class CreateSprint extends Component {
 
                                     <SelectInput value={values.status} name='status' text="Durum seçiniz (*)" selections={[{id: 0, text: "Hemen Başlamasın"}, {id: 1, text: "Hemen Başlasın"}]} setSelectedItem={setFieldValue} errorMessage={touched.status && errors.status ? errors.status : ""} />
 
-                                    <ExampleDatePicker value={values.estimatedFinishDate} name='estimatedFinishDate' handleChange={setFieldValue} text="Tahmini Bitiş Tarihi (*)" />
+                                    {values.status === 1 && <ExampleDatePicker value={values.estimatedFinishDate} name='estimatedFinishDate' handleChange={setFieldValue} text="Tahmini Bitiş Tarihi (*)" />}
 
                                     <RoundedButton disabled={!isValid} color='green' icon='arrow-right' pressFunc={handleSubmit} />
                                 </Fragment>
@@ -80,8 +76,6 @@ class CreateSprint extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({});
 
 const mapStateToProps = state => {
     return {

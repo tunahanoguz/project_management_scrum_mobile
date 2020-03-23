@@ -87,7 +87,7 @@ const StartTask = ({navigation}) => {
 
     const secondStepHandleSubmit = () => {
         dispatch(startTask(task.id, selectedSprintID, selectedUser.id, estimatedFinishDate));
-        navigation.navigate('TaskDetail', {task});
+        navigation.navigate('TaskDetail', {taskID: task.id});
     };
 
     const setSprint = (name, value) => {
@@ -179,15 +179,18 @@ const StartTask = ({navigation}) => {
                     />
 
                     {Object.keys(selectedUser).length !== 0 && (
-                        <InnerContainer>
-                            <DirectionContainer row alignCenter>
-                                <ProfilePicture size={50} picture={selectedUser.photoURL}/>
+                        <Fragment>
+                            <Divider height={20}/>
+                            <InnerContainer>
+                                <DirectionContainer row alignCenter>
+                                    <ProfilePicture size={50} picture={selectedUser.photoURL}/>
 
-                                <Divider width={20} />
+                                    <Divider width={20} />
 
-                                <Text medium size={16}>{selectedUser.fullName}</Text>
-                            </DirectionContainer>
-                        </InnerContainer>
+                                    <Text medium size={16}>{selectedUser.fullName}</Text>
+                                </DirectionContainer>
+                            </InnerContainer>
+                        </Fragment>
                     )}
 
                     <Divider height={20} />

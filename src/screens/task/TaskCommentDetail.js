@@ -8,8 +8,8 @@ import {getTaskReplyComments} from "../../actions/taskActions";
 
 const TaskCommentDetail = ({navigation}) => {
     const commentParam = navigation.getParam('comment', {});
-    const taskID = navigation.getParam('taskID', "");
-    const {id, comment, createdAt} = commentParam;
+    const taskID = navigation.getParam('itemID', "");
+    const {id} = commentParam;
 
     const dispatch = useDispatch();
     const replyComments = useSelector(state => state.taskReducer.replyComments);
@@ -39,10 +39,17 @@ const TaskCommentDetail = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                <FlatList
-                    data={replyComments}
-                    renderItem={({item}) => <CommentCard comment={item} itemID={taskID} type='task'/>}
-                />
+                {replyComments !== [] ? (
+                        <FlatList
+                            data={replyComments}
+                            renderItem={({item}) => (
+                                <CommentCard
+                                    comment={item}
+                                    itemID={taskID}
+                                    type='project'
+                                />
+                            )}/>) :
+                    <Text medium>Hiç cevap yok.</Text>}
             </Container>
         </Container>
     );

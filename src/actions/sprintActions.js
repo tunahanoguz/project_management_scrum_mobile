@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import {NavigationActions} from "react-navigation";
 import {
     GET_ALL_SPRINTS_START,
     GET_ALL_SPRINTS_SUCCESS,
@@ -141,11 +142,14 @@ export const createSprint = (name, status, startDate, estimatedFinishDate, userI
         createdBy: userID,
         projectID,
     })
-        .then(() => dispatch({type: CREATE_SPRINT_SUCCESS}))
+        .then(() => {
+            dispatch({type: CREATE_SPRINT_SUCCESS});
+            dispatch(getAllSprints(projectID));
+        })
         .catch(() => dispatch({type: CREATE_SPRINT_FAILURE, error: "Sprint'ler getirilemedi."}));
 };
 
-export const startSprint = (sprintID) => dispatch => {
+export const startSprint = (sprintID, estimatedFinishDate) => dispatch => {
     dispatch({type: START_SPRINT_START});
     const sprintRef = firestore().collection('sprint');
     const nowDate = new Date();
@@ -153,8 +157,12 @@ export const startSprint = (sprintID) => dispatch => {
     sprintDoc.update({
         status: 1,
         startDate: nowDate,
+        estimatedFinishDate,
     })
-        .then(() => dispatch({type: START_SPRINT_SUCCESS}))
+        .then(() => {
+            dispatch(getSingleSprint(sprintID));
+            dispatch({type: START_SPRINT_SUCCESS});
+        })
         .catch(() => dispatch({type: START_SPRINT_FAILURE, error: "Sprint başlatılamadı."}));
 };
 
@@ -166,8 +174,12 @@ export const finishSprint = (sprintID) => dispatch => {
     const sprintDoc = sprintRef.doc(sprintID);
     sprintDoc.update({
         finishDate: nowDate,
+        status: 2,
     })
-        .then(() => dispatch({type: FINISH_SPRINT_SUCCESS}))
+        .then(() => {
+            dispatch(getSingleSprint(sprintID));
+            dispatch({type: FINISH_SPRINT_SUCCESS});
+        })
         .catch(() => dispatch({type: FINISH_SPRINT_FAILURE, error: "Sprint bitirilemedi."}));
 };
 
@@ -189,14 +201,11 @@ export const editSprint = (projectID, sprintID, name, estimatedFinishDate) => di
 
 export const deleteSprint = (projectID, sprintID) => dispatch => {
     dispatch({type: DELETE_SPRINT_START});
-    console.log("projectID: " + projectID);
-    console.log("sprintID: " + sprintID);
 
     const sprintRef = firestore().collection('sprint');
     const sprintDoc = sprintRef.doc(sprintID);
     sprintDoc.delete()
         .then(() => {
-            console.log("Delete success");
             dispatch(getAllSprints(projectID));
             dispatch({type: DELETE_SPRINT_SUCCESS});
         })

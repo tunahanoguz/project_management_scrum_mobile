@@ -164,7 +164,7 @@ class ProjectDetail extends Component {
         } else if (selectedTab === 2) {
             return (
                 <Container flex={0.2} verticalMiddle>
-                    <Button color='green' text="🏃 TÜM SPRİNTLERİ GÖR" action={() => alert('asdasdasd')}/>
+                    <Button color='green' text="🏃 TÜM SPRİNTLERİ GÖR" action={() => this.goToSprintList(projectID)}/>
                 </Container>
             );
         } else {

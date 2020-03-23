@@ -2,8 +2,10 @@ import React, {useState, useEffect, Fragment} from 'react';
 import {Text, Animated, StyleSheet, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import {withNavigation} from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import styled, {css} from 'styled-components';
+import messaging from '@react-native-firebase/messaging';
 import TopBar from "../components/TopBar";
 import Icon from "react-native-vector-icons/Feather";
 import {Container} from "../styles";
@@ -53,6 +55,7 @@ const Home = (props) => {
     useEffect(() => {
         dispatch(getUser());
         changeNavigationBarColor('#281C9D');
+        checkPermission();
     }, []);
 
     useEffect(() => {
@@ -78,6 +81,38 @@ const Home = (props) => {
             dispatch(getAllProjects(teamIDs));
         }
     }, [teamIDsValue]);
+
+    const checkPermission = async () => {
+        const enabled = await messaging().hasPermission();
+        if (enabled) {
+            getToken();
+        } else {
+            requestPermission();
+        }
+    };
+
+    const getToken = async () => {
+        let fcmToken = await AsyncStorage.getItem('fcmToken');
+        console.log(fcmToken);
+        if (!fcmToken) {
+            fcmToken = await messaging().getToken();
+            if (fcmToken) {
+                // user has a device token
+                await AsyncStorage.setItem('fcmToken', fcmToken);
+            }
+        }
+    };
+
+    const requestPermission = async () => {
+        try {
+            await messaging().requestPermission();
+            // User has authorised
+            getToken();
+        } catch (error) {
+            // User has rejected permissions
+            console.log('permission rejected');
+        }
+    };
 
     const absoluteButtonStyle = (color) => {
         return {

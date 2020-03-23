@@ -11,14 +11,13 @@ import ProfilePicture from "../../components/ProfilePicture";
 import {getUserById} from "../../actions/authActions";
 import {getSingleSprint} from "../../actions/sprintActions";
 import List from "../../components/list/List";
-import {getAllTaskComments, getAllTaskFiles} from "../../actions/taskActions";
+import {getAllTaskComments, getAllTaskFiles, getSingleTask} from "../../actions/taskActions";
 import DoubleButton from "../../components/buttons/DoubleButton";
 
 const TaskDetail = ({navigation}) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
-    const taskObj = navigation.getParam('task', {});
-    const {id, task, description, projectID, sprintID, userID, startDate, estimatedFinishDate} = taskObj;
+    const taskID = navigation.getParam('taskID', "");
 
     const dispatch = useDispatch();
     const project = useSelector(state => state.projectReducer.project);
@@ -29,12 +28,16 @@ const TaskDetail = ({navigation}) => {
     const files = useSelector(state => state.taskReducer.files);
     const comments = useSelector(state => state.taskReducer.comments);
 
+    const taskObj = useSelector(state => state.taskReducer.task);
+    const {id, task, description, projectID, sprintID, userID, startDate, estimatedFinishDate} = taskObj;
+
     useEffect(() => {
         dispatch(getSingleProject(projectID));
+        dispatch(getSingleTask(taskID));
         dispatch(getUserById(userID ? userID : ""));
         dispatch(getSingleSprint(sprintID));
-        dispatch(getAllTaskFiles(id));
-        dispatch(getAllTaskComments(id));
+        dispatch(getAllTaskFiles(taskID));
+        dispatch(getAllTaskComments(taskID));
     }, []);
 
     const goToStartTask = () => {
@@ -82,7 +85,7 @@ const TaskDetail = ({navigation}) => {
         }
     };
 
-    const renderAllDates = () => {
+    const renderAllDatesAndAssignedUser = () => {
         if (startDate !== null){
             return (
                 <InnerContainer>
@@ -90,32 +93,18 @@ const TaskDetail = ({navigation}) => {
                         {renderDateContainer("Başlangıç Tarihi: ", startDate)}
                         <Divider height={10}/>
                         {renderDateContainer("Bitiş Tarihi: ", estimatedFinishDate)}
+                        <Divider height={10}/>
+                        <DirectionContainer row alignCenter>
+                            <ProfilePicture size={40} picture={foundUser.photoURL ? foundUser.photoURL : ""} />
+                            <Divider width={10}/>
+                            <Text medium size={16}>{foundUser?.fullName}</Text>
+                        </DirectionContainer>
                     </Fragment>
                 </InnerContainer>
             );
         } else {
             return (
                 <Button color='green' text="👍 BAŞLAT" action={() => goToStartTask()} />
-            );
-        }
-    };
-
-    const assignedUserDetail = () => {
-        if (userID !== null){
-            return (
-                <InnerContainer>
-                    <DirectionContainer row alignCenter>
-                        <ProfilePicture size={50} picture={foundUser.photoURL ? foundUser.photoURL : ""} />
-                        <Divider width={20}/>
-                        <Text medium size={16}>{foundUser?.fullName}</Text>
-                    </DirectionContainer>
-                </InnerContainer>
-            );
-        } else {
-            return (
-                <InnerContainer>
-                    <Text medium>Kişi: Henüz hiç kimse atanmamış.</Text>
-                </InnerContainer>
             );
         }
     };
@@ -131,11 +120,7 @@ const TaskDetail = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                {renderAllDates()}
-
-                <Divider height={10}/>
-
-                {assignedUserDetail()}
+                {renderAllDatesAndAssignedUser()}
             </Fragment>
         );
     };
@@ -235,12 +220,14 @@ const TaskDetail = ({navigation}) => {
             <Container space>
                 <Title>{task}</Title>
 
-                <TabContent
-                    tabs={tabs}
-                    selectedTab={selectedTab}
-                    tabButtonAction={setSelectedTab}
-                    tabContents={renderTabContents}
-                />
+                {Object.keys(taskObj).length !== 0 && (
+                    <TabContent
+                        tabs={tabs}
+                        selectedTab={selectedTab}
+                        tabButtonAction={setSelectedTab}
+                        tabContents={renderTabContents}
+                    />
+                )}
             </Container>
         </Container>
     );

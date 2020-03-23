@@ -23,9 +23,10 @@ import RoundedButton from "../../components/buttons/RoundedButton";
 import Divider from "../../components/Divider";
 import ProjectNoteCard from "../../components/cards/ProjectNoteCard";
 import validate from "validate.js";
-import {getAllCreatedTeams, getAllTeams} from "../../actions/teamActions";
+import {getAllCreatedTeams, getAllTeams, getTeamUserIDs} from "../../actions/teamActions";
 import {createProject} from "../../actions/projectActions";
 import {projectValidations} from "../../validations";
+import {createNotification} from "../../actions/notificationActions";
 
 class CreateProject extends Component {
     constructor(props) {
@@ -214,9 +215,11 @@ class CreateProject extends Component {
     // --------------------------------------------------------------------------------------
     // Create Project Function
 
-    createProject = (projectName, projectDescription, projectNotes, assignedTeam,) => {
+    createProject = async (projectName, projectDescription, projectNotes, assignedTeam,) => {
         Keyboard.dismiss();
-        this.props.createProject(projectName, projectDescription, projectNotes, new Date(), null, null, assignedTeam, this.props.teamIDs, this.props.user.uid);
+        await this.props.createProject(projectName, projectDescription, projectNotes, new Date(), null, null, assignedTeam, this.props.teamIDs, this.props.user.uid);
+        await this.props.getTeamUserIDs(assignedTeam);
+        this.props.createNotification(this.props.userIDs, "project", "İçerisinde bulunacağınız bir proje oluşturuldu.");
         this.props.navigation.navigate('ProjectList');
     };
 
@@ -285,6 +288,7 @@ const mapStateToProps = state => {
         createdTeams: state.teamReducer.createdTeams,
         teamIDs: state.teamReducer.teamIDs,
         user: state.authReducer.user,
+        userIDs: state.teamReducer.userIDs,
     };
 };
 
@@ -293,6 +297,8 @@ const mapDispatchToProps = dispatch => {
         getAllTeams: () => dispatch(getAllTeams()),
         getAllCreatedTeams: (userID) => dispatch(getAllCreatedTeams(userID)),
         createProject: (name, description, notes, createdAt, startDate, finishDate, teamID, teamIDs, userID) => dispatch(createProject(name, description, notes, createdAt, startDate, finishDate, teamID, teamIDs, userID)),
+        getTeamUserIDs: (teamID) => dispatch(getTeamUserIDs(teamID)),
+        createNotification: (userIDs, type, description) => dispatch(createNotification(userIDs, type, description)),
     };
 };
 

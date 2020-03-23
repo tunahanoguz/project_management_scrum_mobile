@@ -34,7 +34,6 @@ import CreateSprint from "./src/screens/sprint/CreateSprint";
 import SprintList from "./src/screens/sprint/SprintList";
 import EditSprint from "./src/screens/sprint/EditSprint";
 import SprintDetail from "./src/screens/sprint/SprintDetail";
-import MyTasks from "./src/screens/sprint/MyTasks";
 import TeamProjectsList from "./src/screens/team/TeamProjectsList";
 import ProjectTaskList from "./src/screens/task/ProjectTaskList";
 import TaskList from "./src/screens/task/TaskList";
@@ -48,6 +47,10 @@ import ProjectCommentReply from "./src/screens/project/ProjectCommentReply";
 import CreateTaskFile from "./src/screens/task/CreateTaskFile";
 import TaskFileList from "./src/screens/task/TaskFileList";
 import StartTask from "./src/screens/task/StartTask";
+import TeamDescription from "./src/screens/team/TeamDescription";
+import StartSprint from "./src/screens/sprint/StartSprint";
+import DailyScrumMeeting from "./src/screens/sprint/DailyScrumMeeting";
+import NotificationList from "./src/screens/notification/NotificationList";
 
 const stackNavigator = createStackNavigator(
     {
@@ -79,6 +82,7 @@ const teamNavigator = createStackNavigator(
     {
         TeamList: TeamList,
         TeamDetail: TeamDetail,
+        TeamDescription: TeamDescription,
         TeamMembers: TeamMembers,
         TeamProjectsList: TeamProjectsList,
         CreateTeam: CreateTeam,
@@ -122,10 +126,21 @@ const projectNavigator = createStackNavigator(
         SprintList: SprintList,
         EditSprint: EditSprint,
         SprintDetail: SprintDetail,
-        MyTasks: MyTasks,
+        StartSprint: StartSprint,
+        DailyScrumMeeting,
     },
     {
         initialRouteName: 'ProjectList',
+        headerMode: 'none',
+    }
+);
+
+const notificationNavigator = createStackNavigator(
+    {
+        NotificationList,
+    },
+    {
+        initialRouteName: 'NotificationList',
         headerMode: 'none',
     }
 );
@@ -153,6 +168,14 @@ const bottomBarNavigator = createMaterialBottomTabNavigator(
             navigationOptions: {
                 tabBarIcon: ({tintColor}) => (
                     <Icon name='briefcase' size={22} color={tintColor}/>
+                ),
+            },
+        },
+        Notification: {
+            screen: notificationNavigator,
+            navigationOptions: {
+                tabBarIcon: ({tintColor}) => (
+                    <Icon name='bell' size={22} color={tintColor}/>
                 ),
             },
         },

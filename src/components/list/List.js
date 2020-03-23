@@ -10,7 +10,7 @@ import moment from "moment";
 import RNFetchBlob from "rn-fetch-blob";
 import uuid from "rn-fetch-blob/utils/uuid";
 
-const List = ({navigation, loading, error, data, type, orderColor, isFunctioned, modalFunc}) => {
+const List = ({navigation, loading, error, data, type, icon, orderColor, isFunctioned, modalFunc}) => {
 
     const renderDate = (date) => {
         moment.locale('tr-TR');
@@ -26,6 +26,8 @@ const List = ({navigation, loading, error, data, type, orderColor, isFunctioned,
             return item.task;
         } else if (type === 'comment'){
             return item.comment;
+        } else if (type === 'notification'){
+            return item.description;
         }
     };
 
@@ -40,6 +42,8 @@ const List = ({navigation, loading, error, data, type, orderColor, isFunctioned,
             return renderDate(item?.createdAt.toDate());
         } else if (type === 'file'){
             return `${item.size / 1000000} MB`;
+        } else if (type === 'notification'){
+            return renderDate(item.date.toDate());
         }
     };
 
@@ -53,11 +57,12 @@ const List = ({navigation, loading, error, data, type, orderColor, isFunctioned,
     };
 
     const goToTask = (task) => {
-        navigation.navigate('TaskDetail', {task});
+        navigation.navigate('TaskDetail', {taskID: task.id});
     };
 
     const goToSprint = (sprint) => {
-        navigation.navigate('SprintDetail', {sprint});
+        const {id} = sprint;
+        navigation.navigate('SprintDetail', {sprintID: id});
     };
 
     const downloadFile = (fileURL, type) => {
@@ -89,6 +94,20 @@ const List = ({navigation, loading, error, data, type, orderColor, isFunctioned,
             return goToSprint;
         } else if (type === 'file') {
             return downloadFile;
+        } else if (type === 'notification') {
+            return () => {};
+        }
+    };
+
+    const renderIconName = (item) => {
+        if (type === 'notification'){
+            if (item.type === 'daily_scrum_meeting'){
+                return 'sun';
+            } else if (item.type === 'project'){
+                return 'briefcase';
+            } else if (item.type === 'team'){
+                return 'users';
+            }
         }
     };
 
@@ -123,6 +142,7 @@ const List = ({navigation, loading, error, data, type, orderColor, isFunctioned,
                                     isFunctioned={isFunctioned}
                                     modalFunc={modalFunc ? modalFunc : () => alert("asdasdasd")}
                                     type={type}
+                                    icon={renderIconName(item)}
                                 />
                             );
                         }}
@@ -146,6 +166,7 @@ List.propTypes = {
     error: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
     type: PropTypes.string.isRequired,
+    icon: PropTypes.string,
     orderColor: PropTypes.string.isRequired,
     isFunctioned: PropTypes.bool.isRequired,
     modalFunc: PropTypes.func,

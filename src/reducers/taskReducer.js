@@ -22,13 +22,19 @@ import {
     GET_TASK_REPLY_COMMENTS_START,
     GET_TASK_REPLY_COMMENTS_SUCCESS,
     GET_TASK_REPLY_COMMENTS_FAILURE,
-    CREATE_TASK_FILE_START, CREATE_TASK_FILE_SUCCESS, CREATE_TASK_FILE_FAILURE,
+    CREATE_TASK_FILE_START,
+    CREATE_TASK_FILE_SUCCESS,
+    CREATE_TASK_FILE_FAILURE,
+    GET_TASKS_FOR_USER_START,
+    GET_TASKS_FOR_USER_SUCCESS,
+    GET_TASKS_FOR_USER_FAILURE, GET_SINGLE_TASK_START, GET_SINGLE_TASK_SUCCESS, GET_SINGLE_TASK_FAILURE,
 } from '../actions/types';
 
 const initialState = {
     tasks: [],
     homeTasks: [],
     myTasks: [],
+    userTasks: [],
     task: {},
     files: [],
     comments: [],
@@ -62,6 +68,25 @@ const taskReducer = (state = initialState, action) => {
                 loading: false,
             };
         case GET_ALL_TASKS_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_SINGLE_TASK_START:
+            return {
+                ...state,
+                loading: true,
+                error: ""
+            };
+        case GET_SINGLE_TASK_SUCCESS:
+            return {
+                ...state,
+                task: action.task,
+                loading: false,
+                error: "",
+            };
+        case GET_SINGLE_TASK_FAILURE:
             return {
                 ...state,
                 error: action.error,
@@ -113,6 +138,23 @@ const taskReducer = (state = initialState, action) => {
                 loading: false,
             };
         case GET_TASKS_FOR_HOME_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_TASKS_FOR_USER_START:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_TASKS_FOR_USER_SUCCESS:
+            return {
+                ...state,
+                userTasks: action.userTasks,
+                loading: false,
+            };
+        case GET_TASKS_FOR_USER_FAILURE:
             return {
                 ...state,
                 error: action.error,

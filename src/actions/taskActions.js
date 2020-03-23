@@ -36,13 +36,16 @@ import {
     GET_TASK_REPLY_COMMENTS_START,
     GET_TASK_REPLY_COMMENTS_SUCCESS,
     GET_TASK_REPLY_COMMENTS_FAILURE,
-    CREATE_PROJECT_FAILURE,
     CREATE_TASK_FILE_START,
     CREATE_TASK_FILE_SUCCESS,
-    CREATE_TASK_FILE_FAILURE
+    CREATE_TASK_FILE_FAILURE,
+    GET_TASKS_FOR_USER_START,
+    GET_TASKS_FOR_USER_SUCCESS,
+    GET_TASKS_FOR_USER_FAILURE, GET_SINGLE_TASK_START, GET_SINGLE_TASK_SUCCESS, GET_SINGLE_TASK_FAILURE
 } from './types';
 import firestore from '@react-native-firebase/firestore';
-import {getAllProjectFiles} from "./projectActions";
+import {createNotification, sendNotifications} from "./notificationActions";
+import {getUserById} from "./authActions";
 
 export const getAllTasks = (projectIDs) => dispatch => {
     dispatch({type: GET_ALL_TASKS_START});
@@ -68,6 +71,26 @@ export const getAllTasks = (projectIDs) => dispatch => {
             dispatch({type: GET_ALL_TASKS_SUCCESS, tasks});
         })
         .catch(() => dispatch({type: GET_ALL_TASKS_FAILURE, error: "Taskler getirilemedi."}));
+};
+
+export const getSingleTask = (taskID) => dispatch => {
+    dispatch({type: GET_SINGLE_TASK_START});
+    console.log("Task ID: " + taskID);
+
+    const taskRef = firestore().collection('task');
+    const taskDoc = taskRef.doc(taskID);
+    taskDoc.get()
+        .then(doc => {
+            const task = {
+                id: doc.id,
+                ...doc.data(),
+            };
+
+            console.log(task);
+
+            dispatch({type: GET_SINGLE_TASK_SUCCESS, task});
+        })
+        .catch(() => dispatch({type: GET_SINGLE_TASK_FAILURE, error: "Sprint bulunamadı."}));
 };
 
 export const getAllProjectTasks = (projectID) => dispatch => {
@@ -148,6 +171,32 @@ export const getTasksForHome = (projectIDs) => dispatch => {
         .catch(() => dispatch({type: GET_TASKS_FOR_HOME_FAILURE, error: "Taskler getirilemedi."}));
 };
 
+export const getTasksForUser = (userID) => dispatch => {
+    dispatch({type: GET_TASKS_FOR_USER_START});
+
+    const taskRef = firestore().collection('task');
+    const taskQuery = taskRef.where('userID', '==', userID);
+    taskQuery.get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                dispatch({type: GET_TASKS_FOR_USER_FAILURE, error: "Hiç iş yok."});
+            } else {
+                const tasks = [];
+                snapshot.forEach(doc => {
+                    const task = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    tasks.push(task);
+                });
+
+                dispatch({type: GET_TASKS_FOR_USER_SUCCESS, userTasks: tasks});
+            }
+        })
+        .catch(() => dispatch({type: GET_TASKS_FOR_USER_FAILURE, error: "İşler getirilemedi."}));
+};
+
 export const createTask = (task, description, priority, userID, projectID) => dispatch => {
     dispatch({type: CREATE_TASK_START});
 
@@ -208,7 +257,10 @@ export const startTask = (taskID, sprintID, userID, estimatedFinishDate) => disp
         status: 1,
     })
         .then(() => {
-            dispatch(getAllTasks());
+            dispatch(getSingleTask(taskID));
+            dispatch(getUserById(userID));
+            dispatch(sendNotifications([userID], "Bir iş oluşturuldu!", "Size ait bir iş oluşturuldu"));
+            dispatch(createNotification([userID], "task", "Size ait bir iş oluşturuldu"));
             dispatch({type: START_TASK_SUCCESS});
         })
         .catch(() => dispatch({type: START_TASK_FAILURE, error: "Task oluşturulamadı."}));
@@ -273,12 +325,10 @@ export const getTaskReplyComments = (parentCommentID) => dispatch => {
                     replyComments.push(replyComment);
                 });
 
-                console.log(replyComments);
-
                 dispatch({type: GET_TASK_REPLY_COMMENTS_SUCCESS, replyComments});
             }
         })
-        .catch(() => dispatch({type: GET_TASK_REPLY_COMMENTS_FAILURE, error: "Bu yoruma ya hiç cevap gelmedi ya da cevaplar getirilemedi."}));
+        .catch((err) => dispatch({type: GET_TASK_REPLY_COMMENTS_FAILURE, error: "Bu yoruma ya hiç cevap gelmedi ya da cevaplar getirilemedi."}));
 };
 
 export const createTaskComment = (comment, parentCommentID, taskID, userID) => dispatch => {

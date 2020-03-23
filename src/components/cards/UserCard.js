@@ -1,25 +1,26 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types'
 import {withNavigation} from 'react-navigation';
 import ProfilePicture from "../ProfilePicture";
-import {fonts, sizes} from "../../styles";
+import {fonts, sizes, Text} from "../../styles";
 
 class UserCard extends Component {
 
-    goToUserProfile = (user) => {
-        this.props.navigation.navigate('UserProfile', {user: user});
+    goToUserProfile = (userID) => {
+        this.props.navigation.navigate('UserProfile', {userID});
     };
 
     render() {
         const {user, style} = this.props;
-        const {fullName, photoURL, role} = user;
+        const {id, fullName, photoURL, role} = user;
         return (
-            <TouchableOpacity style={{...styles.container, ...style}} onPress={() => this.goToUserProfile(user)}>
+            <TouchableOpacity style={{...styles.container, ...style}} onPress={() => this.goToUserProfile(id)}>
                 <ProfilePicture picture={photoURL} size={54}/>
+
                 <View style={styles.innerContainer}>
-                    <Text style={fonts.cardTitle}>{fullName}</Text>
-                    <Text style={fonts.normalText}>{role}</Text>
+                    <Text medium>{fullName}</Text>
+                    <Text normal>{role}</Text>
                 </View>
             </TouchableOpacity>
         );

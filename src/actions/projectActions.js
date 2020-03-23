@@ -42,6 +42,9 @@ import {
     GET_PROJECT_REPLY_COMMENTS_START,
     GET_PROJECT_REPLY_COMMENTS_SUCCESS,
     GET_PROJECT_REPLY_COMMENTS_FAILURE,
+    GET_PROJECTS_FOR_USER_START,
+    GET_PROJECTS_FOR_USER_SUCCESS,
+    GET_PROJECTS_FOR_USER_FAILURE,
 } from './types';
 
 export const getAllProjects = (teamIDs) => dispatch => {
@@ -113,6 +116,32 @@ export const getProjectsForTeam = (teamID) => dispatch => {
             dispatch({type: GET_PROJECTS_FOR_TEAM_SUCCESS, projects});
         })
         .catch(() => dispatch({type: GET_PROJECTS_FOR_TEAM_FAILURE, error: "Projeler getirilemedi."}));
+};
+
+export const getProjectsForUser = (userID) => dispatch => {
+    dispatch({type: GET_PROJECTS_FOR_USER_START});
+
+    const taskRef = firestore().collection('projects');
+    const taskQuery = taskRef.where('userID', '==', userID);
+    taskQuery.get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                dispatch({type: GET_PROJECTS_FOR_USER_FAILURE, error: "Hiç iş yok."});
+            } else {
+                const projects = [];
+                snapshot.forEach(doc => {
+                    const project = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    projects.push(project);
+                });
+
+                dispatch({type: GET_PROJECTS_FOR_USER_SUCCESS, userProjects: projects});
+            }
+        })
+        .catch(() => dispatch({type: GET_PROJECTS_FOR_USER_FAILURE, error: "İşler getirilemedi."}));
 };
 
 export const getSingleProject = (projectID) => dispatch => {

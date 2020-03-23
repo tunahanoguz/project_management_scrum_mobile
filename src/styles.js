@@ -241,6 +241,9 @@ export const Text = styled.Text`
     ${({size}) => size && css`
         font-size: ${size}px;
     `};
+    ${({center}) => center && css`
+        textAlign: center;
+    `};
 `;
 
 export const TextMedium = styled.Text`

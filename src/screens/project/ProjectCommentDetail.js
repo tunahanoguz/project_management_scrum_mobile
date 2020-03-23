@@ -35,10 +35,16 @@ const ProjectCommentDetail = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                {replyComments !== [] ? (<FlatList data={replyComments}
-                                                   renderItem={({item}) => <CommentCard comment={item}
-                                                                                        itemID={projectID}
-                                                                                        type='project'/>}/>) :
+                {replyComments !== [] ? (
+                    <FlatList
+                        data={replyComments}
+                        renderItem={({item}) => (
+                            <CommentCard
+                                comment={item}
+                                itemID={projectID}
+                                type='project'
+                            />
+                        )}/>) :
                     <Text medium>Hiç cevap yok.</Text>}
             </Container>
         </Container>

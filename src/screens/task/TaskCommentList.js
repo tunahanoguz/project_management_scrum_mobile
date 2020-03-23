@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import TopBar from "../../components/TopBar";
-import {Container, Divider, Title} from "../../styles";
+import {Container, DirectionContainer, Divider, Text, Title} from "../../styles";
 import {getAllTaskComments} from "../../actions/taskActions";
 import Button from "../../components/buttons/Button";
-import List from "../../components/list/List";
+import Loading from "../../components/Loading";
+import {FlatList} from "react-native";
+import CommentCard from "../../components/cards/CommentCard";
 
 const TaskCommentList = ({navigation}) => {
     const dispatch = useDispatch();
@@ -22,6 +24,29 @@ const TaskCommentList = ({navigation}) => {
         navigation.navigate('CreateTaskComment', {taskID});
     };
 
+    const renderComments = () => {
+        if (loading){
+            return <DirectionContainer flex={1} justifyCenter alignCenter><Loading /></DirectionContainer>;
+        } else {
+            if (error.length !== 0){
+                return <DirectionContainer flex={1} justifyCenter alignCenter><Text medium>{error}</Text></DirectionContainer>;
+            } else {
+                return (
+                    <FlatList
+                        data={comments}
+                        renderItem={({item}) => !item.parentCommentID && (
+                            <CommentCard
+                                comment={item}
+                                itemID={taskID}
+                                type='task'
+                            />
+                        )}
+                    />
+                );
+            }
+        }
+    };
+
     return (
         <Container>
             <TopBar isBack={true}/>
@@ -32,15 +57,7 @@ const TaskCommentList = ({navigation}) => {
                 <Divider height={20}/>
 
                 <Container flex={0.8}>
-                    <List
-                        loading={loading}
-                        error={error}
-                        data={comments}
-                        type='comment'
-                        orderColor='orange'
-                        isFunctioned={false}
-                        modalFunc={() => alert("asdasdasd")}
-                    />
+                    {renderComments()}
                 </Container>
 
                 <Container flex={0.2} verticalMiddle>

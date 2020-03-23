@@ -29,12 +29,16 @@ import {
     GET_TASK_REPLY_COMMENTS_START,
     GET_TASK_REPLY_COMMENTS_SUCCESS,
     GET_TASK_REPLY_COMMENTS_FAILURE,
-    GET_PROJECT_REPLY_COMMENTS_START, GET_PROJECT_REPLY_COMMENTS_SUCCESS, GET_PROJECT_REPLY_COMMENTS_FAILURE,
+    GET_PROJECT_REPLY_COMMENTS_START,
+    GET_PROJECT_REPLY_COMMENTS_SUCCESS,
+    GET_PROJECT_REPLY_COMMENTS_FAILURE,
+    GET_PROJECTS_FOR_USER_START, GET_PROJECTS_FOR_USER_SUCCESS, GET_PROJECTS_FOR_USER_FAILURE,
 } from "../actions/types";
 
 const initialState = {
     projects: [],
     homeProjects: [],
+    userProjects: [],
     projectIDs: [],
     project: {},
     files: [],
@@ -102,6 +106,24 @@ const projectReducer = (state = initialState, action) => {
                 error: "",
             };
         case GET_PROJECTS_FOR_TEAM_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_PROJECTS_FOR_USER_START:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_PROJECTS_FOR_USER_SUCCESS:
+            return {
+                ...state,
+                projects: action.projects,
+                loading: false,
+                error: "",
+            };
+        case GET_PROJECTS_FOR_USER_FAILURE:
             return {
                 ...state,
                 error: action.error,

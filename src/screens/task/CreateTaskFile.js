@@ -92,7 +92,7 @@ const CreateTaskFile = ({navigation}) => {
         }
     };
 
-    const buttonStyle = [styles.buttonContainer, fileUri !== "" ? {backgroundColor: colors.darkGreen} : null];
+    const buttonStyle = [styles.buttonContainer, fileUri !== "" ? {backgroundColor: colors.darkGreen, color: 'white'} : null];
 
     return (
         <Container>
@@ -135,7 +135,7 @@ const CreateTaskFile = ({navigation}) => {
                                     onPress={() => openFilePicker()}
                                     style={buttonStyle}
                                 >
-                                    <Text>Bir dosya seçin</Text>
+                                    <Text color={fileUri !== "" && 'white'}>Bir dosya seçin</Text>
                                 </TouchableOpacity>
 
                                 <RoundedButton

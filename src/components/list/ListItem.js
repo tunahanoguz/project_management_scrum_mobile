@@ -2,14 +2,17 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import PropTypes from 'prop-types';
 import {
-    ListItemEnd, ListItemEndLeft, ListItemEndRight,
+    ListItemEnd,
+    ListItemEndLeft,
+    ListItemEndRight,
     ListItemOrder,
     ListItemStart,
-    ListItemText, OrderText,
+    ListItemText,
+    OrderText,
     StyledListItem
 } from "./styles";
 
-const ListItem = ({order, orderColor, item, itemID, topTitle, bottomTitle, isFunctioned, modalFunc, goToScreenFunc, type}) => {
+const ListItem = ({order, orderColor, item, itemID, topTitle, bottomTitle, isFunctioned, modalFunc, goToScreenFunc, type, icon}) => {
 
     const renderTitle = (title) => {
         const titleLength = title.length;
@@ -23,19 +26,36 @@ const ListItem = ({order, orderColor, item, itemID, topTitle, bottomTitle, isFun
     return (
         <StyledListItem first={order === 1}>
             <ListItemStart>
-                <ListItemOrder color={orderColor}>
-                    <OrderText normal>{order}</OrderText>
-                </ListItemOrder>
+                {type === 'notification' ? (
+                    <ListItemOrder color={orderColor}>
+                        <Icon
+                            name={icon}
+                            size={24}
+                            color='white'
+                        />
+                    </ListItemOrder>
+                ) : (
+                    <ListItemOrder color={orderColor}>
+                        <OrderText normal>{order}</OrderText>
+                    </ListItemOrder>
+                )}
             </ListItemStart>
 
             <ListItemEnd>
-                <ListItemEndLeft onPress={() => type === 'file' ? goToScreenFunc(item.downloadURL, item.contentType) : goToScreenFunc(item)}>
-                    <ListItemText normal>{renderTitle(topTitle)}</ListItemText>
+                <ListItemEndLeft
+                    onPress={() => type === 'file' ? goToScreenFunc(item.downloadURL, item.contentType) : goToScreenFunc(item)}>
+                    <ListItemText normal>
+                        {type === 'notification' ? (
+                            topTitle
+                        ) : (
+                            renderTitle(topTitle)
+                        )}
+                    </ListItemText>
                     <ListItemText light>{bottomTitle}</ListItemText>
                 </ListItemEndLeft>
                 {isFunctioned && (
                     <ListItemEndRight onPress={() => modalFunc(itemID)}>
-                        <Icon name='more-vertical' size={24} color='midnightblue' />
+                        <Icon name='more-vertical' size={24} color='midnightblue'/>
                     </ListItemEndRight>
                 )}
             </ListItemEnd>
@@ -54,6 +74,7 @@ ListItem.propTypes = {
     modalFunc: PropTypes.func.isRequired,
     goToScreenFunc: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
+    icon: PropTypes.string,
 };
 
 export default ListItem;

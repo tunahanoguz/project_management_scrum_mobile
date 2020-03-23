@@ -4,14 +4,15 @@ import {connect} from "react-redux";
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {deleteSprint, editSprint, getAllSprints} from "../../actions/sprintActions";
-import Container from "../../components/Container";
 import TopBar from "../../components/TopBar";
 import SprintCard from "../../components/cards/SprintCard";
 import ListActionModal from "../../components/modals/ListActionModal";
 import Loading from "../../components/Loading";
 import CenteredContainer from "../../components/containers/CenteredContainer";
-import {colors} from "../../styles";
+import {colors, Container} from "../../styles";
 import AbsoluteButton from "../../components/buttons/AbsoluteButton";
+import List from "../../components/list/List";
+import Button from "../../components/buttons/Button";
 
 class SprintList extends Component {
     constructor(props) {
@@ -54,34 +55,47 @@ class SprintList extends Component {
         this.setIsModalOpen();
     };
 
-    renderSprints = (sprints) => {
+    renderSprints = () => {
+        const {loading, error, sprints} = this.props;
         return (
-            <FlatList data={sprints} renderItem={({item, index}) => <SprintCard sprint={item} order={index} action={this.setIsModalOpenWithID} />} keyExtractor={(item) => item.id.toString()} />
+            <Container flex={0.8}>
+                <List
+                    loading={loading}
+                    error={error}
+                    data={sprints}
+                    type='sprint'
+                    orderColor='purple'
+                    isFunctioned={false}
+                    modalFunc={this.setIsModalOpenWithID}
+                />
+            </Container>
         );
     };
 
-    renderSprintList = (sprints, loading, error) => {
-        if (loading){
-            return <CenteredContainer><Loading /></CenteredContainer>;
-        } else {
-            if (error){
-                return <CenteredContainer><Text>{error}</Text></CenteredContainer>;
-            } else {
-                return this.renderSprints(sprints);
-            }
-        }
-    };
-
     render(){
-        const {sprints, loading, error} = this.props;
         const {isModalOpen} = this.state;
+        const {navigation} = this.props;
+        const projectID = navigation.getParam('projectID', "");
         return (
             <Container>
                 <TopBar isBack={true} />
 
-                {this.renderSprintList(sprints, loading, error)}
+                <Container space>
+                    {this.renderSprints()}
 
-                <ListActionModal isOpen={isModalOpen} toggleFunc={this.setIsModalOpenWithID} editText={"Sprint'i Düzenle"} editAction={this.editSprint} deleteText={"Sprint'i Sil"} deleteAction={this.deleteSprint}/>
+                    <Container flex={0.2} verticalMiddle>
+                        <Button action={() => navigation.navigate('CreateSprint', {projectID})} color='green' text="🏃 YENİ SPRİNT OLUŞTUR"/>
+                    </Container>
+                </Container>
+
+                <ListActionModal
+                    isOpen={isModalOpen}
+                    toggleFunc={this.setIsModalOpenWithID}
+                    editText={"Sprint'i Düzenle"}
+                    editAction={this.editSprint}
+                    deleteText={"Sprint'i Sil"}
+                    deleteAction={this.deleteSprint}
+                />
             </Container>
         );
     }

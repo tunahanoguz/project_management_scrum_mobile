@@ -2,7 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import PropTypes from 'prop-types';
 
-const Button = ({color, half, leftRounded, rightRounded, text, action}) => {
+const Button = ({color, style, half, leftRounded, rightRounded, text, action}) => {
     return (
         <ButtonContainer
             color={color}
@@ -10,6 +10,7 @@ const Button = ({color, half, leftRounded, rightRounded, text, action}) => {
             half={!!half}
             leftRounded={!!leftRounded}
             rightRounded={!!rightRounded}
+            style={style}
         >
             <ButtonText>{text}</ButtonText>
         </ButtonContainer>
@@ -35,6 +36,9 @@ const ButtonContainer = styled.TouchableOpacity`
     `};
     ${({color}) => color === 'blue' && css`
         background-color: midnightblue;
+    `};
+    ${({color}) => color === 'red' && css`
+        background-color: crimson;
     `};
     ${({half}) => half && css`
         flex: 0.5;
@@ -71,6 +75,7 @@ Button.propTypes = {
     color: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     action: PropTypes.func.isRequired,
+    style: PropTypes.object
 };
 
 export default Button;

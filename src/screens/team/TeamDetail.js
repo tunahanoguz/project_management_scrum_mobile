@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import {ActivityIndicator} from "react-native-paper";
 import DoubleButton from "../../components/buttons/DoubleButton";
 import {getProjectsForTeam} from "../../actions/projectActions";
+import Button from "../../components/buttons/Button";
 
 class TeamDetail extends Component {
     constructor(props) {
@@ -102,7 +103,7 @@ class TeamDetail extends Component {
 
     render() {
         const {newMembers} = this.state;
-        const {loading, team, projects} = this.props;
+        const {navigation, loading, team, projects} = this.props;
         const {id, name, description, members} = team;
         return (
             <Container>
@@ -110,19 +111,25 @@ class TeamDetail extends Component {
 
                 <InnerContainer space nonRadius>
                     <Title>{name}</Title>
+
                     <Divider height={10} />
-                    <Text medium>{description}</Text>
+
+                    <TouchableOpacity onPress={() => navigation.navigate('TeamDescription', {description})}>
+                        <Text medium>{description?.length > 80 ? description?.substring(0, 80) + "..." : description}</Text>
+                    </TouchableOpacity>
                 </InnerContainer>
 
                 <Container space>
-                    <DoubleButton
-                        firstText={members ? `🤝 ${members.length} ÜYE` : 0 + " ÜYE"}
-                        secondText={`💼 ${projects?.length} Proje`}
-                        firstColor='purple'
-                        secondColor='orange'
-                        firstAction={() => this.goToTeamMemberList(newMembers)}
-                        secondAction={() => this.goToTeamProjects(id)}
-                    />
+                    {/*<DoubleButton*/}
+                    {/*    firstText={members ? `🤝 ${members.length} ÜYE` : 0 + " ÜYE"}*/}
+                    {/*    secondText={`💼 ${projects?.length} Proje`}*/}
+                    {/*    firstColor='purple'*/}
+                    {/*    secondColor='orange'*/}
+                    {/*    firstAction={() => this.goToTeamMemberList(newMembers)}*/}
+                    {/*    secondAction={() => this.goToTeamProjects(id)}*/}
+                    {/*/>*/}
+
+                    <Button action={() => this.goToTeamProjects(id)} color='orange' text={`💼 ${projects?.length} Proje`}/>
 
                     <Divider height={30} />
 

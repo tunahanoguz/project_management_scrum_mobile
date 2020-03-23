@@ -1,123 +1,111 @@
-import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {Container, DirectionContainer, Divider, InnerContainer, Text} from "../../styles";
 import TopBar from "../../components/TopBar";
-import {colors, fonts} from "../../styles";
 import ProfilePicture from "../../components/ProfilePicture";
-import Divider from "../../components/Divider";
-import Icon from "react-native-vector-icons/Feather";
+import {getUserById} from "../../actions/authActions";
+import {getTasksForUser} from "../../actions/taskActions";
+import {ProgressCircle} from "react-native-svg-charts";
+import {getProjectsForUser} from "../../actions/projectActions";
 
-class UserProfile extends Component {
-    render() {
-        const {id, fullName, profilePhoto} = this.props.navigation.getParam('user', {});
-        return (
-            <View style={styles.container}>
-                <TopBar isBack={true}/>
+const UserProfile = ({navigation}) => {
+    const userID = navigation.getParam('userID', "");
 
-                <View style={styles.innerContainer}>
-                    <View style={styles.profileGeneralInfoContainer}>
-                        <View style={styles.profilePhotoContainer}>
-                            <ProfilePicture picture={profilePhoto} size={60}/>
-                        </View>
-                        <Text style={styles.cardText}>{fullName}</Text>
-                    </View>
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.authReducer.foundUser);
+    const tasks = useSelector(state => state.taskReducer.userTasks);
+    const projects = useSelector(state => state.projectReducer.userProjects);
 
-                    <View style={{width: '100%', flex: 1, backgroundColor: 'white', padding: 30,}}>
-                        <View style={styles.profileDetailCard}>
-                            <View style={styles.iconContainer}>
-                                <Icon name='users' size={20} color='rgba(0, 0, 0, 0.6)'/>
-                            </View>
-                            <Text style={fonts.cardTitle}>23 Takım</Text>
-                        </View>
+    useEffect(() => {
+        dispatch(getUserById(userID));
+        dispatch(getTasksForUser(userID));
+        dispatch(getProjectsForUser(userID));
+    }, []);
 
-                        <Divider height={20}/>
+    const {fullName, email, photoURL} = user;
 
-                        <View style={styles.profileDetailCard}>
-                            <View style={styles.iconContainer}>
-                                <Icon name='briefcase' size={20} color='rgba(0, 0, 0, 0.6)'/>
-                            </View>
-                            <Text style={fonts.cardTitle}>10 Proje</Text>
-                        </View>
+    const finishedTasksCount = () => {
+        const finishedTasks = tasks.filter(task => task.finishDate !== null);
+        return finishedTasks?.length;
+    };
 
-                        <Divider height={20}/>
+    const finishedProjectsCount = () => {
+        const finishedProjects = projects.filter(project => project.finishDate !== null);
+        return finishedProjects?.length;
+    };
 
-                        <View style={styles.rowContainer}>
-                            <View style={styles.blockButton}>
-                                <View style={{...styles.iconContainer, marginRight: 0,}}>
-                                    <Icon name='user-plus' size={24} color='rgba(0, 0, 0, 0.6)'/>
-                                </View>
-                                <Divider height={20}/>
-                                <Text style={fonts.mediumText}>Bir takıma ekle</Text>
-                            </View>
-                            <View style={{...styles.blockButton, marginRight: 0,}}>
-                                <View style={{...styles.iconContainer, marginRight: 0,}}>
-                                    <Icon name='mail' size={24} color='rgba(0, 0, 0, 0.6)'/>
-                                </View>
-                                <Divider height={20}/>
-                                <Text style={fonts.mediumText}>Mesaj gönder</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
-    }
-}
+    const renderUserGeneralInfo = () => (
+        <InnerContainer>
+            <DirectionContainer row alignCenter>
+                <ProfilePicture
+                    size={50}
+                    picture={photoURL ? photoURL : ""}
+                />
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        backgroundColor: '#060518',
-    },
-    innerContainer: {
-        flex: 1,
-        alignItems: 'flex-start',
-    },
-    profileGeneralInfoContainer: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#3f38dd',
-        padding: 30,
-    },
-    profileDetailCard: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: colors.lightGray,
-        padding: 15,
-        borderRadius: 15,
-    },
-    profilePhotoContainer: {
-        padding: 8,
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: 100,
-    },
-    cardText: {
-        ...fonts.title,
-        marginLeft: 15,
-        marginBottom: 0,
-        color: 'white',
-    },
-    iconContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
-        marginRight: 10,
-        padding: 12,
-        borderRadius: 100,
-    },
-    blockButton: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: colors.lightGray,
-        padding: 15,
-        borderRadius: 15,
-        marginRight: 20
-    },
-    rowContainer: {
-        flexDirection: 'row',
-    },
-});
+                <Divider width={10} />
+
+                <DirectionContainer>
+                    <Text medium>{fullName}</Text>
+                    <Text normal size={12}>{email}</Text>
+                </DirectionContainer>
+
+            </DirectionContainer>
+        </InnerContainer>
+    );
+
+    const renderUserTasks = () => (
+        <InnerContainer>
+            <ProgressCircle
+                style={{ height: 60 }}
+                progress={finishedTasksCount() / tasks?.length}
+                progressColor={'indigo'}
+                strokeWidth={8}
+            />
+
+            <Divider height={20} />
+
+            <DirectionContainer alignCenter>
+                <Text medium size={14}>Toplamda {tasks?.length} iş üzerinde çalışmış.</Text>
+                <Text medium size={14}>{finishedTasksCount()} tanesi bitmiş.</Text>
+            </DirectionContainer>
+        </InnerContainer>
+    );
+
+    const renderUserProjects = () => (
+        <InnerContainer>
+            <ProgressCircle
+                style={{ height: 60 }}
+                progress={finishedProjectsCount() / projects?.length}
+                progressColor={'indigo'}
+                strokeWidth={8}
+            />
+
+            <Divider height={20} />
+
+            <DirectionContainer alignCenter>
+                <Text medium size={14}>Toplamda {projects?.length} iş üzerinde çalışmış.</Text>
+                <Text medium size={14}>{finishedProjectsCount()} tanesi bitmiş.</Text>
+            </DirectionContainer>
+        </InnerContainer>
+    );
+
+    return (
+        <Container>
+            <TopBar isBack={true}/>
+
+            <Container space>
+                {renderUserGeneralInfo()}
+
+                <Divider height={30}/>
+
+                {renderUserTasks()}
+
+                <Divider height={30} />
+
+                {renderUserProjects()}
+            </Container>
+        </Container>
+    );
+};
 
 export default UserProfile;

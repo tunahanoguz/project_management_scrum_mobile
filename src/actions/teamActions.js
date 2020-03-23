@@ -13,9 +13,14 @@ import {
     GET_TEAM_MEMBERS_FAILURE,
     GET_TEAM_MEMBERS_START,
     DELETE_TEAM_START,
-    DELETE_TEAM_FAILURE, GET_TEAMS_FOR_HOME_START, GET_TEAMS_FOR_HOME_SUCCESS, GET_TEAMS_FOR_HOME_FAILURE,
+    DELETE_TEAM_FAILURE,
+    GET_TEAMS_FOR_HOME_START,
+    GET_TEAMS_FOR_HOME_SUCCESS,
+    GET_TEAMS_FOR_HOME_FAILURE,
+    GET_TEAM_USERS_ID_START, GET_TEAM_USERS_ID_SUCCESS, GET_TEAM_USERS_ID_FAILURE,
 } from "./types";
 import firestore from '@react-native-firebase/firestore';
+import {createNotification, sendNotifications} from "./notificationActions";
 
 export const getSingleTeam = teamID => dispatch => {
     const teamsRef = firestore().collection('teams');
@@ -110,7 +115,16 @@ export const createTeam = (teamName, teamDescription, members, userID) => dispat
         createdBy: userID,
         members: members
     })
-        .then(() => dispatch(getAllTeams(userID)))
+        .then(() => {
+            const userIDs = [];
+            members.map(member => {
+                userIDs.push(member.id);
+            });
+
+            dispatch(getAllTeams(userID));
+            dispatch(createNotification(userIDs, "team", "İçerisinde bulunduğunuz bir takım oluşturuldu."));
+            dispatch(sendNotifications(userIDs, "Takım Oluşturuldu!", "İçerisinde bulunduğunuz bir takım oluşturuldu."));
+        })
         .catch(() => dispatch({type: CREATE_TEAM_FAILURE, error: "Takım oluşturulamadı."}));
 };
 
@@ -149,4 +163,23 @@ export const deleteTeam = (userID, teamID) => dispatch => {
     teamRef.doc(teamID).delete()
         .then(() => dispatch(getAllTeams(userID)))
         .catch(() => dispatch({type: DELETE_TEAM_FAILURE, error: "Takım silinirken bir hata oluştu."}));
+};
+
+export const getTeamUserIDs = (teamID) => dispatch => {
+    dispatch({type: GET_TEAM_USERS_ID_START});
+
+    const teamRef = firestore().collection('teams');
+    const teamQuery = teamRef.doc(teamID);
+    teamQuery.get()
+        .then(doc => {
+            const {members} = doc.data();
+            const userIDs = [];
+
+            if (members.length !== 0){
+                members.map(member => userIDs.push(member.id));
+            }
+
+            dispatch({type: GET_TEAM_USERS_ID_SUCCESS, userIDs});
+        })
+        .catch(() => dispatch({type: GET_TEAM_USERS_ID_FAILURE, error: ""}));
 };
