@@ -1,12 +1,14 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import taskReducer from "./reducers/taskReducer";
-import authReducer from "./reducers/authReducer";
-import teamReducer from "./reducers/teamReducer";
-import projectReducer from "./reducers/projectReducer";
-import sprintReducer from "./reducers/sprintReducer";
-import dailyScrumMeetingReducer from "./reducers/dailyScrumMeetingReducer";
-import notificationReducer from "./reducers/notificationReducer";
+import {
+    authReducer,
+    teamReducer,
+    projectReducer,
+    taskReducer,
+    sprintReducer,
+    dailyScrumMeetingReducer,
+    notificationReducer,
+} from './reducers';
 
 const rootReducer = combineReducers({
     taskReducer,
