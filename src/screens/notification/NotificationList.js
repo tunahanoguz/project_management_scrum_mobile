@@ -28,10 +28,13 @@ const NotificationList = () => {
 
     return (
         <Container>
-            <TopBar isBack={false} title="Takımlar"/>
+            <TopBar
+                isBack={false}
+                title="Takımlar"
+            />
 
             <Container space>
-                <Container flex={0.8}>
+                <Container flex={0.94}>
                     <List
                         orderColor='orangered'
                         isFunctioned={false}

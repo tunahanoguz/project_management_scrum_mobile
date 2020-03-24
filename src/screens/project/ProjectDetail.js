@@ -29,6 +29,7 @@ class ProjectDetail extends Component {
     componentDidMount() {
         const {id} = this.props.navigation.getParam('project', {});
         const {getAllProjectComments, getAllProjectFiles, getSprintsForProjectDetail, getAllProjectTasks, getProjectParentCommentsForDetail} = this.props;
+
         getAllProjectComments(id);
         getAllProjectFiles(id);
         getSprintsForProjectDetail(id);
@@ -88,7 +89,9 @@ class ProjectDetail extends Component {
                 <Divider height={20}/>
 
                 <Text medium>Notlar</Text>
+
                 <Divider height={10}/>
+
                 <InnerContainer>
                     {notes.map((note, index) => {
                         if (index < 3) {
@@ -105,8 +108,15 @@ class ProjectDetail extends Component {
         const {taskLoading, taskError, tasks} = this.props;
         return (
             <Container flex={0.8}>
-                <List data={tasks} type='task' loading={taskLoading} error={taskError} orderColor='orangered'
-                      isFunctioned={false} modalFunc={this.setIsOpenModal}/>
+                <List
+                    data={tasks}
+                    type='task'
+                    loading={taskLoading}
+                    error={taskError}
+                    orderColor='orangered'
+                    isFunctioned={false}
+                    modalFunc={this.setIsOpenModal}
+                />
             </Container>
         );
     };
@@ -119,8 +129,15 @@ class ProjectDetail extends Component {
         const {sprintLoading, sprintError, sprints} = this.props;
         return (
             <Container flex={0.8}>
-                <List data={sprints} type='sprint' loading={sprintLoading} error={sprintError} orderColor='orangered'
-                      isFunctioned={false} modalFunc={this.setIsOpenModal}/>
+                <List
+                    data={sprints}
+                    type='sprint'
+                    loading={sprintLoading}
+                    error={sprintError}
+                    orderColor='orangered'
+                    isFunctioned={false}
+                    modalFunc={this.setIsOpenModal}
+                />
             </Container>
         );
     };
@@ -129,8 +146,15 @@ class ProjectDetail extends Component {
         const {commentLoading, commentError, comments} = this.props;
         return (
             <Container flex={0.8}>
-                <List data={comments} type='comment' loading={commentLoading} error={commentError}
-                      orderColor='orangered' isFunctioned={false} modalFunc={this.setIsOpenModal}/>
+                <List
+                    data={comments}
+                    type='comment'
+                    loading={commentLoading}
+                    error={commentError}
+                    orderColor='orangered'
+                    isFunctioned={false}
+                    modalFunc={this.setIsOpenModal}
+                />
             </Container>
         );
     };
@@ -150,27 +174,58 @@ class ProjectDetail extends Component {
     renderButtons = (projectID, selectedTab) => {
         if (selectedTab === 0) {
             return (
-                <Container flex={0.2} verticalMiddle>
-                    <Button color='seagreen' text="📁 DOSYALARI GÖRÜNTÜLE" action={() => this.goToProjectFileList(projectID)}/>
+                <Container
+                    flex={0.2}
+                    verticalMiddle
+                >
+                    <Button
+                        color='seagreen'
+                        text="📁 DOSYALARI GÖRÜNTÜLE"
+                        action={() => this.goToProjectFileList(projectID)}
+                    />
                 </Container>
             );
         } else if (selectedTab === 1) {
             return (
-                <Container flex={0.2} verticalMiddle>
-                    <DoubleButton firstText="🤙 İŞ OLUŞTUR" firstColor='green' firstAction={() => this.goToCreateTask(projectID)} secondText="💪 TÜM İŞLERİ GÖR" secondColor='purple' secondAction={() => this.goToTaskList(projectID)}/>
+                <Container
+                    flex={0.2}
+                    verticalMiddle
+                >
+                    <DoubleButton
+                        firstText="🤙 İŞ OLUŞTUR"
+                        firstColor='green'
+                        firstAction={() => this.goToCreateTask(projectID)}
+                        secondText="💪 TÜM İŞLERİ GÖR"
+                        secondColor='purple'
+                        secondAction={() => this.goToTaskList(projectID)}
+                    />
                     {/*<Button color='purple' text="💪 Tüm İşleri Gör" action={() => this.goToTaskList(projectID)}/>*/}
                 </Container>
             );
         } else if (selectedTab === 2) {
             return (
-                <Container flex={0.2} verticalMiddle>
-                    <Button color='green' text="🏃 TÜM SPRİNTLERİ GÖR" action={() => this.goToSprintList(projectID)}/>
+                <Container
+                    flex={0.2}
+                    verticalMiddle
+                >
+                    <Button
+                        color='green'
+                        text="🏃 TÜM SPRİNTLERİ GÖR"
+                        action={() => this.goToSprintList(projectID)}
+                    />
                 </Container>
             );
         } else {
             return (
-                <Container flex={0.2} verticalMiddle>
-                    <Button color='blue' text="💬 TÜM YORUMLARI GÖR" action={() => this.goToProjectCommentList(projectID)}/>
+                <Container
+                    flex={0.2}
+                    verticalMiddle
+                >
+                    <Button
+                        color='blue'
+                        text="💬 TÜM YORUMLARI GÖR"
+                        action={() => this.goToProjectCommentList(projectID)}
+                    />
                 </Container>
             );
         }
@@ -186,15 +241,24 @@ class ProjectDetail extends Component {
                 <Container space>
                     <Title>{name}</Title>
 
-                    <TabContent tabs={this.tabs} selectedTab={selectedTab} tabButtonAction={this.setSelectedTab}
-                                tabContents={() => this.renderTabContents(selectedTab, description, notes)}/>
+                    <TabContent
+                        tabs={this.tabs}
+                        selectedTab={selectedTab}
+                        tabButtonAction={this.setSelectedTab}
+                        tabContents={() => this.renderTabContents(selectedTab, description, notes)}
+                    />
 
                     {this.renderButtons(id, selectedTab)}
                 </Container>
 
-                <ListActionModal isOpen={isModalOpen} toggleFunc={this.setIsOpenModal} editText="Sprint'i Düzenle"
-                                 editAction={this.editSprintAction} deleteText="Sprint'i Sil"
-                                 deleteAction={this.deleteSprintAction}/>
+                <ListActionModal
+                    isOpen={isModalOpen}
+                    toggleFunc={this.setIsOpenModal}
+                    editText="Sprint'i Düzenle"
+                    editAction={this.editSprintAction}
+                    deleteText="Sprint'i Sil"
+                    deleteAction={this.deleteSprintAction}
+                />
             </Container>
         );
     }

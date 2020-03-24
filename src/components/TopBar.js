@@ -23,7 +23,11 @@ class TopBar extends Component {
         if (isBack){
             return (
                 <TouchableOpacity onPress={() => this.goToBack()}>
-                    <Icon name='arrow-left' size={24} color='white' />
+                    <Icon
+                        name='arrow-left'
+                        size={24}
+                        color='white'
+                    />
                 </TouchableOpacity>
             );
         } else {
@@ -36,14 +40,42 @@ class TopBar extends Component {
     topBarRight = ({photoURL}) => {
         if (photoURL){
             return (
-                <TouchableOpacity onPress={() => this.goToProfile()}>
-                    <Image source={{uri: photoURL}} style={styles.profilePhoto} />
-                </TouchableOpacity>
+                <View style={styles.rightContainer}>
+                    <TouchableOpacity onPress={() => this.goToProfile()}>
+                        <Image
+                            source={{uri: photoURL}}
+                            style={styles.profilePhoto}
+                        />
+                    </TouchableOpacity>
+
+                    {this.props.actionButtons && (
+                        this.props.actionButtons.map((button, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.rightButton}
+                                onPress={() => button.action()}
+                            >
+                                <Icon
+                                    name={button.icon}
+                                    width={100}
+                                    color='white'
+                                />
+                            </TouchableOpacity>
+                        ))
+                    )}
+                </View>
             );
         } else {
             return (
-                <TouchableOpacity style={styles.profileView} onPress={() => this.goToProfile()}>
-                    <Icon name='user' width={100} color='white' />
+                <TouchableOpacity
+                    style={styles.profileView}
+                    onPress={() => this.goToProfile()}
+                >
+                    <Icon
+                        name='user'
+                        width={100}
+                        color='white'
+                    />
                 </TouchableOpacity>
             );
         }
@@ -78,6 +110,18 @@ const styles = StyleSheet.create({
         color: 'white',
         includeFontPadding: false,
     },
+    rightContainer: {
+        flexDirection: 'row',
+    },
+    rightButton: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        borderRadius: 15,
+    },
     profilePhoto: {
         width: 40,
         height: 40,
@@ -95,6 +139,10 @@ const styles = StyleSheet.create({
 TopBar.propTypes = {
     isBack: PropTypes.bool.isRequired,
     title: PropTypes.string,
+    actionButtons: PropTypes.arrayOf(PropTypes.shape({
+        icon: PropTypes.string.isRequired,
+        action: PropTypes.func.isRequired,
+    })),
 };
 
 const mapStateToProps = state => {

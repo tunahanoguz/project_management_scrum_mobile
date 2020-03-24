@@ -26,10 +26,26 @@ const TaskCommentList = ({navigation}) => {
 
     const renderComments = () => {
         if (loading){
-            return <DirectionContainer flex={1} justifyCenter alignCenter><Loading /></DirectionContainer>;
+            return (
+                <DirectionContainer
+                    flex={1}
+                    justifyCenter
+                    alignCenter
+                >
+                    <Loading/>
+                </DirectionContainer>
+            );
         } else {
             if (error.length !== 0){
-                return <DirectionContainer flex={1} justifyCenter alignCenter><Text medium>{error}</Text></DirectionContainer>;
+                return (
+                    <DirectionContainer
+                        flex={1}
+                        justifyCenter
+                        alignCenter
+                    >
+                        <Text medium>{error}</Text>
+                    </DirectionContainer>
+                );
             } else {
                 return (
                     <FlatList

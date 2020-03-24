@@ -69,14 +69,18 @@ const stackNavigator = createStackNavigator(
     }
 );
 
-// stackNavigator.navigationOptions = ({navigation}) => {
-//     let tabBarVisible = true;
-//     if (navigation.state.index === 0){
-//         tabBarVisible = false;
-//     }
-//
-//     return {tabBarVisible};
-// };
+stackNavigator.navigationOptions = ({ navigation }) => {
+    let tabBarVisible;
+    if (navigation.state.routes.length > 1) {
+        navigation.state.routes.map(route => {
+            tabBarVisible = !(route.routeName === "Register" || route.routeName === "Login" || route.routeName === "ForgotPassword");
+        });
+    }
+
+    return {
+        tabBarVisible
+    };
+};
 
 const teamNavigator = createStackNavigator(
     {

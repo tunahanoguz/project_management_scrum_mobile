@@ -118,25 +118,60 @@ class Register extends Component {
     };
 
     render() {
-        const {fullName, fullNameError, email, emailError, password, passwordError} = this.state;
+        const {
+            fullName,
+            fullNameError,
+            email,
+            emailError,
+            password,
+            passwordError
+        } = this.state;
+
         return (
             <View style={styles.container}>
                 <Text style={fonts.title}>Kayıt Ol</Text>
 
-                <Input iconName='type' value={fullName} placeholder="Ad Soyad" name='fullName'
-                       setStateFunc={this.setStateFunc} isValid={this.validateFullName}
-                       errorMessage={fullNameError}/>
-                <Input iconName='mail' value={email} placeholder="Email" name='email'
-                       setStateFunc={this.setStateFunc} isValid={this.validateEmail}
-                       errorMessage={emailError}/>
-                <Input iconName='key' value={password} placeholder="Password" name='password'
-                       setStateFunc={this.setStateFunc} isValid={this.validatePassword} secureTextEntry={true}
-                       errorMessage={passwordError}/>
+                <Input
+                    iconName='type'
+                    value={fullName}
+                    placeholder="Ad Soyad"
+                    name='fullName'
+                    setStateFunc={this.setStateFunc}
+                    isValid={this.validateFullName}
+                    errorMessage={fullNameError}
+                />
 
-                <RoundedButton color='green' icon='arrow-right' pressFunc={this.handleSubmit}/>
+                <Input
+                    iconName='mail'
+                    value={email}
+                    placeholder="Email"
+                    name='email'
+                    setStateFunc={this.setStateFunc}
+                    isValid={this.validateEmail}
+                    errorMessage={emailError}
+                />
 
-                <TouchableOpacity onPress={() => this.goToLogin()}
-                                  style={styles.loginButton}>
+                <Input
+                    iconName='key'
+                    value={password}
+                    placeholder="Password"
+                    name='password'
+                    setStateFunc={this.setStateFunc}
+                    isValid={this.validatePassword}
+                    secureTextEntry={true}
+                    errorMessage={passwordError}
+                />
+
+                <RoundedButton
+                    color='green'
+                    icon='arrow-right'
+                    pressFunc={this.handleSubmit}
+                />
+
+                <TouchableOpacity
+                    onPress={() => this.goToLogin()}
+                    style={styles.loginButton}
+                >
                     <Text style={{...fonts.mediumText, color: 'rgba(0, 0, 0, 0.4)'}}>HESABINIZ VAR MI? GİRİŞ YAPIN.</Text>
                 </TouchableOpacity>
             </View>

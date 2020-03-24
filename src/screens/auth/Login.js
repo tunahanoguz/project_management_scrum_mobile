@@ -90,27 +90,56 @@ class Login extends Component {
     };
 
     render() {
-        const {email, emailError, password, passwordError} = this.state;
+        const {
+            email,
+            emailError,
+            password,
+            passwordError
+        } = this.state;
+
         return (
             <View style={styles.container}>
                 <Text style={fonts.title}>Giriş Yap</Text>
 
-                <Input iconName='mail' value={email} placeholder="Email" name='email'
-                       setStateFunc={this.setStateFunc} isValid={this.validateEmail}
-                       errorMessage={emailError} isEmail={true}/>
-                <Input iconName='key' value={password} placeholder="Password" name='password'
-                       setStateFunc={this.setStateFunc} isValid={this.validatePassword} secureTextEntry={true}
-                       errorMessage={passwordError}/>
+                <Input
+                    iconName='mail'
+                    value={email}
+                    placeholder="Email"
+                    name='email'
+                    setStateFunc={this.setStateFunc}
+                    isValid={this.validateEmail}
+                    errorMessage={emailError}
+                    isEmail={true}
+                />
 
-                <RoundedButton color='green' icon='arrow-right' pressFunc={this.handleSubmit}/>
+                <Input
+                    iconName='key'
+                    value={password}
+                    placeholder="Password"
+                    name='password'
+                    setStateFunc={this.setStateFunc}
+                    isValid={this.validatePassword}
+                    secureTextEntry={true}
+                    errorMessage={passwordError}
+                />
 
-                <TouchableOpacity onPress={() => this.goToRegister()}
-                                  style={styles.registerButton}>
+                <RoundedButton
+                    color='green'
+                    icon='arrow-right'
+                    pressFunc={this.handleSubmit}
+                />
+
+                <TouchableOpacity
+                    onPress={() => this.goToRegister()}
+                    style={styles.registerButton}
+                >
                     <Text style={{...fonts.mediumText, color: 'rgba(0, 0, 0, 0.4)'}}>HESABINIZ YOK MU? KAYIT OLUN.</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.goToForgotPassword()}
-                                  style={styles.registerButton}>
+                <TouchableOpacity
+                    onPress={() => this.goToForgotPassword()}
+                    style={styles.registerButton}
+                >
                     <Text style={{...fonts.mediumText, color: 'rgba(0, 0, 0, 0.4)'}}>ŞİFREMİ UNUTTUM</Text>
                 </TouchableOpacity>
             </View>

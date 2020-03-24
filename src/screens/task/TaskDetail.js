@@ -11,7 +11,7 @@ import ProfilePicture from "../../components/ProfilePicture";
 import {getUserById} from "../../actions/authActions";
 import {getSingleSprint} from "../../actions/sprintActions";
 import List from "../../components/list/List";
-import {getAllTaskComments, getAllTaskFiles, getSingleTask} from "../../actions/taskActions";
+import {deleteTask, getAllTaskComments, getAllTaskFiles, getSingleTask} from "../../actions/taskActions";
 import DoubleButton from "../../components/buttons/DoubleButton";
 
 const TaskDetail = ({navigation}) => {
@@ -21,6 +21,7 @@ const TaskDetail = ({navigation}) => {
 
     const dispatch = useDispatch();
     const project = useSelector(state => state.projectReducer.project);
+    const user = useSelector(state => state.authReducer.user);
     const foundUser = useSelector(state => state.authReducer.foundUser);
     const sprint = useSelector(state => state.sprintReducer.sprint);
     const taskLoading = useSelector(state => state.taskReducer.loading);
@@ -29,7 +30,7 @@ const TaskDetail = ({navigation}) => {
     const comments = useSelector(state => state.taskReducer.comments);
 
     const taskObj = useSelector(state => state.taskReducer.task);
-    const {id, task, description, projectID, sprintID, userID, startDate, estimatedFinishDate} = taskObj;
+    const {id, task, description, projectID, sprintID, createdBy, userID, startDate, estimatedFinishDate} = taskObj;
 
     useEffect(() => {
         dispatch(getSingleProject(projectID));
@@ -91,12 +92,21 @@ const TaskDetail = ({navigation}) => {
                 <InnerContainer>
                     <Fragment>
                         {renderDateContainer("Başlangıç Tarihi: ", startDate)}
+
                         <Divider height={10}/>
+
                         {renderDateContainer("Bitiş Tarihi: ", estimatedFinishDate)}
+
                         <Divider height={10}/>
+
                         <DirectionContainer row alignCenter>
-                            <ProfilePicture size={40} picture={foundUser.photoURL ? foundUser.photoURL : ""} />
+                            <ProfilePicture
+                                size={40}
+                                picture={foundUser.photoURL ? foundUser.photoURL : ""}
+                            />
+
                             <Divider width={10}/>
+
                             <Text medium size={16}>{foundUser?.fullName}</Text>
                         </DirectionContainer>
                     </Fragment>
@@ -104,7 +114,11 @@ const TaskDetail = ({navigation}) => {
             );
         } else {
             return (
-                <Button color='green' text="👍 BAŞLAT" action={() => goToStartTask()} />
+                <Button
+                    color='green'
+                    text="👍 BAŞLAT"
+                    action={() => goToStartTask()}
+                />
             );
         }
     };
@@ -138,7 +152,11 @@ const TaskDetail = ({navigation}) => {
             );
         } else {
             return (
-                <Button color='purple' text="👊 BİR SPRINT'E ATA" action={() => navigation.navigate('StartTask', {task, project})} />
+                <Button
+                    color='purple'
+                    text="👊 BİR SPRINT'E ATA"
+                    action={() => navigation.navigate('StartTask', {task, project})}
+                />
             );
         }
     };
@@ -199,7 +217,12 @@ const TaskDetail = ({navigation}) => {
         );
     };
 
-    const tabs = [{icon: '💼', name: 'Genel'}, {icon: '🏃', name: 'Sprint'}, {icon: '📁', name: 'Dosya'}, {icon: '💬', name: 'Yorum'}];
+    const tabs = [
+        {icon: '💼', name: 'Genel'},
+        {icon: '🏃', name: 'Sprint'},
+        {icon: '📁', name: 'Dosya'},
+        {icon: '💬', name: 'Yorum'},
+    ];
 
     const renderTabContents = () => {
         if (selectedTab === 0) {
@@ -213,9 +236,22 @@ const TaskDetail = ({navigation}) => {
         }
     };
 
+    const topBarRightButtons = [
+        {
+            icon: 'trash-2',
+            action: () => {
+                dispatch(deleteTask(taskID));
+                navigation.navigate('ProjectDetail', projectID);
+            },
+        }
+    ];
+
     return (
         <Container>
-            <TopBar isBack={true} />
+            <TopBar
+                isBack={true}
+                actionButtons={createdBy === user.uid ? topBarRightButtons : []}
+            />
 
             <Container space>
                 <Title>{task}</Title>

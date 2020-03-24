@@ -53,7 +53,11 @@ class EditSprint extends Component {
 
                 <InnerContainer>
                     <Text style={fonts.title}>Sprint Düzenle</Text>
-                    <Formik initialValues={{name: sprint.name, estimatedFinishDate: sprint.estimatedFinishDate.toDate()}} validationSchema={this.validationSchema} onSubmit={values => this.handleSubmit(values)}>
+                    <Formik
+                        initialValues={{name: sprint.name, estimatedFinishDate: sprint.estimatedFinishDate.toDate()}}
+                        validationSchema={this.validationSchema}
+                        onSubmit={values => this.handleSubmit(values)}
+                    >
                         {({values, handleChange, errors, setFieldValue, setFieldTouched, touched, isValid, handleSubmit}) => {
                             return (
                                 <Fragment>
@@ -69,9 +73,19 @@ class EditSprint extends Component {
 
                                     {/*<SelectInput value={values.status} name='status' text="Durum seçiniz (*)" selections={[{id: 0, text: "Hemen Başlamasın"}, {id: 1, text: "Hemen Başlasın"}]} setSelectedItem={setFieldValue} errorMessage={touched.status && errors.status ? errors.status : ""} />*/}
 
-                                    <ExampleDatePicker value={values.estimatedFinishDate} name='estimatedFinishDate' handleChange={setFieldValue} text="Tahmini Bitiş Tarihi (*)" />
+                                    <ExampleDatePicker
+                                        value={values.estimatedFinishDate}
+                                        name='estimatedFinishDate'
+                                        handleChange={setFieldValue}
+                                        text="Tahmini Bitiş Tarihi (*)"
+                                    />
 
-                                    <RoundedButton disabled={!isValid} color='green' icon='arrow-right' pressFunc={handleSubmit} />
+                                    <RoundedButton
+                                        disabled={!isValid}
+                                        color='green'
+                                        icon='arrow-right'
+                                        pressFunc={handleSubmit}
+                                    />
                                 </Fragment>
                             );
                         }}

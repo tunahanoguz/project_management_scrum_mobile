@@ -19,6 +19,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
+import messaging from "@react-native-firebase/messaging";
 
 export const getUser = () => dispatch => {
     auth().onAuthStateChanged(function (user) {
@@ -77,13 +78,21 @@ export const register = (fullName, email, password) => dispatch => {
             const newUser = user.user;
             newUser.updateProfile({
                 displayName: fullName
-            }).then(() => {
-                firestore().collection('users').doc(newUser.uid).set({
-                    fullName: fullName,
-                    email: newUser.email,
-                    photoURL: "",
-                    createdAt: new Date(),
-                }).then(() => dispatch({type: REGISTER_SUCCESS, authState: true, user: user.user}));
+            })
+                .then(() => {
+                    getToken()
+                        .then(token => {
+                            firestore().collection('users').doc(newUser.uid).set({
+                                fullName: fullName,
+                                email: newUser.email,
+                                photoURL: "",
+                                createdAt: new Date(),
+                                fcmToken: token,
+                            })
+                                .then(() => dispatch({type: REGISTER_SUCCESS, authState: true, user: newUser}))
+                                .catch(() => dispatch({type: REGISTER_FAILURE, error: "Kullanıcı kayıt işlemi yapılamadı."}));
+                        })
+                        .catch(() => dispatch({type: REGISTER_FAILURE, error: "Kullanıcı kayıt işlemi yapılamadı."}));
             });
         })
         .catch(() => dispatch({type: REGISTER_FAILURE, error: "Kullanıcı kayıt işlemi yapılamadı."}));
@@ -130,4 +139,9 @@ export const changeProfilePhoto = photoURL => dispatch => {
             console.log("updateProfile başarısız.");
             dispatch({type: UPDATE_PP_FAILURE, error: "Profil fotoğrafınız değiştirilemedi."})
         });
+};
+
+const getToken = async () => {
+        let fcmToken = await messaging().getToken();
+        return fcmToken;
 };

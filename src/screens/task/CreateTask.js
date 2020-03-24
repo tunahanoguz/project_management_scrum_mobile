@@ -75,7 +75,14 @@ class EmptyScreen extends Component {
                                         errorMessage={touched.description && errors.description ? errors.description: ""}
                                     />
 
-                                    <SelectInput value={values.priority} name='priority' text="Öncelik seçiniz (*)" selections={[{id: 1, text: "Yüksek Öncelikli"}, {id: 0, text: "Orta Öncelikli"}, {id: 2, text: "Düşük Öncelikli"}]} setSelectedItem={setFieldValue} errorMessage={touched.priority && errors.priority ? errors.priority: ""} />
+                                    <SelectInput
+                                        value={values.priority}
+                                        name='priority'
+                                        text="Öncelik seçiniz (*)"
+                                        selections={[{id: 1, text: "Yüksek Öncelikli"}, {id: 0, text: "Orta Öncelikli"}, {id: 2, text: "Düşük Öncelikli"}]}
+                                        setSelectedItem={setFieldValue}
+                                        errorMessage={touched.priority && errors.priority ? errors.priority: ""}
+                                    />
 
                                     {/*<SelectInput value={values.status} name='project' text="Proje seçiniz (*)" selections={this.renderProjects()} setSelectedItem={setFieldValue} errorMessage={touched.project && errors.project ? errors.project: ""} />*/}
 
@@ -83,7 +90,12 @@ class EmptyScreen extends Component {
 
                                     {/*<ExampleDatePicker value={values.estimatedFinishDate} name='estimatedFinishDate' handleChange={setFieldValue} text="Tahmini Bitiş Tarihi (*)" />*/}
 
-                                    <RoundedButton disabled={!isValid} color='green' icon='arrow-right' pressFunc={handleSubmit} />
+                                    <RoundedButton
+                                        disabled={!isValid}
+                                        color='green'
+                                        icon='arrow-right'
+                                        pressFunc={handleSubmit}
+                                    />
                                 </Fragment>
                             );
                         }}

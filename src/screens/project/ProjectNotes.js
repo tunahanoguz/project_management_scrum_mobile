@@ -19,8 +19,11 @@ class ProjectNotes extends Component {
     notesContainer = () => {
         if (this.notes.length > 0) {
             return (
-                <FlatList data={this.notes} renderItem={({item, index}) => this.noteList(item, index)}
-                          keyExtractor={(item, index) => index.toString()}/>
+                <FlatList
+                    data={this.notes}
+                    renderItem={({item, index}) => this.noteList(item, index)}
+                    keyExtractor={(item, index) => index.toString()}
+                />
             );
         } else {
             return null;

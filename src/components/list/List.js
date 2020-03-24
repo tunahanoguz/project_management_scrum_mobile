@@ -1,5 +1,6 @@
 import React from 'react';
 import {FlatList} from 'react-native';
+import {useSelector} from "react-redux";
 import PropTypes from 'prop-types';
 import {withNavigation} from 'react-navigation';
 import ListItem from "./ListItem";
@@ -11,6 +12,8 @@ import RNFetchBlob from "rn-fetch-blob";
 import uuid from "rn-fetch-blob/utils/uuid";
 
 const List = ({navigation, loading, error, data, type, icon, orderColor, isFunctioned, modalFunc}) => {
+
+    const user = useSelector(state => state.authReducer.user);
 
     const renderDate = (date) => {
         moment.locale('tr-TR');
@@ -139,7 +142,7 @@ const List = ({navigation, loading, error, data, type, icon, orderColor, isFunct
                                     order={index + 1}
                                     orderColor={orderColor}
                                     bottomTitle={renderBottomTitle(item)}
-                                    isFunctioned={isFunctioned}
+                                    isFunctioned={item?.createdBy === user.uid ?  isFunctioned : false}
                                     modalFunc={modalFunc ? modalFunc : () => alert("asdasdasd")}
                                     type={type}
                                     icon={renderIconName(item)}

@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 const getMessages = (setMessageArray, dailyScrumMeetingID) => {
     const dailyScrumMeetingMessageRef = firestore().collection('dailyScrumMeetingMessage');
     const dailyScrumMeetingMessageQuery = dailyScrumMeetingMessageRef.where('dailyScrumMeetingID', '==', dailyScrumMeetingID).orderBy('createdAt', 'DESC');
-    dailyScrumMeetingMessageRef.onSnapshot({
+    dailyScrumMeetingMessageQuery.onSnapshot({
         error: (e) => console.log(e),
         next: (querySnapshot) => {
             const messages = [];
@@ -12,6 +12,8 @@ const getMessages = (setMessageArray, dailyScrumMeetingID) => {
                     _id: doc.id,
                     ...doc.data(),
                 };
+
+                console.log(message);
 
                 messages.push(message);
             });

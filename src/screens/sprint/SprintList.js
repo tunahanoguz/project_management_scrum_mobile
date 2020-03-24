@@ -76,6 +76,7 @@ class SprintList extends Component {
         const {isModalOpen} = this.state;
         const {navigation} = this.props;
         const projectID = navigation.getParam('projectID', "");
+
         return (
             <Container>
                 <TopBar isBack={true} />
@@ -84,7 +85,10 @@ class SprintList extends Component {
                     {this.renderSprints()}
 
                     <Container flex={0.2} verticalMiddle>
-                        <Button action={() => navigation.navigate('CreateSprint', {projectID})} color='green' text="🏃 YENİ SPRİNT OLUŞTUR"/>
+                        <Button
+                            action={() => navigation.navigate('CreateSprint', {projectID})}
+                            color='green'
+                            text="🏃 YENİ SPRİNT OLUŞTUR"/>
                     </Container>
                 </Container>
 

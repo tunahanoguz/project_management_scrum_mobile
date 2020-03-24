@@ -74,27 +74,54 @@ class ForgotPassword extends Component {
 
     firstStep = () => (
         <Fragment>
-            <Input iconName='mail' value={this.state.email} placeholder="Email" name='email'
-                   setStateFunc={this.setStateFunc} isValid={this.validateEmail}
-                   errorMessage={this.state.emailError}/>
-            <BlockButton color='green' text="Şifre değiştirme maili gönder" icon='mail' iconSize={16}
-                         pressFunc={this.handleSubmit}/>
+            <Input
+                iconName='mail'
+                value={this.state.email}
+                placeholder="Email"
+                name='email'
+                setStateFunc={this.setStateFunc}
+                isValid={this.validateEmail}
+                errorMessage={this.state.emailError}
+            />
+
+            <BlockButton
+                color='green'
+                text="Şifre değiştirme maili gönder"
+                icon='mail'
+                iconSize={16}
+                pressFunc={this.handleSubmit}
+            />
         </Fragment>
     );
 
     secondStep = () => (
         <Fragment>
-            <Text style={fonts.normalText}>Şifrenizi değiştirebilmeniz için mail adresinize bir mail gönderdik. Bu
-                mailde yer alan linke tıklayarak şifrenizi değiştirebilirsiniz.</Text>
+            <Text style={fonts.normalText}>
+                Şifrenizi değiştirebilmeniz için mail adresinize bir mail gönderdik. Bu
+                mailde yer alan linke tıklayarak şifrenizi değiştirebilirsiniz.
+            </Text>
+
             <Divider height={10} />
-            <BlockButton color='purple' text="Anladım" icon='check' iconSize={16} pressFunc={this.goToLogin}/>
+
+            <BlockButton
+                color='purple'
+                text="Anladım"
+                icon='check'
+                iconSize={16}
+                pressFunc={this.goToLogin}
+            />
         </Fragment>
     );
 
     render() {
         return (
             <CenterContainer padding={true}>
-                <StatusBar backgroundColor='transparent' translucent={true} barStyle='dark-content'/>
+                <StatusBar
+                    backgroundColor='transparent'
+                    translucent={true}
+                    barStyle='dark-content'
+                />
+
                 <Text style={fonts.title}>Şifremi Unuttum</Text>
 
                 {this.state.secondStep ? this.secondStep() : this.firstStep()}
@@ -102,7 +129,5 @@ class ForgotPassword extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({});
 
 export default ForgotPassword;

@@ -5,7 +5,6 @@ import {Container, sizes} from "../../styles";
 import ProjectActionsModal from "../../components/modals/ProjectActionsModal";
 import {getAllProjects} from "../../actions/projectActions";
 import {connect} from "react-redux";
-import FlashMessage from "react-native-flash-message";
 import List from "../../components/list/List";
 import Button from "../../components/buttons/Button";
 
@@ -42,7 +41,15 @@ class ProjectList extends Component {
     renderProjectList = (loading, error, projects) => {
         return (
             <Container flex={0.8}>
-                <List data={projects} loading={loading} error={error} orderColor='orangered' type='project' isFunctioned={true} modalFunc={this.toggleActionsContainer}/>
+                <List
+                    data={projects}
+                    loading={loading}
+                    error={error}
+                    orderColor='orangered'
+                    type='project'
+                    isFunctioned={true}
+                    modalFunc={this.toggleActionsContainer}
+                />
             </Container>
         );
     };
@@ -55,14 +62,23 @@ class ProjectList extends Component {
 
                 <Container space>
                     {this.renderProjectList(loading, error, projects)}
+
                     <Container flex={0.2} verticalMiddle>
-                        <Button color='purple' text="🤙 Proje Oluştur" action={this.goToCreateProjectScreen}/>
+                        <Button
+                            color='purple'
+                            text="🤙 Proje Oluştur"
+                            action={this.goToCreateProjectScreen}
+                        />
                     </Container>
                 </Container>
 
-                <ProjectActionsModal isOpen={this.state.isActionsModalOpen} animatedValue={this.state.animatedValue}
-                                     toggleFunc={this.toggleActionsContainer} selectedProjectID={this.state.selectedProjectID} teamIDs={this.props.teamIDs}/>
-                <FlashMessage position="top" />
+                <ProjectActionsModal
+                    isOpen={this.state.isActionsModalOpen}
+                    animatedValue={this.state.animatedValue}
+                    toggleFunc={this.toggleActionsContainer}
+                    selectedProjectID={this.state.selectedProjectID}
+                    teamIDs={this.props.teamIDs}
+                />
             </Container>
         );
     }

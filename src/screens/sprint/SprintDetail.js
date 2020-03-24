@@ -19,7 +19,7 @@ import ProfilePicture from "../../components/ProfilePicture";
 import Button from "../../components/buttons/Button";
 import TabContent from "../../components/tab/TabContent";
 import {getSingleProject} from "../../actions/projectActions";
-import {finishSprint, getSingleSprint} from "../../actions/sprintActions";
+import {deleteSprint, finishSprint, getSingleSprint} from "../../actions/sprintActions";
 import {
     createDailyScrumMeeting,
     getDailyScrumMeeting,
@@ -27,6 +27,7 @@ import {
 } from "../../actions/dailyScrumMeetingActions";
 import {getSingleTeam} from "../../actions/teamActions";
 import {createNotification, sendNotifications} from "../../actions/notificationActions";
+import {deleteTask} from "../../actions/taskActions";
 
 const SprintDetail = ({navigation}) => {
     const sprintID = navigation.getParam('sprintID', {});
@@ -34,6 +35,7 @@ const SprintDetail = ({navigation}) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const dispatch = useDispatch();
+    const authUser = useSelector(state => state.authReducer.user);
     const user = useSelector(state => state.authReducer.foundUser);
     const {fullName, photoURL} = user;
 
@@ -268,9 +270,22 @@ const SprintDetail = ({navigation}) => {
         }
     };
 
+    const topBarRightButtons = [
+        {
+            icon: 'trash-2',
+            action: () => {
+                dispatch(deleteSprint(projectID, sprintID));
+                navigation.navigate('ProjectDetail', projectID);
+            },
+        }
+    ];
+
     return (
         <Container>
-            <TopBar isBack={true}/>
+            <TopBar
+                isBack={true}
+                actionButtons={createdBy === authUser.uid ? topBarRightButtons : []}
+            />
 
             <Container space>
                 <Title>{name}</Title>
