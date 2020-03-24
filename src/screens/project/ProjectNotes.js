@@ -1,7 +1,7 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {SafeAreaView, View, Text, FlatList, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
-import TopBar from "../../components/TopBar";
+import {TopBar} from 'components';
 import {fonts} from "../../styles";
 
 class ProjectNotes extends Component {

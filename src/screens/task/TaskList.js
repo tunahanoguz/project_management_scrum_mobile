@@ -1,12 +1,17 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import {FlatList} from 'react-native';
-// import PropTypes from 'prop-types';
 import {useSelector, useDispatch} from "react-redux";
-import TopBar from "../../components/TopBar";
-import {Container, Divider, Title} from "../../styles";
-import DoubleButton from "../../components/buttons/DoubleButton";
+import {
+    TopBar,
+    DoubleButton,
+    TaskCard,
+} from 'components';
+import {
+    Container,
+    Divider,
+    Title,
+} from "../../styles";
 import {getAllProjectTasks} from "../../actions/taskActions";
-import TaskCard from "../../components/cards/TaskCard";
 
 const TaskList = ({navigation}) => {
     const [type, setType] = useState(0);

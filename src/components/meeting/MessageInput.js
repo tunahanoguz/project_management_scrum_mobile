@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {View, TextInput, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import PropTypes from 'prop-types';
 import {fonts, sizes} from "../../styles";

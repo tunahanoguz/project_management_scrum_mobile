@@ -1,17 +1,19 @@
 import React, {Component, Fragment} from 'react';
-import {Text, StyleSheet} from 'react-native';
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
-import ExampleInput from "../../components/ExampleInput";
-import SelectInput from "../../components/form/SelectInput";
-import ExampleDatePicker from "../../components/form/ExampleDatePicker";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import {Formik} from "formik";
-import {createSprint} from "../../actions/sprintActions";
-import {fonts} from "../../styles";
+import {Text} from 'react-native';
 import {connect} from "react-redux";
+import {Formik} from "formik";
 import * as yup from "yup";
+import {
+    TopBar,
+    Container,
+    InnerContainer,
+    ExampleInput,
+    SelectInput,
+    ExampleDatePicker,
+    RoundedButton,
+} from 'components';
+import {fonts} from "../../styles";
+import {createSprint} from "../../actions/sprintActions";
 import {
     sprintEstimatedFinishDate,
     sprintName,

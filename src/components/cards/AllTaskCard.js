@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity
+} from 'react-native';
 import PropTypes from 'prop-types';
-import {profiles} from "../../constants";
 import Icon from "react-native-vector-icons/Feather";
-import BlockButton from "../buttons/BlockButton";
+import {profiles} from "../../constants";
 
 class AllTaskCard extends Component {
     cardColor = () => {
@@ -62,7 +67,6 @@ const styles = StyleSheet.create({
     taskContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
-        // backgroundColor: 'rgba(0, 0, 0, 0.05)',
         marginBottom: 20,
         marginHorizontal: 30,
         paddingVertical: 10,
@@ -90,7 +94,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 10,
-        // backgroundColor: 'red',
     },
     taskProfileContainer: {
         flexDirection: 'row',
@@ -106,7 +109,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // backgroundColor: 'blue',
     },
     taskProfilePhoto: {
         width: 18,

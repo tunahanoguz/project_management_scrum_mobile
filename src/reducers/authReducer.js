@@ -16,7 +16,7 @@ import {
     CHANGE_USER_FULLNAME_FAILURE,
     UPDATE_PP_SUCCESS,
     UPDATE_PP_FAILURE,
-} from "../actions/types";
+} from "../actions/types/authTypes";
 
 const initialState = {
     authState: false,

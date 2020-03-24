@@ -7,12 +7,14 @@ import {
     taskPriority,
     taskDescription
 } from '../../validationSchema';
-import {createTask} from "../../actions/taskActions";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import ExampleInput from "../../components/ExampleInput";
-import TopBar from "../../components/TopBar";
-import SelectInput from "../../components/form/SelectInput";
+import {
+    TopBar,
+    RoundedButton,
+    ExampleInput,
+    SelectInput,
+} from 'components';
 import {Container, Divider, Title} from "../../styles";
+import {createTask} from "../../actions/taskActions";
 
 class EmptyScreen extends Component {
     constructor(props) {

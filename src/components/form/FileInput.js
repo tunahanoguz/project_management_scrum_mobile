@@ -4,11 +4,8 @@ import PropTypes from 'prop-types';
 import {colors} from "../../styles";
 import Icon from "react-native-vector-icons/Feather";
 import ImagePicker from "react-native-image-picker";
-import storage from '@react-native-firebase/storage';
-import RoundedButton from "../buttons/RoundedButton";
 import {connect} from "react-redux";
 import {getUser} from "../../actions/authActions";
-import uuid from 'uuid';
 
 class FileInput extends Component {
     constructor(props) {

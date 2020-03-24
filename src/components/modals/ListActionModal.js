@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import {
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Animated
+} from 'react-native';
 import PropTypes from 'prop-types';
-import {colors, Divider, fonts, sizes} from "../../styles";
+import {Divider, fonts, sizes} from "../../styles";
 import Icon from "react-native-vector-icons/Feather";
 import styled from "styled-components";
 

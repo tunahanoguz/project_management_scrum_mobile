@@ -1,16 +1,29 @@
 import React, {Component, Fragment} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import TopBar from "../../components/TopBar";
-import {Container, container, fonts, InnerContainer, Text, Title} from "../../styles";
-import Divider from "../../components/Divider";
-import UserCard from "../../components/cards/UserCard";
-import Icon from "react-native-vector-icons/Feather";
-import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
+import {
+    FlatList,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import {connect} from "react-redux";
+import Icon from "react-native-vector-icons/Feather";
 import {ActivityIndicator} from "react-native-paper";
-import DoubleButton from "../../components/buttons/DoubleButton";
+import {
+    TopBar,
+    Divider,
+    UserCard,
+    Button,
+} from 'components';
+import {
+    Container,
+    InnerContainer,
+    Text,
+    Title,
+    container,
+    fonts,
+} from "../../styles";
+import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
 import {getProjectsForTeam} from "../../actions/projectActions";
-import Button from "../../components/buttons/Button";
 
 class TeamDetail extends Component {
     constructor(props) {

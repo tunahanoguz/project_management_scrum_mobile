@@ -3,7 +3,7 @@ import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import ProfilePicture from "../ProfilePicture";
 import Divider from "../Divider";
-import {colors, fonts, sizes} from "../../styles";
+import {fonts, sizes} from "../../styles";
 import Icon from "react-native-vector-icons/Feather";
 
 class AddedUserCard extends Component {

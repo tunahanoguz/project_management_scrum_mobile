@@ -1,16 +1,26 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, FlatList, Animated, StyleSheet, Dimensions} from 'react-native';
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
-import {colors, fonts} from "../../styles";
-import Input from "../../components/form/Input";
-import Icon from "react-native-vector-icons/Feather";
-import FullScreenModal from "../../components/modals/FullScreenModal";
-import {priorities} from "../../constants";
-import DatePicker from "../../components/form/DatePicker";
-import {editTask} from '../../actions/taskActions';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    FlatList,
+    Animated,
+    StyleSheet,
+    Dimensions,
+} from 'react-native';
 import {connect} from "react-redux";
+import Icon from "react-native-vector-icons/Feather";
+import {
+    TopBar,
+    Container,
+    InnerContainer,
+    Input,
+    FullScreenModal,
+    DatePicker,
+} from 'components';
+import {colors, fonts} from "../../styles";
+import {priorities} from "../../constants";
+import {editTask} from '../../actions/taskActions';
 
 class EditTask extends Component {
     constructor(props) {

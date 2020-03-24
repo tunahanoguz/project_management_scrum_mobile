@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {
+    TopBar,
+    Input,
+    RoundedButton,
+} from 'components';
 import {container, fonts} from "../../styles";
-import TopBar from "../../components/TopBar";
-import Input from "../../components/form/Input";
-import RoundedButton from "../../components/buttons/RoundedButton";
 
 class CreateTeamSecondStep extends Component {
     constructor(props) {

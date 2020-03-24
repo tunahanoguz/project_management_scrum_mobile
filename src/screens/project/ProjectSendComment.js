@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
-import {colors, fonts} from "../../styles";
-import Icon from "react-native-vector-icons/Feather";
-import {TextInput} from "react-native-paper";
-import {sendProjectParentComment} from "../../actions/projectActions";
 import {connect} from "react-redux";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import Divider from "../../components/Divider";
+import {TextInput} from "react-native-paper";
+import Icon from "react-native-vector-icons/Feather";
+import {
+    TopBar,
+    Container,
+    InnerContainer,
+    RoundedButton,
+    Divider,
+} from 'components';
+import {colors, fonts} from "../../styles";
+import {sendProjectParentComment} from "../../actions/projectActions";
 
 class ProjectSendComment extends Component {
     constructor(props) {

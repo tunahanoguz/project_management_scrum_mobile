@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
-import UserCard from "../../components/cards/UserCard";
-import TopBar from "../../components/TopBar";
 import {connect} from "react-redux";
-import {Container, Divider, InnerContainer, Title} from "../../styles";
+import {
+    TopBar,
+    UserCard,
+} from 'components';
+import {
+    Container,
+    Divider,
+    InnerContainer,
+    Title,
+} from "../../styles";
 
 class TeamMembers extends Component {
     members = () => {
@@ -31,11 +38,6 @@ class TeamMembers extends Component {
                         <Divider height={10} />
                     </InnerContainer>
                 </Container>
-
-
-                {/*<View style={styles.innerContainer}>*/}
-                {/*    {this.members()}*/}
-                {/*</View>*/}
             </View>
         );
     }

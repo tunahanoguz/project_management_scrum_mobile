@@ -1,23 +1,34 @@
-import React, {useState, useEffect, Fragment} from 'react';
-import {Text, Animated, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {
+    Fragment,
+    useState,
+    useEffect,
+} from 'react';
+import {
+    Text,
+    Animated,
+    StyleSheet,
+    TouchableOpacity
+} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import {withNavigation} from 'react-navigation';
-// import AsyncStorage from '@react-native-community/async-storage';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import styled, {css} from 'styled-components';
-// import messaging from '@react-native-firebase/messaging';
-import TopBar from "../components/TopBar";
 import Icon from "react-native-vector-icons/Feather";
+import styled, {css} from 'styled-components';
+import SplashScreen from 'react-native-splash-screen';
+import auth from "@react-native-firebase/auth";
+import {
+    TopBar,
+    Divider,
+    List,
+} from 'components';
 import {Container} from "../styles";
-import {getTasksForHome} from "../actions/taskActions";
+
+import {getTasksForHome} from "actions/taskActions";
 import {getAllTeams, getTeamsForHomeScreen} from "../actions/teamActions";
 import {getAllProjects, getProjectsForHomeScreen} from "../actions/projectActions";
-import Divider from "../components/Divider";
 import {getSprintsForHomeScreen} from "../actions/sprintActions";
-import SplashScreen from 'react-native-splash-screen';
 import {getUser} from "../actions/authActions";
-import auth from "@react-native-firebase/auth";
-import List from "../components/list/List";
+
 
 const Home = (props) => {
     const [isOpenAbsoluteButtons, setIsOpenAbsoluteButtons] = useState(false);
@@ -55,7 +66,6 @@ const Home = (props) => {
     useEffect(() => {
         dispatch(getUser());
         changeNavigationBarColor('#281C9D');
-        // checkPermission();
     }, []);
 
     useEffect(() => {
@@ -81,39 +91,6 @@ const Home = (props) => {
             dispatch(getAllProjects(teamIDs));
         }
     }, [teamIDsValue]);
-
-    // const checkPermission = async () => {
-    //     const enabled = await messaging().hasPermission();
-    //     if (enabled) {
-    //         return getToken();
-    //     } else {
-    //         requestPermission();
-    //     }
-    // };
-    //
-    // const getToken = async () => {
-    //     let fcmToken = await AsyncStorage.getItem('fcmToken');
-    //     if (!fcmToken) {
-    //         fcmToken = await messaging().getToken();
-    //         if (fcmToken) {
-    //             // user has a device token
-    //             await AsyncStorage.setItem('fcmToken', fcmToken);
-    //         }
-    //
-    //         return fcmToken;
-    //     }
-    // };
-    //
-    // const requestPermission = async () => {
-    //     try {
-    //         await messaging().requestPermission();
-    //         // User has authorised
-    //         getToken();
-    //     } catch (error) {
-    //         // User has rejected permissions
-    //         console.log('permission rejected');
-    //     }
-    // };
 
     const absoluteButtonStyle = (color) => {
         return {

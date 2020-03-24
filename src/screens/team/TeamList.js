@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import TopBar from "../../components/TopBar";
 import {connect} from "react-redux";
+import {
+    TopBar,
+    List,
+    Button,
+    ListActionModal,
+} from 'components';
+import {Container} from "../../styles";
 import {deleteTeam, getAllTeams} from "../../actions/teamActions";
 import {getAllUsers} from "../../actions/authActions";
-import {Container} from "../../styles";
-import List from "../../components/list/List";
-import Button from "../../components/buttons/Button";
-import ListActionModal from "../../components/modals/ListActionModal";
 
 class TeamList extends Component {
     constructor(props) {

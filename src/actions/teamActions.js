@@ -1,3 +1,4 @@
+import firestore from '@react-native-firebase/firestore';
 import {
     GET_SINGLE_TEAM_SUCCESS,
     GET_SINGLE_TEAM_FAILURE,
@@ -18,8 +19,7 @@ import {
     GET_TEAMS_FOR_HOME_SUCCESS,
     GET_TEAMS_FOR_HOME_FAILURE,
     GET_TEAM_USERS_ID_START, GET_TEAM_USERS_ID_SUCCESS, GET_TEAM_USERS_ID_FAILURE,
-} from "./types";
-import firestore from '@react-native-firebase/firestore';
+} from "./types/teamTypes";
 import {createNotification, sendNotifications} from "./notificationActions";
 
 export const getSingleTeam = teamID => dispatch => {

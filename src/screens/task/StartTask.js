@@ -1,20 +1,28 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import {Animated, Keyboard, View, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
-import * as yup from 'yup';
 import styled, {css} from 'styled-components';
-import {getAllSprints} from "../../actions/sprintActions";
-import {Container, DirectionContainer, Divider, InnerContainer, sizes, Text, Title} from "../../styles";
-import TopBar from "../../components/TopBar";
-import SelectInput from "../../components/form/SelectInput";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
-import {taskSprint} from "../../validationSchema";
-import Icon from "react-native-vector-icons/Feather";
-import ProfilePicture from "../../components/ProfilePicture";
 import Carousel, {Pagination} from "react-native-snap-carousel";
+import Icon from "react-native-vector-icons/Feather";
+import {
+    TopBar,
+    SelectInput,
+    RoundedButton,
+    ProfilePicture,
+    ExampleDatePicker,
+} from 'components';
+import {
+    Container,
+    DirectionContainer,
+    Divider,
+    InnerContainer,
+    Text,
+    Title,
+    sizes,
+} from "../../styles";
+import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
+import {getAllSprints} from "../../actions/sprintActions";
 import {startTask} from "../../actions/taskActions";
-import ExampleDatePicker from "../../components/form/ExampleDatePicker";
 
 const StartTask = ({navigation}) => {
     const dispatch = useDispatch();

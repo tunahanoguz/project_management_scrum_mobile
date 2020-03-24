@@ -15,7 +15,7 @@ import {
     GET_ALL_SPRINT_PLANNING_MEETINGS_FAILURE,
     GET_ALL_SPRINT_PLANNING_MEETINGS_START,
     GET_ALL_SPRINT_PLANNING_MEETINGS_SUCCESS,
-} from "./types";
+} from "./types/sprintPlanningMeetingTypes";
 
 export const getSprintPlanningMeetings = () => dispatch => {
     dispatch({type: GET_ALL_SPRINT_PLANNING_MEETINGS_START});

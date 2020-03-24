@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {View, Animated, Text, ActivityIndicator,} from 'react-native';
-import TopBar from "../../components/TopBar";
-import {Container, sizes} from "../../styles";
-import ProjectActionsModal from "../../components/modals/ProjectActionsModal";
-import {getAllProjects} from "../../actions/projectActions";
+import {Animated} from 'react-native';
 import {connect} from "react-redux";
-import List from "../../components/list/List";
-import Button from "../../components/buttons/Button";
+import {
+    TopBar,
+    ProjectActionsModal,
+    List,
+    Button,
+} from 'components';
+import {Container, sizes} from "../../styles";
+import {getAllProjects} from "../../actions/projectActions";
 
 class ProjectList extends Component {
     constructor(props) {

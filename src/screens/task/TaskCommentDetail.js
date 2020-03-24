@@ -1,9 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {FlatList} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
-import TopBar from "../../components/TopBar";
-import {Container, Divider, Text, Title} from "../../styles";
-import CommentCard from "../../components/cards/CommentCard";
+import {
+    TopBar,
+    CommentCard,
+} from 'components';
+import {
+    Container,
+    Divider,
+    Text,
+    Title
+} from "../../styles";
 import {getTaskReplyComments} from "../../actions/taskActions";
 
 const TaskCommentDetail = ({navigation}) => {

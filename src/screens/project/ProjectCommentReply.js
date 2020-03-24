@@ -1,10 +1,17 @@
 import React, {useState} from 'react';
 import {TextInput} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
-import TopBar from "../../components/TopBar";
-import {Container, Divider, InnerContainer, Title} from "../../styles";
-import CommentCard from "../../components/cards/CommentCard";
-import Button from "../../components/buttons/Button";
+import {
+    TopBar,
+    CommentCard,
+    Button,
+} from 'components';
+import {
+    Container,
+    Divider,
+    InnerContainer,
+    Title
+} from "../../styles";
 import {createProjectComment} from "../../actions/projectActions";
 
 const ProjectCommentReply = ({navigation}) => {

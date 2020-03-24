@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity
+} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/Feather';
 import {withNavigation} from 'react-navigation';
-import {container, sizes} from '../styles';
 import {connect} from "react-redux";
+import {container} from '../styles';
 
 class TopBar extends Component {
     constructor(props) {

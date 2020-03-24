@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {useDispatch} from "react-redux";
+import {
+    TopBar,
+    ExampleDatePicker,
+    Button,
+} from 'components';
 import {Container, Divider, Title} from "../../styles";
-import TopBar from "../../components/TopBar";
-import ExampleDatePicker from "../../components/form/ExampleDatePicker";
-import Button from "../../components/buttons/Button";
 import {startSprint} from "../../actions/sprintActions";
 
 const StartSprint = ({navigation}) => {

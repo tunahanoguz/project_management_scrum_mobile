@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import {
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Animated
+} from 'react-native';
 import {connect} from "react-redux";
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Icon from "react-native-vector-icons/Feather";
-import {colors, Divider, fonts, sizes} from "../../styles";
+import {Divider, fonts, sizes} from "../../styles";
 import {deleteProject} from "../../actions/projectActions";
 
 class ProjectActionsModal extends Component {

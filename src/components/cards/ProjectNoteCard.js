@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {
+    TouchableOpacity,
+    Text,
+    StyleSheet
+} from 'react-native';
 import PropTypes from 'prop-types';
-import {colors, fonts} from "../../styles";
+import {fonts} from "../../styles";
 
 class ProjectNoteCard extends Component {
     render(){

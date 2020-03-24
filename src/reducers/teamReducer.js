@@ -16,8 +16,9 @@ import {
     GET_TEAMS_FOR_HOME_SUCCESS,
     GET_TEAMS_FOR_HOME_FAILURE,
     GET_TEAM_USERS_ID_START,
-    GET_TEAM_USERS_ID_SUCCESS, GET_TEAM_USERS_ID_FAILURE,
-} from "../actions/types";
+    GET_TEAM_USERS_ID_SUCCESS,
+    GET_TEAM_USERS_ID_FAILURE,
+} from "../actions/types/teamTypes";
 
 const initialState = {
     team: {},

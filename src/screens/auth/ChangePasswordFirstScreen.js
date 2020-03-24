@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
-import {View, Image, Text, StyleSheet, Alert} from 'react-native';
+import {View, Image, StyleSheet, Alert} from 'react-native';
+import {withNavigation} from 'react-navigation';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import TopBar from "../../components/TopBar";
-import BlockButton from "../../components/buttons/BlockButton";
-import {fonts, sizes, Title} from "../../styles";
-import Divider from "../../components/Divider";
-import {withNavigation} from 'react-navigation';
+import {
+    TopBar,
+    Divider,
+    Button,
+} from 'components';
+import {sizes, Title} from "../../styles";
 import changePasswordImage from '../../../assets/images/change-password.png';
-import Button from "../../components/buttons/Button";
 
 class ChangePasswordFirstScreen extends Component {
 

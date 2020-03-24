@@ -1,3 +1,4 @@
+import firestore from '@react-native-firebase/firestore';
 import {
     GET_ALL_TASKS_START,
     GET_ALL_TASKS_SUCCESS,
@@ -42,8 +43,7 @@ import {
     GET_TASKS_FOR_USER_START,
     GET_TASKS_FOR_USER_SUCCESS,
     GET_TASKS_FOR_USER_FAILURE, GET_SINGLE_TASK_START, GET_SINGLE_TASK_SUCCESS, GET_SINGLE_TASK_FAILURE
-} from './types';
-import firestore from '@react-native-firebase/firestore';
+} from './types/taskTypes';
 import {createNotification, sendNotifications} from "./notificationActions";
 import {getUserById} from "./authActions";
 

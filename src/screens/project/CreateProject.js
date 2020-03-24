@@ -13,16 +13,18 @@ import {
 import {connect} from "react-redux";
 import {withNavigation} from 'react-navigation';
 import Icon from "react-native-vector-icons/Feather";
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
-import {colors, fonts} from "../../styles";
-import Input from "../../components/form/Input";
-import BlockButton from "../../components/buttons/BlockButton";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import Divider from "../../components/Divider";
-import ProjectNoteCard from "../../components/cards/ProjectNoteCard";
 import validate from "validate.js";
+import {
+    TopBar,
+    Container,
+    InnerContainer,
+    Input,
+    BlockButton,
+    RoundedButton,
+    Divider,
+    ProjectNoteCard,
+} from 'components';
+import {colors, fonts} from "../../styles";
 import {getAllCreatedTeams, getAllTeams, getTeamUserIDs} from "../../actions/teamActions";
 import {createProject} from "../../actions/projectActions";
 import {projectValidations} from "../../validations";

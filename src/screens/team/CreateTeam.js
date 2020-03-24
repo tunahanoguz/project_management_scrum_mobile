@@ -12,14 +12,16 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/Feather';
 import validate from "validate.js";
 import {connect} from "react-redux";
+import {
+    TopBar,
+    Input,
+    RoundedButton,
+    Divider,
+    FilteredUserCard,
+    AddedUserCard,
+} from 'components';
 import {colors, fonts, sizes} from "../../styles";
-import TopBar from "../../components/TopBar";
-import Input from "../../components/form/Input";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import Divider from "../../components/Divider";
 import {createTeam} from "../../actions/teamActions";
-import FilteredUserCard from "../../components/cards/FilteredUserCard";
-import AddedUserCard from "../../components/cards/AddedUserCard";
 import {roles} from "../../constants";
 
 class CreateTeam extends Component {

@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import {colors, fonts} from "../../styles";
-import ProjectFileCard from "../../components/cards/ProjectFileCard";
-import AbsoluteButton from "../../components/buttons/AbsoluteButton";
-import {deleteProjectFile, getAllProjectFiles} from "../../actions/projectActions";
 import {connect} from "react-redux";
-import {ActivityIndicator} from "react-native-paper";
-import List from "../../components/list/List";
-import ListActionModal from "../../components/modals/ListActionModal";
+import {
+    TopBar,
+    Container,
+    AbsoluteButton,
+    List,
+    ListActionModal,
+} from 'components';
+import {colors} from "../../styles";
+import {deleteProjectFile, getAllProjectFiles} from "../../actions/projectActions";
 
 class ProjectFileList extends Component {
     constructor(props) {

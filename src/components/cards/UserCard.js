@@ -3,7 +3,7 @@ import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types'
 import {withNavigation} from 'react-navigation';
 import ProfilePicture from "../ProfilePicture";
-import {fonts, sizes, Text} from "../../styles";
+import {Text} from "../../styles";
 
 class UserCard extends Component {
 

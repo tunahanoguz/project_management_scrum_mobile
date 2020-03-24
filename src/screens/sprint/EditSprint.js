@@ -4,20 +4,19 @@ import {withNavigation} from 'react-navigation';
 import {Formik} from "formik";
 import {connect} from "react-redux";
 import * as yup from "yup";
-import PropTypes from 'prop-types';
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
-import ExampleInput from "../../components/ExampleInput";
-import SelectInput from "../../components/form/SelectInput";
-import ExampleDatePicker from "../../components/form/ExampleDatePicker";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import {editSprint} from "../../actions/sprintActions";
+import {
+    TopBar,
+    Container,
+    InnerContainer,
+    ExampleInput,
+    ExampleDatePicker,
+    RoundedButton,
+} from 'components';
 import {fonts} from "../../styles";
+import {editSprint} from "../../actions/sprintActions";
 import {
     sprintEstimatedFinishDate,
     sprintName,
-    sprintStatus,
 } from "../../validationSchema";
 
 class EditSprint extends Component {

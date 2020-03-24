@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {getAllTaskFiles} from "../../actions/taskActions";
-import List from "../../components/list/List";
-import TopBar from "../../components/TopBar";
+import {
+    TopBar,
+    List,
+    Button,
+    ListActionModal,
+} from 'components';
 import {Container} from "../../styles";
-import Button from "../../components/buttons/Button";
-import ListActionModal from "../../components/modals/ListActionModal";
+import {getAllTaskFiles} from "../../actions/taskActions";
 
 const TaskFileList = ({navigation}) => {
     const taskID = navigation.getParam('taskID', "");

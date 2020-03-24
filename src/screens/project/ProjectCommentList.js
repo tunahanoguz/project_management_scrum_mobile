@@ -1,14 +1,22 @@
 import React, {useEffect} from 'react';
 import {FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import TopBar from "../../components/TopBar";
-import {Container, DirectionContainer, Divider, Text, Title} from "../../styles";
-import Button from "../../components/buttons/Button";
-import CommentCard from "../../components/cards/CommentCard";
+import {
+    TopBar,
+    Button,
+    CommentCard,
+    Loading,
+} from 'components';
+import {
+    Container,
+    DirectionContainer,
+    Divider,
+    Text,
+    Title
+} from "../../styles";
 import {getAllProjectComments} from "../../actions/projectActions";
-import Loading from "../../components/Loading";
 
-const TaskCommentList = ({navigation}) => {
+const ProjectCommentList = ({navigation}) => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.projectReducer.loading);
     const error = useSelector(state => state.projectReducer.error);
@@ -73,4 +81,4 @@ const TaskCommentList = ({navigation}) => {
     );
 };
 
-export default TaskCommentList;
+export default ProjectCommentList;

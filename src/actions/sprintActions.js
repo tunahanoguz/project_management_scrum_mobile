@@ -1,5 +1,4 @@
 import firestore from '@react-native-firebase/firestore';
-import {NavigationActions} from "react-navigation";
 import {
     GET_ALL_SPRINTS_START,
     GET_ALL_SPRINTS_SUCCESS,
@@ -26,8 +25,9 @@ import {
     GET_SPRINTS_FOR_PROJECT_SUCCESS,
     GET_SPRINTS_FOR_PROJECT_FAILURE,
     GET_SINGLE_SPRINT_START,
-    GET_SINGLE_SPRINT_SUCCESS, GET_SINGLE_SPRINT_FAILURE,
-} from "./types";
+    GET_SINGLE_SPRINT_SUCCESS,
+    GET_SINGLE_SPRINT_FAILURE,
+} from "./types/sprintTypes";
 
 export const getAllSprints = (projectID) => dispatch => {
     dispatch({type: GET_ALL_SPRINTS_START});

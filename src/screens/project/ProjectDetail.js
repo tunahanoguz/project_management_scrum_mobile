@@ -1,19 +1,21 @@
 import React, {Component} from 'react';
-import TopBar from "../../components/TopBar";
+import {connect} from "react-redux";
+import {
+    TopBar,
+    TabContent,
+    List,
+    ListActionModal,
+    Button,
+    DoubleButton,
+} from 'components';
 import {Container, Divider, InnerContainer, Text, TextMedium, TextNormal, Title} from "../../styles";
 import {
     getAllProjectComments,
     getAllProjectFiles,
     getProjectParentCommentsForDetail
 } from "../../actions/projectActions";
-import {connect} from "react-redux";
-import TabContent from "../../components/tab/TabContent";
-import List from "../../components/list/List";
 import {getSprintsForProjectDetail} from "../../actions/sprintActions";
-import ListActionModal from "../../components/modals/ListActionModal";
 import {getAllProjectTasks} from "../../actions/taskActions";
-import Button from "../../components/buttons/Button";
-import DoubleButton from "../../components/buttons/DoubleButton";
 
 class ProjectDetail extends Component {
     constructor(props) {

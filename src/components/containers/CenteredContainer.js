@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
+import {View, StyleSheet} from 'react-native';
 
 class CenteredContainer extends Component {
     render(){
@@ -19,13 +18,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
-
-// const mapStateToProps = state => {
-//     return {};
-// };
-//
-// const mapDispatchToProps = dispatch => {
-//     return {};
-// };
 
 export default CenteredContainer;

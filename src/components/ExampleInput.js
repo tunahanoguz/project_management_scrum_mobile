@@ -14,7 +14,19 @@ class ExampleInput extends Component {
     };
 
     render() {
-        const {name, placeholder, value, iconName, iconColor, handleChange, setFieldTouched, secureTextEntry, isEmail, errorMessage} = this.props;
+        const {
+            name,
+            placeholder,
+            value,
+            iconName,
+            iconColor,
+            handleChange,
+            setFieldTouched,
+            secureTextEntry,
+            isEmail,
+            errorMessage,
+        } = this.props;
+
         return (
             <Fragment>
                 <View style={styles.inputContainer}>

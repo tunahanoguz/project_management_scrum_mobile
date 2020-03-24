@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
-import TopBar from "../../components/TopBar";
+import {TopBar} from 'components';
 
 class ProjectNotes extends Component {
     description = this.props.navigation.getParam('description', "");

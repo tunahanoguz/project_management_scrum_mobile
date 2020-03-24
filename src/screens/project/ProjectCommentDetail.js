@@ -1,9 +1,16 @@
 import React, {useEffect} from 'react';
 import {FlatList} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
-import TopBar from "../../components/TopBar";
-import {Container, Divider, Text, Title} from "../../styles";
-import CommentCard from "../../components/cards/CommentCard";
+import {
+    TopBar,
+    CommentCard,
+} from 'components';
+import {
+    Container,
+    Divider,
+    Text,
+    Title
+} from "../../styles";
 import {getProjectReplyComments} from "../../actions/projectActions";
 
 const ProjectCommentDetail = ({navigation}) => {

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import TabItem from "./TabItem";
 
 const TabList = ({tabs, selectedTab, tabButtonAction}) => {
-
     return (
         <TabContainer>
             {tabs.map((tab, index) => (

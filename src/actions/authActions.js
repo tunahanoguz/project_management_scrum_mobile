@@ -1,3 +1,6 @@
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import messaging from "@react-native-firebase/messaging";
 import {
     GET_USER_SUCCESS,
     GET_USER_FAILURE,
@@ -15,11 +18,7 @@ import {
     CHANGE_USER_FULLNAME_SUCCESS,
     CHANGE_USER_FULLNAME_FAILURE,
     UPDATE_PP_FAILURE
-} from "./types";
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-community/async-storage';
-import messaging from "@react-native-firebase/messaging";
+} from "./types/authTypes";
 
 export const getUser = () => dispatch => {
     auth().onAuthStateChanged(function (user) {

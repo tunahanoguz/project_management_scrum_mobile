@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import firestore from '@react-native-firebase/firestore';
 import moment from "moment";
 import "moment/locale/tr";
-import {DirectionContainer, Divider, Text} from "../../styles";
+import {
+    DirectionContainer,
+    Divider,
+    Text,
+} from "../../styles";
 
 const MessageContainer = (props) => {
     const {

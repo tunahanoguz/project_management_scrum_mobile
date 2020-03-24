@@ -5,7 +5,7 @@ import {
     GET_ALL_NOTIFICATIONS_START,
     GET_ALL_NOTIFICATIONS_SUCCESS,
     GET_ALL_NOTIFICATIONS_FAILURE, SEND_NOTIFICATION_START, SEND_NOTIFICATION_SUCCESS, SEND_NOTIFICATION_FAILURE,
-} from '../actions/types';
+} from '../actions/types/notificationTypes';
 
 const initialState = {
     loading: false,

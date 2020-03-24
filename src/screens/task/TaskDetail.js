@@ -2,17 +2,26 @@ import React, {Fragment, useState, useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import TopBar from "../../components/TopBar";
-import {Container, DirectionContainer, Divider, InnerContainer, Text, Title} from "../../styles";
-import Button from "../../components/buttons/Button";
+import {
+    TopBar,
+    Button,
+    TabContent,
+    ProfilePicture,
+    List,
+    DoubleButton,
+} from 'components';
+import {
+    Container,
+    DirectionContainer,
+    Divider,
+    InnerContainer,
+    Text,
+    Title,
+} from "../../styles";
 import {getSingleProject} from "../../actions/projectActions";
-import TabContent from "../../components/tab/TabContent";
-import ProfilePicture from "../../components/ProfilePicture";
 import {getUserById} from "../../actions/authActions";
 import {getSingleSprint} from "../../actions/sprintActions";
-import List from "../../components/list/List";
 import {deleteTask, getAllTaskComments, getAllTaskFiles, getSingleTask} from "../../actions/taskActions";
-import DoubleButton from "../../components/buttons/DoubleButton";
 
 const TaskDetail = ({navigation}) => {
     const [selectedTab, setSelectedTab] = useState(0);

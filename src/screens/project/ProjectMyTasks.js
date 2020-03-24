@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
-import {View, FlatList, Text, StyleSheet} from 'react-native';
-import TopBar from "../../components/TopBar";
-import MyTaskCard from "../../components/cards/TaskCard";
+import {
+    View,
+    FlatList,
+    Text,
+    StyleSheet
+} from 'react-native';
+import {
+    TopBar,
+    MyTaskCard,
+} from 'components';
 import {tasks} from "../../constants";
 
 class ProjectMyTasks extends Component {

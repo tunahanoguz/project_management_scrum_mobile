@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
-import {Container, Text} from "../../styles";
-import TopBar from "../../components/TopBar";
 import { GiftedChat } from 'react-native-gifted-chat'
+import {TopBar} from 'components';
+import {Container} from "../../styles";
 import {createMessage, getMessages} from "./dailyScrumMeetingFunctions";
 
 const DailyScrumMeeting = ({navigation}) => {

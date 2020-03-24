@@ -3,8 +3,12 @@ import {useDispatch, useSelector} from "react-redux";
 import styled from 'styled-components';
 import moment from "moment";
 import 'moment/locale/tr';
-
-import TopBar from "../../components/TopBar";
+import {
+    TopBar,
+    ProfilePicture,
+    Button,
+    TabContent,
+} from 'components';
 import {
     Container,
     DirectionContainer,
@@ -13,11 +17,7 @@ import {
     Text,
     Title
 } from "../../styles";
-
 import {getUserById} from "../../actions/authActions";
-import ProfilePicture from "../../components/ProfilePicture";
-import Button from "../../components/buttons/Button";
-import TabContent from "../../components/tab/TabContent";
 import {getSingleProject} from "../../actions/projectActions";
 import {deleteSprint, finishSprint, getSingleSprint} from "../../actions/sprintActions";
 import {
@@ -27,7 +27,6 @@ import {
 } from "../../actions/dailyScrumMeetingActions";
 import {getSingleTeam} from "../../actions/teamActions";
 import {createNotification, sendNotifications} from "../../actions/notificationActions";
-import {deleteTask} from "../../actions/taskActions";
 
 const SprintDetail = ({navigation}) => {
     const sprintID = navigation.getParam('sprintID', {});

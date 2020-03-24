@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {
+    View,
+    TouchableOpacity,
+    Text,
+    StyleSheet
+} from 'react-native';
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 import Icon from "react-native-vector-icons/Feather";
 import RNFetchBlob from 'rn-fetch-blob'
-import {colors, fonts} from "../../styles";
 import uuid from "rn-fetch-blob/utils/uuid";
+import {colors, fonts} from "../../styles";
 import {deleteProjectFile} from "../../actions/projectActions";
-import {connect} from "react-redux";
 
 class ProjectFileCard extends Component {
     downloadFile = (fileURL, type) => {

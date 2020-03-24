@@ -1,12 +1,20 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import TopBar from "../../components/TopBar";
-import {Container, DirectionContainer, Divider, Text, Title} from "../../styles";
-import {getAllTaskComments} from "../../actions/taskActions";
-import Button from "../../components/buttons/Button";
-import Loading from "../../components/Loading";
 import {FlatList} from "react-native";
-import CommentCard from "../../components/cards/CommentCard";
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    TopBar,
+    Button,
+    Loading,
+    CommentCard,
+} from 'components';
+import {
+    Container,
+    DirectionContainer,
+    Divider,
+    Text,
+    Title
+} from "../../styles";
+import {getAllTaskComments} from "../../actions/taskActions";
 
 const TaskCommentList = ({navigation}) => {
     const dispatch = useDispatch();

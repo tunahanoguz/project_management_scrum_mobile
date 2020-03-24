@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-// import {TextInput} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import TopBar from "../../components/TopBar";
+import {
+    TopBar,
+    Button,
+} from 'components';
 import {Container, Divider, InnerContainer, Title} from "../../styles";
 import {createTaskComment} from "../../actions/taskActions";
-import Button from "../../components/buttons/Button";
 
 const CreateTaskComment = ({navigation}) => {
     const [comment, setComment] = useState("");

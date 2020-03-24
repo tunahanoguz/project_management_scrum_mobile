@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Alert, Keyboard, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, Keyboard, TouchableOpacity} from 'react-native';
 import {connect} from "react-redux";
 import {withNavigation} from 'react-navigation';
-import {register} from "../../actions/authActions";
-import Input from "../../components/form/Input";
-import {fonts} from "../../styles";
-import RoundedButton from "../../components/buttons/RoundedButton";
 import validate from "validate.js";
+import {
+    Input,
+    RoundedButton,
+} from 'components';
+import {register} from "../../actions/authActions";
+import {fonts} from "../../styles";
 
 class Register extends Component {
     constructor(props) {

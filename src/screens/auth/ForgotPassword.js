@@ -1,13 +1,15 @@
 import React, {Component, Fragment} from 'react';
-import {Text, StyleSheet, Alert, Keyboard, StatusBar} from 'react-native';
+import {Text, Alert, StatusBar} from 'react-native';
 import firebase from "firebase/app";
 import 'firebase/auth';
-import CenterContainer from "../../components/containers/CenterContainer";
-import BlockButton from "../../components/buttons/BlockButton";
+import {
+    CenterContainer,
+    BlockButton,
+    Input,
+    Divider,
+} from 'components';
 import {fonts} from "../../styles";
 import validate from "validate.js";
-import Input from "../../components/form/Input";
-import Divider from "../../components/Divider";
 
 class ForgotPassword extends Component {
     constructor(props) {

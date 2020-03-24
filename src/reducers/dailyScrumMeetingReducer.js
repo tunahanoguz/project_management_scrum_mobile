@@ -7,7 +7,7 @@ import {
     GET_DAILY_SCRUM_MEETING_FAILURE,
     GET_ALL_DAILY_SCRUM_MEETING_MESSAGES_START,
     GET_ALL_DAILY_SCRUM_MEETING_MESSAGES_SUCCESS, GET_ALL_DAILY_SCRUM_MEETING_MESSAGES_FAILURE,
-} from "../actions/types";
+} from "../actions/types/dailyScrumMeeting";
 
 const initialState = {
     loading: false,

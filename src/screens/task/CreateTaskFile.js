@@ -1,16 +1,17 @@
 import React, {Fragment, useState} from 'react';
 import {Keyboard, StyleSheet, TouchableOpacity} from "react-native";
 import {useDispatch} from "react-redux";
-import {colors, Container, Divider, Text, Title} from "../../styles";
-import TopBar from "../../components/TopBar";
 import {Formik} from "formik";
-import ExampleInput from "../../components/ExampleInput";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import FileInput from "../../components/form/FileInput";
 import DocumentPicker from "react-native-document-picker";
 import storage from "@react-native-firebase/storage";
 import uuid from "uuid";
 import * as yup from "yup";
+import {
+    TopBar,
+    ExampleInput,
+    RoundedButton,
+} from 'components';
+import {colors, Container, Divider, Text, Title} from "../../styles";
 import {taskFileDescription, taskFileName} from "../../validationSchema";
 import {createTaskFile} from "../../actions/taskActions";
 

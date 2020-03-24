@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import {
+    StyleSheet,
+    TouchableOpacity,
+    Animated,
+} from 'react-native';
 import Icon from "react-native-vector-icons/Feather";
-import RoundedButton from "../buttons/RoundedButton";
 import PropTypes from 'prop-types';
+import RoundedButton from "../buttons/RoundedButton";
 import Divider from "../Divider";
 
 class FullScreenModal extends Component {

@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, Keyboard} from 'react-native';
+import {TouchableOpacity, Text, StyleSheet, Keyboard} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {connect} from 'react-redux';
+import storage from "@react-native-firebase/storage";
 import validate from "validate.js";
 import {withNavigation} from 'react-navigation';
 import uuid from "uuid";
-import Container from "../../components/Container";
-import TopBar from "../../components/TopBar";
-import InnerContainer from "../../components/InnerContainer";
+import {
+    TopBar,
+    Container,
+    InnerContainer,
+    RoundedButton,
+} from 'components';
 import {createProjectFile} from "../../actions/projectActions";
-import RoundedButton from "../../components/buttons/RoundedButton";
 import {colors, fonts} from "../../styles";
-import storage from "@react-native-firebase/storage";
 import {fileValidations} from "../../validations";
 
 class ProjectFileUpload extends Component {

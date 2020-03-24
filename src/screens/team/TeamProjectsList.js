@@ -1,11 +1,16 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import List from "../../components/list/List";
-import {getProjectsForTeam} from "../../actions/projectActions";
-import ListActionModal from "../../components/modals/ListActionModal";
-import {Container, Divider, Title} from "../../styles";
 import {withNavigation} from 'react-navigation';
-import TopBar from "../../components/TopBar";
+import {
+    TopBar,
+    List,
+} from 'components';
+import {
+    Container,
+    Divider,
+    Title
+} from "../../styles";
+import {getProjectsForTeam} from "../../actions/projectActions";
 
 const TeamProjectsList = ({navigation}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);

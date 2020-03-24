@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {withNavigation} from 'react-navigation';
 import 'firebase/auth';
 import Icon from "react-native-vector-icons/Feather";
-import TopBar from "../../components/TopBar";
+import {
+    TopBar,
+    BlockButton,
+    Divider,
+} from 'components';
 import {colors, fonts} from "../../styles";
-import {withNavigation} from 'react-navigation';
-import BlockButton from "../../components/buttons/BlockButton";
-import Divider from "../../components/Divider";
 
 class ChangePasswordSecondScreen extends Component {
     constructor(props) {

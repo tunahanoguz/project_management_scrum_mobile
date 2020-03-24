@@ -2,10 +2,12 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {withNavigation} from 'react-navigation';
 import {getAllProjectTasks} from "../../actions/taskActions";
+import {
+    TopBar,
+    List,
+    Button,
+} from 'components';
 import {Container, Divider, Title} from "../../styles";
-import TopBar from "../../components/TopBar";
-import List from "../../components/list/List";
-import Button from "../../components/buttons/Button";
 
 const ProjectTaskList = ({navigation}) => {
     const projectID = navigation.getParam('projectID', "");

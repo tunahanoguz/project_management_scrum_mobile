@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
-import {getAllNotifications} from "../../actions/notificationActions";
-import List from "../../components/list/List";
-import TopBar from "../../components/TopBar";
+import {
+    TopBar,
+    List,
+} from 'components';
 import {Container} from "../../styles";
+import {getAllNotifications} from "../../actions/notificationActions";
 
 const NotificationList = () => {
     const dispatch = useDispatch();

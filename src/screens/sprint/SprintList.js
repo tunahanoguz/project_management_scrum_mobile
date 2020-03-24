@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
-import {FlatList, View, Text, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {connect} from "react-redux";
 import {withNavigation} from 'react-navigation';
-import PropTypes from 'prop-types';
+import {
+    TopBar,
+    ListActionModal,
+    List,
+    Button,
+} from 'components';
+import {Container} from "../../styles";
 import {deleteSprint, editSprint, getAllSprints} from "../../actions/sprintActions";
-import TopBar from "../../components/TopBar";
-import SprintCard from "../../components/cards/SprintCard";
-import ListActionModal from "../../components/modals/ListActionModal";
-import Loading from "../../components/Loading";
-import CenteredContainer from "../../components/containers/CenteredContainer";
-import {colors, Container} from "../../styles";
-import AbsoluteButton from "../../components/buttons/AbsoluteButton";
-import List from "../../components/list/List";
-import Button from "../../components/buttons/Button";
 
 class SprintList extends Component {
     constructor(props) {

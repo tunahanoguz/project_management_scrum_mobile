@@ -1,3 +1,4 @@
+import firestore from "@react-native-firebase/firestore";
 import {
     CREATE_NOTIFICATION_FAILURE,
     CREATE_NOTIFICATION_START,
@@ -8,8 +9,7 @@ import {
     SEND_NOTIFICATION_START,
     SEND_NOTIFICATION_SUCCESS,
     SEND_NOTIFICATION_FAILURE,
-} from "./types";
-import firestore from "@react-native-firebase/firestore";
+} from "./types/notificationTypes";
 
 export const createNotification = (userIDs, type, description) => dispatch => {
     dispatch({type: CREATE_NOTIFICATION_START});

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import ProfilePicture from "../ProfilePicture";
 import Icon from "react-native-vector-icons/Feather";
-import {fonts} from "../../styles";
 import {connect} from "react-redux";
+import ProfilePicture from "../ProfilePicture";
+import {fonts} from "../../styles";
 import {getUserById} from "../../actions/authActions";
 
 class ChildCommentCard extends Component {

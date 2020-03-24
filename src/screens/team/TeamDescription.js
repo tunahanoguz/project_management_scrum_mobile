@@ -1,6 +1,12 @@
 import React from 'react';
-import TopBar from "../../components/TopBar";
-import {Container, Divider, InnerContainer, Text, Title} from "../../styles";
+import {TopBar} from "components";
+import {
+    Container,
+    Divider,
+    InnerContainer,
+    Text,
+    Title
+} from "../../styles";
 
 const TeamDescription = ({navigation}) => {
     const description = navigation.getParam('description', "");

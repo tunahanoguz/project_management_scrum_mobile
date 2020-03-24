@@ -1,9 +1,16 @@
-import React, {Component, Fragment} from 'react';
-import {View, FlatList, Text, StyleSheet} from 'react-native';
-import TopBar from "../../components/TopBar";
+import React, {Component} from 'react';
+import {
+    View,
+    FlatList,
+    Text,
+    StyleSheet
+} from 'react-native';
+import {
+    TopBar,
+    AllTaskCard,
+    BlockButton,
+} from 'components';
 import {tasks} from "../../constants";
-import AllTaskCard from "../../components/cards/AllTaskCard";
-import BlockButton from "../../components/buttons/BlockButton";
 
 class ProjectAllTasks extends Component {
     constructor(props) {

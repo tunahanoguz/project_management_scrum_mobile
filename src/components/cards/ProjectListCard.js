@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from "react-native-vector-icons/Feather";
 import {withNavigation} from 'react-navigation';
-import {CardOrderContainer, CardOrderText, CardTitle, colors, fonts} from "../../styles";
+import {
+    CardOrderContainer,
+    CardOrderText,
+    CardTitle,
+    colors,
+} from "../../styles";
 
 class ProjectListCard extends Component {
     projectName = "e-commerce application design project";

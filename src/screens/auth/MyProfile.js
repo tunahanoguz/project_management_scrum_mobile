@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
-import styled from 'styled-components';
-import TopBar from "../../components/TopBar";
-import {Container, DirectionContainer, Divider, fonts, InnerContainer, Text, Title} from "../../styles";
-import Icon from "react-native-vector-icons/Feather";
+import {StyleSheet} from 'react-native';
 import {connect} from "react-redux";
+import styled from 'styled-components';
+import {
+    TopBar,
+    Button,
+    DoubleButton,
+} from 'components';
+import {
+    Container,
+    DirectionContainer,
+    Divider,
+    InnerContainer,
+    Title
+} from "../../styles";
 import {getUser, logOut} from "../../actions/authActions";
-import Button from "../../components/buttons/Button";
-import DoubleButton from "../../components/buttons/DoubleButton";
-// import ProfilePicture from "../../components/ProfilePicture";
 
 class MyProfile extends Component {
 

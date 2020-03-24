@@ -1,10 +1,14 @@
-import React, {Component, Fragment} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {
+    View,
+    TouchableOpacity,
+    Text,
+    StyleSheet
+} from 'react-native';
 import PropTypes from 'prop-types';
-import {colors, fonts} from "../../styles";
-import Divider from "../Divider";
 import {withNavigation} from 'react-navigation';
 import Icon from "react-native-vector-icons/Feather";
+import {colors, fonts} from "../../styles";
 
 class TeamCard extends Component {
 

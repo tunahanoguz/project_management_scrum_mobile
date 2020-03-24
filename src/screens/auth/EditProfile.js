@@ -1,19 +1,17 @@
 import React, {Component, Fragment} from 'react';
-import {View, Text, StyleSheet,} from 'react-native';
-import TopBar from "../../components/TopBar";
-import {Container, fonts, Title} from "../../styles";
-import FileInput from "../../components/form/FileInput";
-import ProfilePicture from "../../components/ProfilePicture";
-import Divider from "../../components/Divider";
-import Middle from "../../components/Middle";
-import {changeProfilePhoto, changeUserFullName} from "../../actions/authActions";
 import {connect} from "react-redux";
-import RoundedButton from "../../components/buttons/RoundedButton";
-import BlockButton from "../../components/buttons/BlockButton";
-import validate from "validate.js";
-import Input from "../../components/form/Input";
 import storage from "@react-native-firebase/storage";
 import uuid from "uuid";
+import {
+    TopBar,
+    FileInput,
+    ProfilePicture,
+    Divider,
+    Middle,
+    RoundedButton,
+} from 'components';
+import {Container, Title} from "../../styles";
+import {changeProfilePhoto} from "../../actions/authActions";
 
 class EditProfile extends Component {
     constructor(props) {

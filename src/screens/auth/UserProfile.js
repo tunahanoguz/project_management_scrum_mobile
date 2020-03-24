@@ -1,11 +1,19 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Container, DirectionContainer, Divider, InnerContainer, Text} from "../../styles";
-import TopBar from "../../components/TopBar";
-import ProfilePicture from "../../components/ProfilePicture";
+import {ProgressCircle} from "react-native-svg-charts";
+import {
+    TopBar,
+    ProfilePicture,
+} from 'components';
+import {
+    Container,
+    DirectionContainer,
+    Divider,
+    InnerContainer,
+    Text
+} from "../../styles";
 import {getUserById} from "../../actions/authActions";
 import {getTasksForUser} from "../../actions/taskActions";
-import {ProgressCircle} from "react-native-svg-charts";
 import {getProjectsForUser} from "../../actions/projectActions";
 
 const UserProfile = ({navigation}) => {

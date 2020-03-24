@@ -21,7 +21,7 @@ import {
     START_DAILY_SCRUM_MEETING_FAILURE,
     START_DAILY_SCRUM_MEETING_START,
     START_DAILY_SCRUM_MEETING_SUCCESS
-} from "./types";
+} from "./types/dailyScrumMeeting";
 
 export const getDailyScrumMeeting = (sprintID) => dispatch => {
     dispatch({type: GET_DAILY_SCRUM_MEETING_START});

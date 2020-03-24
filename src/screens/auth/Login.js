@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Keyboard} from 'react-native';
 import {withNavigation} from 'react-navigation';
-import {login} from "../../actions/authActions";
-import {connect} from "react-redux";
-import Input from "../../components/form/Input";
 import validate from "validate.js";
-import RoundedButton from "../../components/buttons/RoundedButton";
+import {connect} from "react-redux";
+import {
+    Input,
+    RoundedButton,
+} from 'components';
 import {fonts} from "../../styles";
+import {login} from "../../actions/authActions";
 
 class Login extends Component {
     constructor(props) {

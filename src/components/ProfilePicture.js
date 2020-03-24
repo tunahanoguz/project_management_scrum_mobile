@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {profilePhotoColors} from "../styles";
 import Icon from "react-native-vector-icons/Feather";
 import styled from 'styled-components';
+import {profilePhotoColors} from "../styles";
 
 class ProfilePicture extends Component {
     render() {

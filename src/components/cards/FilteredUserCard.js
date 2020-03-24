@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
+import Icon from "react-native-vector-icons/Feather";
 import ProfilePicture from "../ProfilePicture";
 import Divider from "../Divider";
 import {fonts, sizes} from "../../styles";
-import Icon from "react-native-vector-icons/Feather";
 import RoundedButton from "../buttons/RoundedButton";
 import {roles} from "../../constants";
 
