@@ -144,13 +144,21 @@ const SprintDetail = ({navigation}) => {
                 </InnerContainer>
             );
         } else {
-            return (
-                <Button
-                    action={() => navigation.navigate('StartSprint', {sprintID: id})}
-                    color='purple'
-                    text="👊 BAŞLAT"
-                />
-            );
+            if (createdBy === authUser.uid){
+                return (
+                    <Button
+                        action={() => navigation.navigate('StartSprint', {sprintID: id})}
+                        color='purple'
+                        text="👊 BAŞLAT"
+                    />
+                );
+            } else {
+                return (
+                    <Text medium center>
+                        Sprint henüz başlatılmamış ve Sprint'i başlatmanız için yetkiniz yok.
+                    </Text>
+                );
+            }
         }
     };
 
@@ -186,13 +194,15 @@ const SprintDetail = ({navigation}) => {
 
     const renderFinishSprintButton = () => {
         if (!finishDate) {
-            return (
-                <Button
-                    action={finish}
-                    color='blue'
-                    text="👎 SPRİNT'İ BİTİR"
-                />
-            );
+            if (createdBy === authUser.uid){
+                return (
+                    <Button
+                        action={finish}
+                        color='blue'
+                        text="👎 SPRİNT'İ BİTİR"
+                    />
+                );
+            }
         }
     };
 
@@ -204,26 +214,52 @@ const SprintDetail = ({navigation}) => {
         const dailyScrumMeetingID = dailyScrumMeeting.id;
         if (Object.keys(dailyScrumMeeting).length === 0){
             dispatch(createDailyScrumMeeting(sprintID));
-            dispatch(createNotification(userIDs, "daily_scrum_meeting", `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`));
-            dispatch(sendNotifications(userIDs, "Daily Scrum Meeting", `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`));
+            dispatch(createNotification(
+                userIDs,
+                "daily_scrum_meeting",
+                `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
+            ));
+
+            dispatch(sendNotifications(
+                userIDs,
+                "Daily Scrum Meeting",
+                `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
+            ));
+
             navigation.navigate('DailyScrumMeeting', {dailyScrumMeetingID});
         } else {
             dispatch(startDailyScrumMeeting(dailyScrumMeetingID));
-            dispatch(createNotification(userIDs, "daily_scrum_meeting", `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`));
-            dispatch(sendNotifications(userIDs, "Daily Scrum Meeting", `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`));
+            dispatch(createNotification(
+                userIDs,
+                "daily_scrum_meeting",
+                `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
+            ));
+
+            dispatch(sendNotifications(
+                userIDs,
+                "Daily Scrum Meeting",
+                `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
+            ));
+
             navigation.navigate('DailyScrumMeeting', {dailyScrumMeetingID});
         }
     };
 
     const renderDailyScrumButton = () => {
         if (!finishDate) {
-            return (
-                <Button
-                    action={startDailyScrumMeetingAction}
-                    color='blue'
-                    text="GÜNLÜK SCRUM TOPLANTISI BAŞLAT"
-                />
-            );
+            if (createdBy === authUser.uid){
+                return (
+                    <Button
+                        action={startDailyScrumMeetingAction}
+                        color='blue'
+                        text="GÜNLÜK SCRUM TOPLANTISI BAŞLAT"
+                    />
+                );
+            } else {
+                return (
+                    <Text medium center>Yetkiniz olmadığı için Günlük Scrum Toplantısı'nı başlatamazsınız.</Text>
+                );
+            }
         } else {
             return (
                 <Text medium center>Sprint sona erdiği için Günlük Scrum Toplantısı başlatılamaz.</Text>
@@ -237,13 +273,20 @@ const SprintDetail = ({navigation}) => {
 
     const renderSprintPlanningButton = () => {
         if (!finishDate) {
-            return (
-                <Button
-                    action={() => alert("asdasdasd")}
-                    color='green'
-                    text="SPRİNT PLANLAMA TOPLANTISI BAŞLAT"
-                />
-            );
+            if (createdBy === authUser.uid){
+                return (
+                    <Button
+                        action={() => alert("asdasdasd")}
+                        color='green'
+                        text="SPRİNT PLANLAMA TOPLANTISI BAŞLAT"
+                    />
+                );
+            } else {
+                return (
+                    <Text medium center>Yetkiniz olmadığı için Sprint Planlama Toplantısı'nı başlatamazsınız.</Text>
+                );
+            }
+
         } else {
             return (
                 <Text medium center>Sprint sona erdiği için Sprint Planlama Toplantısı başlatılamaz.</Text>

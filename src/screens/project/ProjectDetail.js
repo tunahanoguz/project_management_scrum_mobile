@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {TouchableOpacity} from 'react-native'
 import {connect} from "react-redux";
 import {
     TopBar,
@@ -8,7 +9,15 @@ import {
     Button,
     DoubleButton,
 } from 'components';
-import {Container, Divider, InnerContainer, Text, TextMedium, TextNormal, Title} from "../../styles";
+import {
+    Container,
+    Divider,
+    InnerContainer,
+    Text,
+    TextMedium,
+    TextNormal,
+    Title,
+} from "../../styles";
 import {
     getAllProjectComments,
     getAllProjectFiles,
@@ -55,6 +64,10 @@ class ProjectDetail extends Component {
         this.props.navigation.navigate("ProjectFileList", {projectID});
     };
 
+    goToProjectDescription = (description) => {
+        this.props.navigation.navigate("ProjectDescription", {description});
+    };
+
     goToProjectNotes = (notes) => {
         this.props.navigation.navigate("ProjectNotes", {notes});
     };
@@ -73,20 +86,27 @@ class ProjectDetail extends Component {
         this.setState({selectedTab: order});
     };
 
-    tabs = [{icon: '📖', name: 'Bilgi'}, {icon: '💪', name: 'İş'}, {icon: '🏃', name: 'Sprint'}, {
-        icon: '💬',
-        name: 'Yorum'
-    }];
+    tabs = [
+        {icon: '📖', name: 'Bilgi'},
+        {icon: '💪', name: 'İş'},
+        {icon: '🏃', name: 'Sprint'},
+        {icon: '💬', name: 'Yorum'},
+    ];
 
     projectInformation = (description, notes) => {
         const projectDescriptionLength = description.length;
         return (
             <Container>
                 <Text medium>Açıklama</Text>
+
                 <Divider height={10}/>
-                <InnerContainer>
-                    <TextNormal>{projectDescriptionLength > 64 ? description.substring(0, 64) + "..." : description}</TextNormal>
-                </InnerContainer>
+
+                <TouchableOpacity onPress={() => this.goToProjectDescription(description)}>
+                    <InnerContainer>
+                        <TextNormal>{projectDescriptionLength > 64 ? description.substring(0, 64) + "..." : description}</TextNormal>
+                    </InnerContainer>
+                </TouchableOpacity>
+
 
                 <Divider height={20}/>
 
@@ -94,14 +114,16 @@ class ProjectDetail extends Component {
 
                 <Divider height={10}/>
 
-                <InnerContainer>
-                    {notes.map((note, index) => {
-                        if (index < 3) {
-                            return <TextMedium key={index}>{note.note}</TextMedium>;
-                        } else {
-                        }
-                    })}
-                </InnerContainer>
+                <TouchableOpacity onPress={() => this.goToProjectNotes(notes)}>
+                    <InnerContainer>
+                        {notes.map((note, index) => {
+                            if (index < 3) {
+                                return <TextMedium key={index}>{note.note}</TextMedium>;
+                            } else {
+                            }
+                        })}
+                    </InnerContainer>
+                </TouchableOpacity>
             </Container>
         );
     };

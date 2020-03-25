@@ -235,6 +235,9 @@ export const Text = styled.Text`
     ${({medium}) => medium && css`
         font-family: Poppins-Medium;
     `};
+    ${({bold}) => bold && css`
+        font-family: Poppins-Bold;
+    `};
     ${({color}) => color && css`
         color: ${color};
     `};

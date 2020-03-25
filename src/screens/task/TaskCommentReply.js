@@ -38,7 +38,10 @@ const TaskCommentReply = ({navigation}) => {
 
                 <Divider height={10} />
 
-                <CommentCard comment={commentParam} />
+                <CommentCard
+                    comment={commentParam}
+                    type='task'
+                />
 
                 <Divider height={30} />
 

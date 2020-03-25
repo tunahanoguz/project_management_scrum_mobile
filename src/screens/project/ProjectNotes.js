@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, Text, FlatList, StyleSheet} from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    FlatList,
+    StyleSheet
+} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {TopBar} from 'components';
-import {fonts} from "../../styles";
+import {Divider, Text} from "../../styles";
 
 class ProjectNotes extends Component {
     notes = this.props.navigation.getParam('notes', []);
@@ -10,8 +15,9 @@ class ProjectNotes extends Component {
     noteList = (item, index) => (
         <View style={styles.noteContainer}>
             <View style={styles.rowContainer}>
-                <Text style={styles.indexText}>{index + 1}.</Text>
-                <Text style={fonts.normalText}>{item.note}</Text>
+                <Text bold>{index + 1}.</Text>
+                <Divider height={10} />
+                <Text medium>{item.note}</Text>
             </View>
         </View>
     );
@@ -56,7 +62,6 @@ const styles = StyleSheet.create({
     },
     noteContainer: {
         paddingVertical: 20,
-        // paddingHorizontal: 30,
         borderBottomWidth: 2,
         borderBottomColor: 'rgba(0, 0, 0, 0.05)',
     },

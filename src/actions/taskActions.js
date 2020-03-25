@@ -287,7 +287,7 @@ export const getAllTaskComments = (taskID) => dispatch => {
     queryTaskComment.get()
         .then(snapshot => {
             if (snapshot.empty){
-                dispatch({type: GET_ALL_TASK_COMMENTS_FAILURE, error: "Bu task için hiç yorum bulunamadı."});
+                dispatch({type: GET_ALL_TASK_COMMENTS_FAILURE, error: "Bu iş için hiç yorum bulunamadı."});
             } else {
                 let comments = [];
                 snapshot.forEach(doc => {
@@ -346,6 +346,10 @@ export const createTaskComment = (comment, parentCommentID, taskID, userID) => d
         .then(() => {
             dispatch(getAllTaskComments(taskID));
             dispatch({type: CREATE_TASK_COMMENT_SUCCESS});
+
+            if (parentCommentID){
+                dispatch(getTaskReplyComments(parentCommentID));
+            }
         })
         .catch(() => dispatch({type: CREATE_TASK_COMMENT_FAILURE, error: "Task yorumu oluşturulamadı."}));
 };

@@ -17,6 +17,7 @@ const TaskList = ({navigation}) => {
     const [type, setType] = useState(0);
     const [tasksArray, setTasksArray] = useState([]);
     const projectID = navigation.getParam('projectID', "");
+
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.taskReducer.tasks);
     const user = useSelector(state => state.authReducer.user);
@@ -35,15 +36,22 @@ const TaskList = ({navigation}) => {
 
     const otherTasksAction = () => {
         setType(1);
-        setTasksArray(tasks);
+        const tasksValue = tasks.filter(task => task.createdBy !== user.uid);
+        setTasksArray(tasksValue);
     };
 
     const renderMyTasks = () => {
         return (
             <Fragment>
                 <Title>Benim İşlerim</Title>
+
                 <Divider height={10}/>
-                <FlatList data={tasksArray} renderItem={({item}) => <TaskCard task={item} />} keyExtractor={(item, index) => index.toString()} />
+
+                <FlatList
+                    data={tasksArray}
+                    renderItem={({item}) => <TaskCard task={item} />}
+                    keyExtractor={(item, index) => index.toString()}
+                />
             </Fragment>
         );
     };
@@ -52,8 +60,14 @@ const TaskList = ({navigation}) => {
         return (
             <Fragment>
                 <Title>Diğer İşler</Title>
+
                 <Divider height={10}/>
-                <FlatList data={tasksArray} renderItem={({item}) => <TaskCard task={item} />} keyExtractor={(item, index) => index.toString()} />
+
+                <FlatList
+                    data={tasksArray}
+                    renderItem={({item}) => <TaskCard task={item} />}
+                    keyExtractor={(item, index) => index.toString()}
+                />
             </Fragment>
         );
     };
@@ -63,7 +77,15 @@ const TaskList = ({navigation}) => {
             <TopBar isBack={true} />
 
             <Container space>
-                <DoubleButton firstText="BENİM İŞLERİM" firstColor='orange' firstAction={() => myTasksAction()} secondText="DİĞER İŞLER" secondColor='purple' secondAction={() => otherTasksAction()}/>
+                <DoubleButton
+                    firstText="BENİM İŞLERİM"
+                    firstColor='orange'
+                    firstAction={() => myTasksAction()}
+                    secondText="DİĞER İŞLER"
+                    secondColor='purple'
+                    secondAction={() => otherTasksAction()}
+                />
+
                 <Divider height={30}/>
 
                 {type === 0 ? renderMyTasks() : renderOtherTasks()}

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {TopBar} from 'components';
+import {Text} from "../../styles";
 
 class ProjectNotes extends Component {
     description = this.props.navigation.getParam('description', "");
@@ -12,7 +13,7 @@ class ProjectNotes extends Component {
                 <TopBar isBack={true}/>
 
                 <View style={styles.innerContainer}>
-                    <Text style={styles.descriptionText}>{this.description}</Text>
+                    <Text medium>{this.description}</Text>
                 </View>
             </SafeAreaView>
         );

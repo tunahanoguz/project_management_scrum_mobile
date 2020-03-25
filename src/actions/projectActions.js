@@ -254,7 +254,13 @@ export const createProjectComment = (comment, parentCommentID, projectID, userID
         projectID,
         userID
     })
-        .then(() => dispatch(getAllProjectComments(projectID)))
+        .then(() => {
+            dispatch(getAllProjectComments(projectID));
+
+            if (parentCommentID){
+                dispatch(getProjectReplyComments(parentCommentID));
+            }
+        })
         .catch(() => dispatch({type: SEND_PARENT_MESSAGE_FAILURE}));
 };
 
