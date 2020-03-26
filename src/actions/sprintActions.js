@@ -26,7 +26,7 @@ import {
     GET_SPRINTS_FOR_PROJECT_FAILURE,
     GET_SINGLE_SPRINT_START,
     GET_SINGLE_SPRINT_SUCCESS,
-    GET_SINGLE_SPRINT_FAILURE,
+    GET_SINGLE_SPRINT_FAILURE, GET_SPRINT_TASKS_START, GET_SPRINT_TASKS_SUCCESS, GET_SPRINT_TASKS_FAILURE,
 } from "./types/sprintTypes";
 
 export const getAllSprints = (projectID) => dispatch => {
@@ -210,4 +210,30 @@ export const deleteSprint = (projectID, sprintID) => dispatch => {
             dispatch({type: DELETE_SPRINT_SUCCESS});
         })
         .catch(() => dispatch({type: DELETE_SPRINT_FAILURE, error: "Sprint güncellenemedi."}));
+};
+
+export const getSprintTasks = (sprintID) => dispatch => {
+    dispatch({type: GET_SPRINT_TASKS_START});
+
+    const taskRef = firestore().collection('task');
+    const taskQuery = taskRef.where('sprintID', '==', sprintID);
+    taskQuery.get()
+        .then(snapshot => {
+            if (snapshot.isEmpty){
+                dispatch({type: GET_SPRINT_TASKS_FAILURE, error: "Bu sprinte ait iş yok."});
+            } else {
+                const tasks = [];
+                snapshot.forEach(doc => {
+                    const task = {
+                        id: doc.id,
+                        ...doc.data(),
+                    };
+
+                    tasks.push(task);
+                });
+
+                dispatch({type: GET_SPRINT_TASKS_SUCCESS, tasks});
+            }
+        })
+        .catch(() => dispatch({type: GET_SPRINT_TASKS_FAILURE, error: "Bu sprinte ait işler getirilemedi."}));
 };

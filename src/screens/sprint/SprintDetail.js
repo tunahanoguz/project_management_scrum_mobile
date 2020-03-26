@@ -7,7 +7,7 @@ import {
     TopBar,
     ProfilePicture,
     Button,
-    TabContent,
+    TabContent, BlockButton,
 } from 'components';
 import {
     Container,
@@ -108,6 +108,14 @@ const SprintDetail = ({navigation}) => {
                     </DirectionContainer>
                 </DirectionContainer>
             </InnerContainer>
+
+            <Divider height={20}/>
+
+            <Button
+                action={() => navigation.navigate('SprintTaskList', {sprintID: id})}
+                color='purple'
+                text="💪 İŞLERİ GÖRÜNTÜLE"
+            />
         </Fragment>
     );
 
@@ -226,7 +234,7 @@ const SprintDetail = ({navigation}) => {
                 `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
             ));
 
-            navigation.navigate('DailyScrumMeeting', {dailyScrumMeetingID});
+            navigation.navigate('DailyScrumMeeting', {dailyScrumMeetingID, createdBy});
         } else {
             dispatch(startDailyScrumMeeting(dailyScrumMeetingID));
             dispatch(createNotification(
@@ -241,7 +249,7 @@ const SprintDetail = ({navigation}) => {
                 `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
             ));
 
-            navigation.navigate('DailyScrumMeeting', {dailyScrumMeetingID});
+            navigation.navigate('DailyScrumMeeting', {dailyScrumMeetingID, createdBy});
         }
     };
 
@@ -349,6 +357,9 @@ const LeftCircle = styled.View`
     justify-content: center;
     align-items: center;
     background-color: orangered;
+    ${({color}) => color && `
+        background-color: ${color};
+    `};
     border-radius: 100px;
 `;
 

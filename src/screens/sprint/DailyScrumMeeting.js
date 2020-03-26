@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { GiftedChat } from 'react-native-gifted-chat'
 import {TopBar} from 'components';
 import {Container} from "../../styles";
 import {createMessage, getMessages} from "./dailyScrumMeetingFunctions";
+import {finishDailyScrumMeeting} from "../../actions/dailyScrumMeetingActions";
 
 const DailyScrumMeeting = ({navigation}) => {
     const [messageArray, setMessageArray] = useState([]);
     const dailyScrumMeetingID = navigation.getParam('dailyScrumMeetingID', "");
+    const createdBy = navigation.getParam('createdBy', "");
 
+    const dispatch = useDispatch();
     const user = useSelector(state => state.authReducer.user);
 
     useEffect(() => {
@@ -20,9 +23,22 @@ const DailyScrumMeeting = ({navigation}) => {
         createMessage(msgs[0], displayName, photoURL, dailyScrumMeetingID);
     };
 
+    const topBarActionButtons = [
+        {
+            icon: 'pause',
+            action: () => {
+                dispatch(finishDailyScrumMeeting(dailyScrumMeetingID));
+                navigation.pop();
+            },
+        }
+    ];
+
     return (
         <Container>
-            <TopBar isBack={true}/>
+            <TopBar
+                isBack={true}
+                actionButtons={createdBy === user.uid ? topBarActionButtons : null}
+            />
 
             <GiftedChat
                 messages={messageArray}

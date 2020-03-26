@@ -22,9 +22,12 @@ class SprintList extends Component {
         };
     }
 
+    createdBy = this.props.navigation.getParam('createdBy', "");
+
     componentDidMount() {
         const {navigation, getAllSprints} = this.props;
         const projectID = navigation.getParam('projectID', "");
+
         getAllSprints(projectID);
     }
 
@@ -53,9 +56,9 @@ class SprintList extends Component {
     };
 
     renderSprints = () => {
-        const {loading, error, sprints} = this.props;
+        const {loading, error, sprints, user} = this.props;
         return (
-            <Container flex={0.8}>
+            <Container flex={this.createdBy === user.uid ? 0.8 : 0.94}>
                 <List
                     loading={loading}
                     error={error}
@@ -71,7 +74,7 @@ class SprintList extends Component {
 
     render(){
         const {isModalOpen} = this.state;
-        const {navigation} = this.props;
+        const {navigation, user} = this.props;
         const projectID = navigation.getParam('projectID', "");
 
         return (
@@ -81,12 +84,14 @@ class SprintList extends Component {
                 <Container space>
                     {this.renderSprints()}
 
-                    <Container flex={0.2} verticalMiddle>
-                        <Button
-                            action={() => navigation.navigate('CreateSprint', {projectID})}
-                            color='green'
-                            text="🏃 YENİ SPRİNT OLUŞTUR"/>
-                    </Container>
+                    {this.createdBy === user.uid && (
+                        <Container flex={0.2} verticalMiddle>
+                            <Button
+                                action={() => navigation.navigate('CreateSprint', {projectID})}
+                                color='green'
+                                text="🏃 YENİ SPRİNT OLUŞTUR"/>
+                        </Container>
+                    )}
                 </Container>
 
                 <ListActionModal
@@ -106,6 +111,7 @@ const styles = StyleSheet.create({});
 
 const mapStateToProps = state => {
     return {
+        user: state.authReducer.user,
         sprints: state.sprintReducer.sprints,
         loading: state.sprintReducer.loading,
         error: state.sprintReducer.error,

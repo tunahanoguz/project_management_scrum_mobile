@@ -42,6 +42,7 @@ export {
     SprintDetail,
     SprintList,
     StartSprint,
+    SprintTaskList,
 } from 'screens/sprint';
 
 export {

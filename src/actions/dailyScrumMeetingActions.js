@@ -74,6 +74,7 @@ export const startDailyScrumMeeting = (dailyScrumMeetingID) => dispatch => {
     dailyScrumMeetingDoc.update({
         status: 1,
         lastStartedAt: nowDate,
+        finishedAt: null,
     })
         .then(() => dispatch({type: START_DAILY_SCRUM_MEETING_SUCCESS}))
         .catch(() => dispatch({type: START_DAILY_SCRUM_MEETING_FAILURE, error: "Günlük Scrum Toplantısı başlatılamadı."}));
@@ -86,7 +87,7 @@ export const finishDailyScrumMeeting = (dailyScrumMeetingID) => dispatch => {
     const dailyScrumMeetingRef = firestore().collection('dailyScrumMeeting');
     const dailyScrumMeetingDoc = dailyScrumMeetingRef.doc(dailyScrumMeetingID);
     dailyScrumMeetingDoc.update({
-        status: 1,
+        status: 0,
         finishedAt: nowDate,
     })
         .then(() => dispatch({type: FINISH_DAILY_SCRUM_MEETING_SUCCESS}))

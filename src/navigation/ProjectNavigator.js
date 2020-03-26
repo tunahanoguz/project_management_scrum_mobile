@@ -32,6 +32,7 @@ import {
     SprintDetail,
     SprintList,
     StartSprint,
+    SprintTaskList,
 } from 'screens';
 
 const ProjectNavigator = createStackNavigator(
@@ -68,6 +69,7 @@ const ProjectNavigator = createStackNavigator(
         SprintDetail,
         StartSprint,
         DailyScrumMeeting,
+        SprintTaskList,
     },
     {
         initialRouteName: 'ProjectList',

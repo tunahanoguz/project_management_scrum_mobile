@@ -72,8 +72,8 @@ class ProjectDetail extends Component {
         this.props.navigation.navigate("ProjectNotes", {notes});
     };
 
-    goToSprintList = (projectID) => {
-        this.props.navigation.navigate("SprintList", {projectID});
+    goToSprintList = (projectID, createdBy) => {
+        this.props.navigation.navigate("SprintList", {projectID, createdBy});
     };
 
     editSprintAction = () => {
@@ -195,7 +195,7 @@ class ProjectDetail extends Component {
         }
     };
 
-    renderButtons = (projectID, selectedTab) => {
+    renderButtons = (projectID, createdBy, selectedTab) => {
         if (selectedTab === 0) {
             return (
                 <Container
@@ -235,7 +235,7 @@ class ProjectDetail extends Component {
                     <Button
                         color='green'
                         text="🏃 TÜM SPRİNTLERİ GÖR"
-                        action={() => this.goToSprintList(projectID)}
+                        action={() => this.goToSprintList(projectID, createdBy)}
                     />
                 </Container>
             );
@@ -256,7 +256,7 @@ class ProjectDetail extends Component {
     };
 
     render() {
-        const {id, name, description, notes} = this.props.navigation.getParam('project', {});
+        const {id, name, description, notes, createdBy} = this.props.navigation.getParam('project', {});
         const {selectedTab, isModalOpen} = this.state;
         return (
             <Container>
@@ -272,7 +272,7 @@ class ProjectDetail extends Component {
                         tabContents={() => this.renderTabContents(selectedTab, description, notes)}
                     />
 
-                    {this.renderButtons(id, selectedTab)}
+                    {this.renderButtons(id, createdBy, selectedTab)}
                 </Container>
 
                 <ListActionModal
