@@ -4,6 +4,7 @@ import projectReducer from "./projectReducer";
 import taskReducer from "./taskReducer";
 import sprintReducer from "./sprintReducer";
 import dailyScrumMeetingReducer from "./dailyScrumMeetingReducer";
+import sprintPlanningMeetingReducer from "./sprintPlanningMeetingReducer";
 import notificationReducer from "./notificationReducer";
 
 export {
@@ -13,5 +14,6 @@ export {
     taskReducer,
     sprintReducer,
     dailyScrumMeetingReducer,
+    sprintPlanningMeetingReducer,
     notificationReducer,
 };

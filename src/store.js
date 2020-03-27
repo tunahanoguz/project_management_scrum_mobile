@@ -7,6 +7,7 @@ import {
     taskReducer,
     sprintReducer,
     dailyScrumMeetingReducer,
+    sprintPlanningMeetingReducer,
     notificationReducer,
 } from './reducers';
 
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     projectReducer,
     sprintReducer,
     dailyScrumMeetingReducer,
+    sprintPlanningMeetingReducer,
     notificationReducer,
 });
 

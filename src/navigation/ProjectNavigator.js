@@ -28,6 +28,7 @@ import {
     TaskList,
     CreateSprint,
     DailyScrumMeeting,
+    SprintPlanningMeeting,
     EditSprint,
     SprintDetail,
     SprintList,
@@ -69,6 +70,7 @@ const ProjectNavigator = createStackNavigator(
         SprintDetail,
         StartSprint,
         DailyScrumMeeting,
+        SprintPlanningMeeting,
         SprintTaskList,
     },
     {

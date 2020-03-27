@@ -1,67 +1,98 @@
 import firestore from "@react-native-firebase/firestore";
 import {
-    CREATE_DAILY_SCRUM_MEETING_FAILURE,
-    CREATE_DAILY_SCRUM_MEETING_START,
-    CREATE_DAILY_SCRUM_MEETING_SUCCESS,
     CREATE_SPRINT_PLANNING_MEETING_FAILURE,
     CREATE_SPRINT_PLANNING_MEETING_START,
     CREATE_SPRINT_PLANNING_MEETING_SUCCESS,
-    DELETE_DAILY_SCRUM_MEETING_FAILURE,
-    DELETE_DAILY_SCRUM_MEETING_START,
-    DELETE_DAILY_SCRUM_MEETING_SUCCESS,
     DELETE_SPRINT_PLANNING_MEETING_FAILURE,
     DELETE_SPRINT_PLANNING_MEETING_START,
     DELETE_SPRINT_PLANNING_MEETING_SUCCESS,
-    GET_ALL_SPRINT_PLANNING_MEETINGS_FAILURE,
-    GET_ALL_SPRINT_PLANNING_MEETINGS_START,
-    GET_ALL_SPRINT_PLANNING_MEETINGS_SUCCESS,
+    FINISH_SPRINT_PLANNING_MEETING_FAILURE,
+    FINISH_SPRINT_PLANNING_MEETING_START,
+    FINISH_SPRINT_PLANNING_MEETING_SUCCESS,
+    GET_SPRINT_PLANNING_MEETING_FAILURE,
+    GET_SPRINT_PLANNING_MEETING_START,
+    GET_SPRINT_PLANNING_MEETING_SUCCESS,
+    START_SPRINT_PLANNING_MEETING_FAILURE,
+    START_SPRINT_PLANNING_MEETING_START,
+    START_SPRINT_PLANNING_MEETING_SUCCESS,
 } from "./types/sprintPlanningMeetingTypes";
 
-export const getSprintPlanningMeetings = () => dispatch => {
-    dispatch({type: GET_ALL_SPRINT_PLANNING_MEETINGS_START});
+export const getSprintPlanningMeeting = (sprintID) => dispatch => {
+    dispatch({type: GET_SPRINT_PLANNING_MEETING_START});
 
-    const dailyScrumMeetingRef = firestore().collection('sprintPlanningMeeting');
-    dailyScrumMeetingRef.get()
+    const sprintPlanningMeetingRef = firestore().collection('sprintPlanningMeeting');
+    const sprintPlanningMeetingQuery = sprintPlanningMeetingRef.where('sprintID', '==', sprintID);
+    sprintPlanningMeetingQuery.get()
         .then(snapshot => {
             if (snapshot.empty){
-                dispatch({type: GET_ALL_SPRINT_PLANNING_MEETINGS_FAILURE, error: "Hiç sprint planlama toplantısı yok."});
+                dispatch({type: GET_SPRINT_PLANNING_MEETING_FAILURE, error: "Hiç sprint planlama toplantısı yok."});
             } else {
-                const sprintPlanningMeetings = [];
+                let sprintPlanningMeeting = {};
                 snapshot.forEach(doc => {
-                    const sprintPlanningMeeting = {
+                    const sprintPlanningMeetingObj = {
                         id: doc.id,
                         ...doc.data(),
                     };
 
-                    sprintPlanningMeetings.push(sprintPlanningMeeting);
+                    sprintPlanningMeeting = sprintPlanningMeetingObj;
                 });
 
-                dispatch({type: GET_ALL_SPRINT_PLANNING_MEETINGS_SUCCESS, sprintPlanningMeetings});
+                dispatch({type: GET_SPRINT_PLANNING_MEETING_SUCCESS, sprintPlanningMeeting});
             }
         })
-        .catch(() => dispatch({type: GET_ALL_SPRINT_PLANNING_MEETINGS_FAILURE, error: "Sprint planlama toplantısı getirilemedi."}));
+        .catch(() => dispatch({type: GET_SPRINT_PLANNING_MEETING_FAILURE, error: "Sprint planlama toplantısı getirilemedi."}));
 };
 
-export const createSprintPlanningMeeting = () => dispatch => {
+export const createSprintPlanningMeeting = (sprintID) => dispatch => {
     dispatch({type: CREATE_SPRINT_PLANNING_MEETING_START});
 
-    const sprintPlanningMeetingRef = firestore().collection('sprintPlanningMeeting');
     const nowDate = new Date();
+    const sprintPlanningMeetingRef = firestore().collection('sprintPlanningMeeting');
     sprintPlanningMeetingRef.add({
-        status: true,
+        status: 1,
+        sprintID,
         createdAt: nowDate,
         finishedAt: null,
     })
         .then(() => dispatch({type: CREATE_SPRINT_PLANNING_MEETING_SUCCESS}))
-        .catch(() => dispatch({type: CREATE_SPRINT_PLANNING_MEETING_FAILURE, error: "Günlük Scrum Toplantısı oluşturulamadı."}));
+        .catch(() => dispatch({type: CREATE_SPRINT_PLANNING_MEETING_FAILURE, error: "Sprint Planlama Toplantısı oluşturulamadı."}));
 };
 
-export const deleteSprintPlanningMeeting = (sprintPlanningMeeting) => dispatch => {
+export const startSprintPlanningMeeting = (sprintPlanningMeetingID) => dispatch => {
+    dispatch({type: START_SPRINT_PLANNING_MEETING_START});
+
+    const nowDate = new Date();
+    const sprintPlanningMeetingRef = firestore().collection('sprintPlanningMeeting');
+    const sprintPlanningMeetingDoc = sprintPlanningMeetingRef.doc(sprintPlanningMeetingID);
+    sprintPlanningMeetingDoc.update({
+        status: 1,
+        lastStartedAt: nowDate,
+        finishedAt: null,
+    })
+        .then(() => dispatch({type: START_SPRINT_PLANNING_MEETING_SUCCESS}))
+        .catch(() => dispatch({type: START_SPRINT_PLANNING_MEETING_FAILURE, error: "Sprint Planlama Toplantısı başlatılamadı."}));
+};
+
+export const finishSprintPlanningMeeting = (sprintPlanningMeetingID) => dispatch => {
+    dispatch({type: FINISH_SPRINT_PLANNING_MEETING_START});
+
+    const nowDate = new Date();
+    const sprintPlanningMeetingRef = firestore().collection('sprintPlanningMeeting');
+    const sprintPlanninMeetingDoc = sprintPlanningMeetingRef.doc(sprintPlanningMeetingID);
+    sprintPlanninMeetingDoc.update({
+        status: 0,
+        finishedAt: nowDate,
+    })
+        .then(() => dispatch({type: FINISH_SPRINT_PLANNING_MEETING_SUCCESS}))
+        .catch(() => dispatch({type: FINISH_SPRINT_PLANNING_MEETING_FAILURE, error: "Sprint Planlama Toplantısı bitirilemedi."}));
+};
+
+export const deleteSprintPlanningMeeting = (sprintPlanningMeetingID) => dispatch => {
     dispatch({type: DELETE_SPRINT_PLANNING_MEETING_START});
 
-    const sprintPlanningMeetingRef = firestore().collection('dailyScrumMeeting');
-    const sprintPlanningMeetingDoc = sprintPlanningMeetingRef.doc(sprintPlanningMeeting);
+    const sprintPlanningMeetingRef = firestore().collection('sprintPlanningMeeting');
+    const sprintPlanningMeetingDoc = sprintPlanningMeetingRef.doc(sprintPlanningMeetingID);
     sprintPlanningMeetingDoc.delete()
         .then(() => dispatch({type: DELETE_SPRINT_PLANNING_MEETING_SUCCESS}))
-        .catch(() => dispatch({type: DELETE_SPRINT_PLANNING_MEETING_FAILURE, error: "Günlük Scrum Toplantısı silinemedi."}));
+        .catch(() => dispatch({type: DELETE_SPRINT_PLANNING_MEETING_FAILURE, error: "Sprint Planlama Toplantısı silinemedi."}));
 };

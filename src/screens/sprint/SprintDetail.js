@@ -27,6 +27,11 @@ import {
 } from "../../actions/dailyScrumMeetingActions";
 import {getSingleTeam} from "../../actions/teamActions";
 import {createNotification, sendNotifications} from "../../actions/notificationActions";
+import {
+    createSprintPlanningMeeting,
+    getSprintPlanningMeeting,
+    startSprintPlanningMeeting
+} from "../../actions/sprintPlanningMeetingActions";
 
 const SprintDetail = ({navigation}) => {
     const sprintID = navigation.getParam('sprintID', {});
@@ -43,15 +48,15 @@ const SprintDetail = ({navigation}) => {
 
     const project = useSelector(state => state.projectReducer.project);
     const dailyScrumMeeting = useSelector(state => state.dailyScrumMeetingReducer.dailyScrumMeeting);
+    const sprintPlanningMeeting = useSelector(state => state.sprintPlanningMeetingReducer.sprintPlanningMeeting);
 
     const team = useSelector(state => state.teamReducer.team);
     const [userIDs, setUserIDs] = useState([]);
 
-    // const [messagingTokens, setMessingTokens] = useState([]);
-
     useEffect(() => {
         dispatch(getSingleSprint(sprintID));
         dispatch(getDailyScrumMeeting(sprintID));
+        dispatch(getSprintPlanningMeeting(sprintID));
     }, []);
 
     useEffect(() => {
@@ -230,7 +235,7 @@ const SprintDetail = ({navigation}) => {
 
             dispatch(sendNotifications(
                 userIDs,
-                "Daily Scrum Meeting",
+                "Günlük Scrum Toplantısı",
                 `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
             ));
 
@@ -245,7 +250,7 @@ const SprintDetail = ({navigation}) => {
 
             dispatch(sendNotifications(
                 userIDs,
-                "Daily Scrum Meeting",
+                "Günlük Scrum Toplantısı",
                 `${name} sprinti için Günlük Scrum Toplantısı başlatıldı.`
             ));
 
@@ -279,12 +284,47 @@ const SprintDetail = ({navigation}) => {
     // SPRINT PLANNING MEETING
     // ----------------------------------------------------------------------
 
+    const startSprintPlanningMeetingAction = () => {
+        const sprintPlanningMeetingID = sprintPlanningMeeting.id;
+        if (Object.keys(sprintPlanningMeeting).length === 0){
+            dispatch(createSprintPlanningMeeting(sprintID));
+            dispatch(createNotification(
+                userIDs,
+                "daily_scrum_meeting",
+                `${name} sprinti için Sprint Planlama Toplantısı başlatıldı.`
+            ));
+
+            dispatch(sendNotifications(
+                userIDs,
+                "Daily Scrum Meeting",
+                `${name} sprinti için Sprint Planlama Toplantısı başlatıldı.`
+            ));
+
+            navigation.navigate('SprintPlanningMeeting', {sprintPlanningMeetingID, createdBy});
+        } else {
+            dispatch(startSprintPlanningMeeting(sprintPlanningMeetingID));
+            dispatch(createNotification(
+                userIDs,
+                "daily_scrum_meeting",
+                `${name} sprinti için Sprint Planlama Toplantısı başlatıldı.`
+            ));
+
+            dispatch(sendNotifications(
+                userIDs,
+                "Sprint Planlama Toplantısı",
+                `${name} sprinti için Sprint Planlama Toplantısı başlatıldı.`
+            ));
+
+            navigation.navigate('SprintPlanningMeeting', {sprintPlanningMeetingID, createdBy});
+        }
+    };
+
     const renderSprintPlanningButton = () => {
         if (!finishDate) {
             if (createdBy === authUser.uid){
                 return (
                     <Button
-                        action={() => alert("asdasdasd")}
+                        action={startSprintPlanningMeetingAction}
                         color='green'
                         text="SPRİNT PLANLAMA TOPLANTISI BAŞLAT"
                     />

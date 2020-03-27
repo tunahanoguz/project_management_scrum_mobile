@@ -38,6 +38,7 @@ export {
 export {
     CreateSprint,
     DailyScrumMeeting,
+    SprintPlanningMeeting,
     EditSprint,
     SprintDetail,
     SprintList,
