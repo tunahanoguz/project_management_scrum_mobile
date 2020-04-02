@@ -15,8 +15,9 @@ import {
 } from 'components';
 import {Container, Divider, Title} from "../../styles";
 import {createTask} from "../../actions/taskActions";
+import {createNotification, sendNotifications} from "../../actions/notificationActions";
 
-class EmptyScreen extends Component {
+class CreateTask extends Component {
     constructor(props) {
         super(props);
 
@@ -120,4 +121,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmptyScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTask);

@@ -148,8 +148,9 @@ export const getMyTasks = (sprintID, userID) => dispatch => {
 export const getTasksForHome = (projectIDs) => dispatch => {
     dispatch({type: GET_TASKS_FOR_HOME_START});
 
+    const newProjectIDs = projectIDs.slice(0, 9);
     const taskRef = firestore().collection('task');
-    const taskQuery = taskRef.where('projectID', 'in', projectIDs).limit(3);
+    const taskQuery = taskRef.where('projectID', 'in', newProjectIDs).limit(3);
     taskQuery.get()
         .then(snapshot => {
             if (snapshot.empty){

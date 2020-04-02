@@ -28,7 +28,7 @@ import {colors, fonts} from "../../styles";
 import {getAllCreatedTeams, getAllTeams, getTeamUserIDs} from "../../actions/teamActions";
 import {createProject} from "../../actions/projectActions";
 import {projectValidations} from "../../validations";
-import {createNotification} from "../../actions/notificationActions";
+import {createNotification, sendNotifications} from "../../actions/notificationActions";
 
 class CreateProject extends Component {
     constructor(props) {
@@ -221,7 +221,8 @@ class CreateProject extends Component {
         Keyboard.dismiss();
         await this.props.createProject(projectName, projectDescription, projectNotes, new Date(), null, null, assignedTeam, this.props.teamIDs, this.props.user.uid);
         await this.props.getTeamUserIDs(assignedTeam);
-        this.props.createNotification(this.props.userIDs, "project", "İçerisinde bulunacağınız bir proje oluşturuldu.");
+        this.props.createNotification(this.props.userIDs, "project", "İçerisinde bulunduğunuz bir proje oluşturuldu.");
+        this.props.sendNotifications(this.props.userIDs, "Bir proje oluşturuldu!", "İçerisinde bulunduğunuz bir proje oluşturuldu.");
         this.props.navigation.navigate('ProjectList');
     };
 
@@ -229,7 +230,15 @@ class CreateProject extends Component {
     // Render screen
 
     render() {
-        const {projectName, projectNameError, projectDescription, projectDescriptionError, projectNotes, assignedTeam} = this.state;
+        const {
+            projectName,
+            projectNameError,
+            projectDescription,
+            projectDescriptionError,
+            projectNotes,
+            assignedTeam,
+        } = this.state;
+
         return (
             <Container>
                 <TopBar isBack={true}/>
@@ -237,25 +246,53 @@ class CreateProject extends Component {
                 <InnerContainer padding={30}>
                     <Text style={fonts.title}>Proje Oluştur</Text>
 
-                    <Input isValid={this.validateProjectName} iconName='hash' value={projectName}
-                           placeholder="Proje adı"
-                           name='projectName' setStateFunc={this.setStateFunc} errorMessage={projectNameError}/>
-                    <Input isValid={this.validateProjectDescription} iconName='align-left' value={projectDescription}
-                           placeholder="Proje açıklaması" name='projectDescription' setStateFunc={this.setStateFunc}
-                           errorMessage={projectDescriptionError}/>
+                    <Input
+                        isValid={this.validateProjectName}
+                        iconName='hash'
+                        value={projectName}
+                        placeholder="Proje adı"
+                        name='projectName'
+                        setStateFunc={this.setStateFunc}
+                        errorMessage={projectNameError}
+                    />
+
+                    <Input
+                        isValid={this.validateProjectDescription}
+                        iconName='align-left'
+                        value={projectDescription}
+                        placeholder="Proje açıklaması"
+                        name='projectDescription'
+                        setStateFunc={this.setStateFunc}
+                        errorMessage={projectDescriptionError}
+                    />
 
                     <View style={styles.rowContainer}>
-                        <BlockButton color='green' text="Not Ekle" icon='plus' iconSize={16}
-                                     pressFunc={this.toggleAddNoteModal}
-                                     side='left'/>
-                        <BlockButton color='purple' text="Takım Ata" icon='user-plus' iconSize={16}
-                                     pressFunc={this.toggleAssignTeamModal} side='right'/>
+                        <BlockButton
+                            color='green'
+                            text="Not Ekle"
+                            icon='plus'
+                            iconSize={16}
+                            pressFunc={this.toggleAddNoteModal}
+                            side='left'
+                        />
+
+                        <BlockButton
+                            color='purple'
+                            text="Takım Ata"
+                            icon='user-plus'
+                            iconSize={16}
+                            pressFunc={this.toggleAssignTeamModal}
+                            side='right'
+                        />
                     </View>
 
                     <Divider height={20}/>
 
-                    <RoundedButton color='dark' icon='arrow-right'
-                                   pressFunc={() => this.createProject(projectName, projectDescription, projectNotes, assignedTeam)}/>
+                    <RoundedButton
+                        color='dark'
+                        icon='arrow-right'
+                        pressFunc={() => this.createProject(projectName, projectDescription, projectNotes, assignedTeam)}
+                    />
                 </InnerContainer>
 
                 {this.assignTeamModal()}
@@ -301,6 +338,7 @@ const mapDispatchToProps = dispatch => {
         createProject: (name, description, notes, createdAt, startDate, finishDate, teamID, teamIDs, userID) => dispatch(createProject(name, description, notes, createdAt, startDate, finishDate, teamID, teamIDs, userID)),
         getTeamUserIDs: (teamID) => dispatch(getTeamUserIDs(teamID)),
         createNotification: (userIDs, type, description) => dispatch(createNotification(userIDs, type, description)),
+        sendNotifications: (userIDs, title, body) => dispatch(sendNotifications(userIDs, title, body)),
     };
 };
 

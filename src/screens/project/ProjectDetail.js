@@ -25,6 +25,7 @@ import {
 } from "../../actions/projectActions";
 import {getSprintsForProjectDetail} from "../../actions/sprintActions";
 import {getAllProjectTasks} from "../../actions/taskActions";
+import {getTeamUserIDs} from "../../actions/teamActions";
 
 class ProjectDetail extends Component {
     constructor(props) {
@@ -38,14 +39,15 @@ class ProjectDetail extends Component {
     }
 
     componentDidMount() {
-        const {id} = this.props.navigation.getParam('project', {});
-        const {getAllProjectComments, getAllProjectFiles, getSprintsForProjectDetail, getAllProjectTasks, getProjectParentCommentsForDetail} = this.props;
+        const {id, teamID} = this.props.navigation.getParam('project', {});
+        const {getAllProjectComments, getAllProjectFiles, getSprintsForProjectDetail, getAllProjectTasks, getProjectParentCommentsForDetail, getTeamUserIDs} = this.props;
 
         getAllProjectComments(id);
         getAllProjectFiles(id);
         getSprintsForProjectDetail(id);
         getAllProjectTasks(id);
         getProjectParentCommentsForDetail(id);
+        getTeamUserIDs(teamID);
     }
 
     goToCreateTask = (projectID) => {
@@ -73,7 +75,7 @@ class ProjectDetail extends Component {
     };
 
     goToSprintList = (projectID, createdBy) => {
-        this.props.navigation.navigate("SprintList", {projectID, createdBy});
+        this.props.navigation.navigate("SprintList", {projectID, createdBy, userIDs: this.props.userIDs});
     };
 
     editSprintAction = () => {
@@ -300,6 +302,7 @@ const mapStateToProps = state => {
         commentError: state.projectReducer.error,
         sprints: state.sprintReducer.sprints,
         tasks: state.taskReducer.tasks,
+        userIDs: state.teamReducer.userIDs,
     };
 };
 
@@ -310,6 +313,7 @@ const mapDispatchToProps = dispatch => {
         getSprintsForProjectDetail: (projectID) => dispatch(getSprintsForProjectDetail(projectID)),
         getAllProjectTasks: (projectID) => dispatch(getAllProjectTasks(projectID)),
         getProjectParentCommentsForDetail: (projectID) => dispatch(getProjectParentCommentsForDetail(projectID)),
+        getTeamUserIDs: (teamID) => dispatch(getTeamUserIDs(teamID)),
     };
 };
 

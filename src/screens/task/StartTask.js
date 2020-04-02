@@ -23,6 +23,7 @@ import {
 import {getSingleTeam, getTeamMembers} from "../../actions/teamActions";
 import {getAllSprints} from "../../actions/sprintActions";
 import {startTask} from "../../actions/taskActions";
+import {createNotification, sendNotifications} from "../../actions/notificationActions";
 
 const StartTask = ({navigation}) => {
     const dispatch = useDispatch();
@@ -53,15 +54,13 @@ const StartTask = ({navigation}) => {
 
     useEffect(() => {
         if (Object.keys(team).length !== 0) {
-            setMembers([]);
             const membersValue = team.members;
-
             setMembers(membersValue);
         }
     }, [team]);
 
     useEffect(() => {
-        if (members.length !== 0) {
+        if (members?.length !== 0) {
             dispatch(getTeamMembers(members));
         }
     }, [members]);
@@ -77,7 +76,7 @@ const StartTask = ({navigation}) => {
 
     const sprintList = () => {
         const list = [];
-        for (let i = 0; i < sprints.length; i++) {
+        for (let i = 0; i < sprints?.length; i++) {
             const sprint = {
                 id: sprints[i].id,
                 text: sprints[i].name,
@@ -95,6 +94,8 @@ const StartTask = ({navigation}) => {
 
     const secondStepHandleSubmit = () => {
         dispatch(startTask(task.id, selectedSprintID, selectedUser.id, estimatedFinishDate));
+        dispatch(createNotification(selectedUser.id, "task", "Size özel bir iş atandı."));
+        dispatch(sendNotifications([selectedUser.id], "İş atandı!", "Size özel bir iş atandı."));
         navigation.navigate('TaskDetail', {taskID: task.id});
     };
 
@@ -158,7 +159,7 @@ const StartTask = ({navigation}) => {
     };
 
     const renderSearchedMembers = () => {
-        if (searchedMembers.length !== 0) {
+        if (searchedMembers?.length !== 0) {
             return (
                 <Fragment>
                     <View>

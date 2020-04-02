@@ -23,6 +23,7 @@ class SprintList extends Component {
     }
 
     createdBy = this.props.navigation.getParam('createdBy', "");
+    userIDs = this.props.navigation.getParam('userIDs', "");
 
     componentDidMount() {
         const {navigation, getAllSprints} = this.props;
@@ -87,7 +88,7 @@ class SprintList extends Component {
                     {this.createdBy === user.uid && (
                         <Container flex={0.2} verticalMiddle>
                             <Button
-                                action={() => navigation.navigate('CreateSprint', {projectID})}
+                                action={() => navigation.navigate('CreateSprint', {projectID, userIDs: this.userIDs})}
                                 color='green'
                                 text="🏃 YENİ SPRİNT OLUŞTUR"/>
                         </Container>

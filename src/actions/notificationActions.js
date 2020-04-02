@@ -63,6 +63,8 @@ export const getAllNotifications = (userID) => dispatch => {
 export const sendNotifications = (userIDs, title, body) => dispatch => {
     dispatch({type: SEND_NOTIFICATION_START});
 
+    console.log("userIDs" + userIDs);
+
     const userRef = firestore().collection('users');
     const userQuery = userRef.where('id', 'in', userIDs);
     userQuery.get()

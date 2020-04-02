@@ -23,6 +23,7 @@ import {
 import {colors, fonts, sizes} from "../../styles";
 import {createTeam} from "../../actions/teamActions";
 import {roles} from "../../constants";
+import {createNotification, sendNotifications} from "../../actions/notificationActions";
 
 class CreateTeam extends Component {
     constructor(props) {
@@ -117,6 +118,8 @@ class CreateTeam extends Component {
 
         if (teamNameError === undefined && teamDescriptionError === undefined) {
             this.props.createTeam(teamName, teamDescription, newAddedMembers, uid);
+            this.props.createNotification(this.state.addedMembers, "team", "İçerisinde bulunduğunuz bir takım oluşturuldu.");
+            this.props.sendNotifications(this.state.addedMembers, "Bir takım oluşturuldu!", "İçerisinde bulunduğunuz bir takım oluşturuldu.");
             this.props.navigation.navigate('TeamList');
         }
     };
@@ -538,6 +541,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         createTeam: (teamName, teamDescription, members, userID) => dispatch(createTeam(teamName, teamDescription, members, userID)),
+        createNotification: (userIDs, type, description) => dispatch(createNotification(userIDs, type, description)),
+        sendNotifications: (userIDs, title, body) => dispatch(sendNotifications(userIDs, title, body)),
     }
 };
 

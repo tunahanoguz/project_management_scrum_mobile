@@ -19,6 +19,7 @@ import {
     sprintName,
     sprintStatus,
 } from "../../validationSchema";
+import {createNotification, sendNotifications} from "../../actions/notificationActions";
 
 class CreateSprint extends Component {
 
@@ -31,12 +32,15 @@ class CreateSprint extends Component {
     handleSubmit = (values) => {
         const {navigation, createSprint, user} = this.props;
         const projectID = navigation.getParam('projectID', "");
+        const userIDs = navigation.getParam('userIDs', "");
         let {name, status, estimatedFinishDate} = values;
         const startDate = status === 0 ? null : new Date();
         estimatedFinishDate = status === 0 ? null : new Date();
 
         try {
             createSprint(name, status, startDate, estimatedFinishDate, user.uid, projectID);
+            this.props.createNotification(userIDs, "sprint", "İçerisinde bulunduğunuz bir sprint oluşturuldu.");
+            this.props.sendNotifications(userIDs, "Bir sprint oluşturuldu!", "İçerisinde bulunduğunuz bir sprint oluşturuldu.");
             navigation.navigate('SprintList');
         } catch (err) {
             alert('Error!');
@@ -88,6 +92,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         createSprint: (name, status, startDate, estimatedFinishDate, userID, projectID) => dispatch(createSprint(name, status, startDate, estimatedFinishDate, userID, projectID)),
+        createNotification: (userIDs, type, description) => dispatch(createNotification(userIDs, type, description)),
+        sendNotifications: (userIDs, title, body) => dispatch(sendNotifications(userIDs, title, body)),
     };
 };
 
