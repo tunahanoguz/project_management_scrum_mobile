@@ -3,6 +3,9 @@ import * as yup from 'yup';
 export const email = yup.string().email("Lütfen geçerli bir email giriniz.").required("Lütfen bir email giriniz.");
 export const password = yup.string().min(6, "Şifre en az 6 karakterden oluşmalı.").required("Lütfen bir şifre giriniz.");
 
+export const projectDescription = yup.string().required("Lütfen proje için bir açıklama giriniz.");
+export const projectNote = yup.string().required("Lütfen bir not giriniz.");
+
 export const sprintName = yup.string().required("Lütfen bir sprint adı giriniz.");
 export const sprintStatus = yup.number("Lütfen sprint'in durumunu seçiniz.").required("Lütfen sprint'in durumunu seçiniz.");
 export const sprintEstimatedFinishDate = yup.date().required("Lütfen sprint için tahmini bir bitiş tarihi giriniz.");

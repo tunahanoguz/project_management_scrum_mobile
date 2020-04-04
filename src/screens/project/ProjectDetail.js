@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {TouchableOpacity} from 'react-native'
 import {connect} from "react-redux";
 import {
@@ -21,7 +21,7 @@ import {
 import {
     getAllProjectComments,
     getAllProjectFiles,
-    getProjectParentCommentsForDetail
+    getProjectParentCommentsForDetail, getSingleProject
 } from "../../actions/projectActions";
 import {getSprintsForProjectDetail} from "../../actions/sprintActions";
 import {getAllProjectTasks} from "../../actions/taskActions";
@@ -40,8 +40,9 @@ class ProjectDetail extends Component {
 
     componentDidMount() {
         const {id, teamID} = this.props.navigation.getParam('project', {});
-        const {getAllProjectComments, getAllProjectFiles, getSprintsForProjectDetail, getAllProjectTasks, getProjectParentCommentsForDetail, getTeamUserIDs} = this.props;
+        const {getSingleProject, getAllProjectComments, getAllProjectFiles, getSprintsForProjectDetail, getAllProjectTasks, getProjectParentCommentsForDetail, getTeamUserIDs} = this.props;
 
+        getSingleProject(id);
         getAllProjectComments(id);
         getAllProjectFiles(id);
         getSprintsForProjectDetail(id);
@@ -66,12 +67,12 @@ class ProjectDetail extends Component {
         this.props.navigation.navigate("ProjectFileList", {projectID});
     };
 
-    goToProjectDescription = (description) => {
-        this.props.navigation.navigate("ProjectDescription", {description});
+    goToProjectDescription = (projectID, description) => {
+        this.props.navigation.navigate("ProjectDescription", {projectID, description});
     };
 
-    goToProjectNotes = (notes) => {
-        this.props.navigation.navigate("ProjectNotes", {notes});
+    goToProjectNotes = (projectID) => {
+        this.props.navigation.navigate("ProjectNotes", {projectID});
     };
 
     goToSprintList = (projectID, createdBy) => {
@@ -95,7 +96,7 @@ class ProjectDetail extends Component {
         {icon: '💬', name: 'Yorum'},
     ];
 
-    projectInformation = (description, notes) => {
+    projectInformation = (projectID, description, notes) => {
         const projectDescriptionLength = description.length;
         return (
             <Container>
@@ -103,7 +104,7 @@ class ProjectDetail extends Component {
 
                 <Divider height={10}/>
 
-                <TouchableOpacity onPress={() => this.goToProjectDescription(description)}>
+                <TouchableOpacity onPress={() => this.goToProjectDescription(projectID, description)}>
                     <InnerContainer>
                         <TextNormal>{projectDescriptionLength > 64 ? description.substring(0, 64) + "..." : description}</TextNormal>
                     </InnerContainer>
@@ -116,7 +117,7 @@ class ProjectDetail extends Component {
 
                 <Divider height={10}/>
 
-                <TouchableOpacity onPress={() => this.goToProjectNotes(notes)}>
+                <TouchableOpacity onPress={() => this.goToProjectNotes(projectID)}>
                     <InnerContainer>
                         {notes.map((note, index) => {
                             if (index < 3) {
@@ -185,9 +186,9 @@ class ProjectDetail extends Component {
         );
     };
 
-    renderTabContents = (selectedTab, description, notes) => {
+    renderTabContents = (projectID, selectedTab, description, notes) => {
         if (selectedTab === 0) {
-            return this.projectInformation(description, notes);
+            return this.projectInformation(projectID, description, notes);
         } else if (selectedTab === 1) {
             return this.projectTasks();
         } else if (selectedTab === 2) {
@@ -258,33 +259,37 @@ class ProjectDetail extends Component {
     };
 
     render() {
-        const {id, name, description, notes, createdBy} = this.props.navigation.getParam('project', {});
+        const {id, name, description, notes, createdBy} = this.props.project;
         const {selectedTab, isModalOpen} = this.state;
         return (
             <Container>
                 <TopBar isBack={true}/>
 
-                <Container space>
-                    <Title>{name}</Title>
+                {Object.keys(this.props.project).length !== 0 && (
+                    <Fragment>
+                        <Container space>
+                            <Title>{name}</Title>
 
-                    <TabContent
-                        tabs={this.tabs}
-                        selectedTab={selectedTab}
-                        tabButtonAction={this.setSelectedTab}
-                        tabContents={() => this.renderTabContents(selectedTab, description, notes)}
-                    />
+                            <TabContent
+                                tabs={this.tabs}
+                                selectedTab={selectedTab}
+                                tabButtonAction={this.setSelectedTab}
+                                tabContents={() => this.renderTabContents(id, selectedTab, description, notes)}
+                            />
 
-                    {this.renderButtons(id, createdBy, selectedTab)}
-                </Container>
+                            {this.renderButtons(id, createdBy, selectedTab)}
+                        </Container>
 
-                <ListActionModal
-                    isOpen={isModalOpen}
-                    toggleFunc={this.setIsOpenModal}
-                    editText="Sprint'i Düzenle"
-                    editAction={this.editSprintAction}
-                    deleteText="Sprint'i Sil"
-                    deleteAction={this.deleteSprintAction}
-                />
+                        <ListActionModal
+                            isOpen={isModalOpen}
+                            toggleFunc={this.setIsOpenModal}
+                            editText="Sprint'i Düzenle"
+                            editAction={this.editSprintAction}
+                            deleteText="Sprint'i Sil"
+                            deleteAction={this.deleteSprintAction}
+                        />
+                    </Fragment>
+                )}
             </Container>
         );
     }
@@ -303,11 +308,13 @@ const mapStateToProps = state => {
         sprints: state.sprintReducer.sprints,
         tasks: state.taskReducer.tasks,
         userIDs: state.teamReducer.userIDs,
+        project: state.projectReducer.project,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        getSingleProject: (projectID) => dispatch(getSingleProject(projectID)),
         getAllProjectComments: (projectID) => dispatch(getAllProjectComments(projectID)),
         getAllProjectFiles: (projectID) => dispatch(getAllProjectFiles(projectID)),
         getSprintsForProjectDetail: (projectID) => dispatch(getSprintsForProjectDetail(projectID)),

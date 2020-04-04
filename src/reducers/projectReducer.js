@@ -35,6 +35,10 @@ import {
     GET_PROJECTS_FOR_USER_START,
     GET_PROJECTS_FOR_USER_SUCCESS,
     GET_PROJECTS_FOR_USER_FAILURE,
+    GET_PROJECT_NOTES_REQUEST,
+    GET_PROJECT_NOTES_SUCCESS,
+    GET_PROJECT_NOTES_FAILURE,
+    GET_PROJECT_DESCRIPTION_REQUEST, GET_PROJECT_DESCRIPTION_SUCCESS, GET_PROJECT_DESCRIPTION_FAILURE,
 } from "../actions/types/projectTypes";
 
 const initialState = {
@@ -47,6 +51,8 @@ const initialState = {
     file: {},
     comments: [],
     replyComments: [],
+    projectDescription: "",
+    projectNotes: [],
     loading: false,
     error: "",
     deleteProjectFileLoading: false,
@@ -72,6 +78,24 @@ const projectReducer = (state = initialState, action) => {
                 error: "",
             };
         case GET_ALL_PROJECTS_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_PROJECT_NOTES_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_PROJECT_NOTES_SUCCESS:
+            return {
+                ...state,
+                projectNotes: action.projectNotes,
+                loading: false,
+                error: "",
+            };
+        case GET_PROJECT_NOTES_FAILURE:
             return {
                 ...state,
                 error: action.error,
@@ -143,6 +167,23 @@ const projectReducer = (state = initialState, action) => {
                 loading: false,
             };
         case GET_SINGLE_PROJECT_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_PROJECT_DESCRIPTION_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_PROJECT_DESCRIPTION_SUCCESS:
+            return {
+                ...state,
+                projectDescription: action.projectDescription,
+                loading: false,
+            };
+        case GET_PROJECT_DESCRIPTION_FAILURE:
             return {
                 ...state,
                 error: action.error,

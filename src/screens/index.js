@@ -33,6 +33,9 @@ export {
     ProjectMyTasks,
     ProjectNotes,
     ProjectSendComment,
+    EditProjectDescription,
+    AddProjectNote,
+    EditProjectNote,
 } from 'screens/project';
 
 export {

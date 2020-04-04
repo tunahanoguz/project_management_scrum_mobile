@@ -34,6 +34,9 @@ import {
     SprintList,
     StartSprint,
     SprintTaskList,
+    EditProjectDescription,
+    EditProjectNote,
+    AddProjectNote,
 } from 'screens';
 
 const ProjectNavigator = createStackNavigator(
@@ -42,7 +45,10 @@ const ProjectNavigator = createStackNavigator(
         CreateProject,
         ProjectDetail,
         ProjectDescription,
+        EditProjectDescription,
+        EditProjectNote,
         ProjectNotes,
+        AddProjectNote,
         ProjectMyTasks,
         CreateProjectComment,
         ProjectCommentList,

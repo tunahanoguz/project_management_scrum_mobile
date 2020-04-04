@@ -1,78 +1,54 @@
-import React, {Component} from 'react';
-import {
-    SafeAreaView,
-    View,
-    FlatList,
-    StyleSheet
-} from 'react-native';
-import {withNavigation} from 'react-navigation';
-import {TopBar} from 'components';
-import {Divider, Text} from "../../styles";
+import React, {useEffect} from 'react';
+import {TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from "react-redux";
+import {getProjectNotes} from "../../actions/projectActions";
+import {Container, Text} from "../../styles";
+import {AbsoluteButton, TopBar} from "../../components";
 
-class ProjectNotes extends Component {
-    notes = this.props.navigation.getParam('notes', []);
+const ProjectNotes = ({navigation}) => {
+    const projectID = navigation.getParam('projectID');
 
-    noteList = (item, index) => (
-        <View style={styles.noteContainer}>
-            <View style={styles.rowContainer}>
-                <Text bold>{index + 1}.</Text>
-                <Divider height={10} />
-                <Text medium>{item.note}</Text>
-            </View>
-        </View>
-    );
+    const dispatch = useDispatch();
+    const notes = useSelector(state => state.projectReducer.projectNotes);
 
-    notesContainer = () => {
-        if (this.notes.length > 0) {
-            return (
-                <FlatList
-                    data={this.notes}
-                    renderItem={({item, index}) => this.noteList(item, index)}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            );
-        } else {
-            return null;
-        }
+    useEffect(() => {
+        dispatch(getProjectNotes(projectID));
+    }, []);
+
+    const renderNotes = () => {
+        return notes.map((note, index) => (
+            <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate('EditProjectNote', {projectID, note: note.note, noteIndex: index})}
+            >
+                <Text medium>{`${index + 1}. ${note.note}`}</Text>
+            </TouchableOpacity>
+        ));
     };
 
-    render() {
-        return (
-            <SafeAreaView style={styles.container}>
-                <TopBar isBack={true}/>
+    return (
+        <Container>
+            <TopBar isBack={true}/>
 
-                <View style={styles.innerContainer}>
-                    {this.notesContainer()}
-                </View>
-            </SafeAreaView>
-        );
-    }
-}
+            <Container space>
+                {renderNotes()}
+            </Container>
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        backgroundColor: 'white',
-    },
-    innerContainer: {
-        flexDirection: 'column',
-        paddingHorizontal: 30,
-    },
-    noteContainer: {
-        paddingVertical: 20,
-        borderBottomWidth: 2,
-        borderBottomColor: 'rgba(0, 0, 0, 0.05)',
-    },
-    rowContainer: {
-        flexDirection: 'row',
-    },
-    indexText: {
-        fontFamily: 'Poppins-Medium',
-        fontWeight: 'bold',
-        marginRight: 6,
-    },
-});
+            <AbsoluteButton
+                icon='plus'
+                backgroundColor='indigo'
+                pressFunc={() => navigation.navigate('AddProjectNote', {projectID})}
+                style={{
+                    bottom: 10,
+                    right: 10,
+                }}
+            />
+        </Container>
+    );
+};
 
-export default withNavigation(ProjectNotes);
+// const styles = StyleSheet.create({
+//
+// });
+
+export default ProjectNotes;

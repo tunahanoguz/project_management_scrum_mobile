@@ -33,6 +33,20 @@ import {
     GET_PROJECTS_FOR_USER_START,
     GET_PROJECTS_FOR_USER_SUCCESS,
     GET_PROJECTS_FOR_USER_FAILURE,
+    EDIT_PROJECT_DESCRIPTION_REQUEST,
+    EDIT_PROJECT_DESCRIPTION_SUCCESS,
+    EDIT_PROJECT_DESCRIPTION_FAILURE,
+    ADD_PROJECT_NOTE_REQUEST,
+    ADD_PROJECT_NOTE_SUCCESS,
+    ADD_PROJECT_NOTE_FAILURE,
+    GET_PROJECT_NOTES_REQUEST,
+    GET_PROJECT_NOTES_SUCCESS,
+    GET_PROJECT_NOTES_FAILURE,
+    EDIT_PROJECT_NOTE_REQUEST,
+    EDIT_PROJECT_NOTE_SUCCESS,
+    EDIT_PROJECT_NOTE_FAILURE,
+    GET_PROJECT_DESCRIPTION_REQUEST,
+    GET_PROJECT_DESCRIPTION_SUCCESS, GET_PROJECT_DESCRIPTION_FAILURE,
 } from './types/projectTypes';
 
 export const getAllProjects = (teamIDs) => dispatch => {
@@ -145,6 +159,34 @@ export const getSingleProject = (projectID) => dispatch => {
         .catch(() => dispatch({type: GET_SINGLE_PROJECT_FAILURE, error: "Proje getirilemedi."}));
 };
 
+export const getProjectDescription = (projectID) => dispatch => {
+    dispatch({type: GET_PROJECT_DESCRIPTION_REQUEST});
+
+    const projectRef = firestore().collection('projects');
+    projectRef.doc(projectID).get()
+        .then(doc => {
+            const data = doc.data();
+            const projectDescription = data.description;
+            dispatch({type: GET_PROJECT_DESCRIPTION_SUCCESS, projectDescription});
+        })
+        .catch(() => dispatch({type: GET_PROJECT_DESCRIPTION_FAILURE, error: 'Proje notları getirilemedi.'}));
+};
+
+export const getProjectNotes = (projectID) => dispatch => {
+    dispatch({type: GET_PROJECT_NOTES_REQUEST});
+
+    console.log("id" + projectID);
+    const projectRef = firestore().collection('projects');
+    projectRef.doc(projectID).get()
+        .then(doc => {
+            const data = doc.data();
+            console.log(doc);
+            const projectNotes = data.notes;
+            dispatch({type: GET_PROJECT_NOTES_SUCCESS, projectNotes});
+        })
+        .catch(() => dispatch({type: GET_PROJECT_NOTES_FAILURE, error: 'Proje notları getirilemedi.'}));
+};
+
 export const createProject = (name, description, notes, createdAt, startDate, finishDate, teamID, teamIDs, userID) => dispatch => {
     firestore().collection('projects').add({
         name,
@@ -167,6 +209,51 @@ export const deleteProject = (teamIDs, projectID) => dispatch => {
     projectRef.doc(projectID).delete()
         .then(() => dispatch(getAllProjects(teamIDs)))
         .catch(() => dispatch({type: DELETE_PROJECT_FAILURE}));
+};
+
+export const editProjectDescription = (projectID, description) => dispatch => {
+    dispatch({type: EDIT_PROJECT_DESCRIPTION_REQUEST});
+
+    const projectRef = firestore().collection('projects');
+    projectRef.doc(projectID).update({
+        description,
+    })
+        .then(() => {
+            dispatch({type: EDIT_PROJECT_DESCRIPTION_SUCCESS});
+            dispatch(getSingleProject(projectID));
+            dispatch(getProjectDescription(projectID));
+        })
+        .catch(() => dispatch({type: EDIT_PROJECT_DESCRIPTION_FAILURE}));
+};
+
+export const addProjectNote = (projectID, userID, notes) => dispatch => {
+    dispatch({type: ADD_PROJECT_NOTE_REQUEST});
+
+    const projectRef = firestore().collection('projects');
+    projectRef.doc(projectID).update({
+        notes,
+    })
+        .then(() => {
+            dispatch({type: ADD_PROJECT_NOTE_SUCCESS});
+            dispatch(getProjectNotes(projectID));
+            dispatch(getSingleProject(projectID));
+        })
+        .catch(() => dispatch({type: ADD_PROJECT_NOTE_FAILURE}));
+};
+
+export const editProjectNote = (projectID, notes) => dispatch => {
+    dispatch({type: EDIT_PROJECT_NOTE_REQUEST});
+
+    const projectRef = firestore().collection('projects');
+    projectRef.doc(projectID).update({
+        notes,
+    })
+        .then(() => {
+            dispatch({type: EDIT_PROJECT_NOTE_SUCCESS});
+            dispatch(getProjectNotes(projectID));
+            dispatch(getSingleProject(projectID));
+        })
+        .catch(() => dispatch({type: EDIT_PROJECT_NOTE_FAILURE}));
 };
 
 // export const uploadProjectFile = (fileURL) => dispatch => {

@@ -25,6 +25,7 @@ class ExampleInput extends Component {
             secureTextEntry,
             isEmail,
             errorMessage,
+            isMultiline,
         } = this.props;
 
         return (
@@ -42,6 +43,7 @@ class ExampleInput extends Component {
                         keyboardType={isEmail ? 'email-address' : 'default'}
                         autoCapitalize={isEmail ? 'none' : 'words'}
                         autoCompleteType='off'
+                        multiline={isMultiline}
                     />
                 </View>
                 {this.renderErrorMessage(errorMessage)}
@@ -97,6 +99,7 @@ ExampleInput.propTypes = {
     setFieldTouched: PropTypes.func.isRequired,
     secureTextEntry: PropTypes.bool,
     isEmail: PropTypes.bool,
+    isMultiline: PropTypes.bool,
 };
 
 export default ExampleInput;

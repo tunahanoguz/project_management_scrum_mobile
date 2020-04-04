@@ -12,6 +12,9 @@ import ProjectList from "./ProjectList";
 import ProjectMyTasks from "./ProjectMyTasks";
 import ProjectNotes from "./ProjectNotes";
 import ProjectSendComment from "./ProjectSendComment";
+import EditProjectDescription from "./EditProjectDescription";
+import AddProjectNote from "./AddProjectNote";
+import EditProjectNote from "./EditProjectNote";
 
 export {
     CreateProject,
@@ -28,4 +31,7 @@ export {
     ProjectMyTasks,
     ProjectNotes,
     ProjectSendComment,
+    EditProjectDescription,
+    AddProjectNote,
+    EditProjectNote,
 };
