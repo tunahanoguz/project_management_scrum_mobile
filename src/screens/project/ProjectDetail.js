@@ -305,7 +305,7 @@ const mapStateToProps = state => {
         sprintLoading: state.sprintReducer.loading,
         sprintError: state.sprintReducer.error,
         commentLoading: state.projectReducer.loading,
-        commentError: state.projectReducer.error,
+        commentError: state.projectReducer.commentError,
         sprints: state.sprintReducer.sprints,
         tasks: state.taskReducer.tasks,
         userIDs: state.teamReducer.userIDs,

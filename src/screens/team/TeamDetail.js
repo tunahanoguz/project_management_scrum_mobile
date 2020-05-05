@@ -128,7 +128,7 @@ class TeamDetail extends Component {
                     <Divider height={10} />
 
                     <TouchableOpacity onPress={() => navigation.navigate('TeamDescription', {teamID: id})}>
-                        <Text medium>{description?.length > 80 ? description?.substring(0, 80) + "..." : description}</Text>
+                        <Text medium numberOfLines={1}>description</Text>
                     </TouchableOpacity>
                 </InnerContainer>
 

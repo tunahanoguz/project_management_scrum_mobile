@@ -19,7 +19,7 @@ import {getAllProjectComments} from "../../actions/projectActions";
 const ProjectCommentList = ({navigation}) => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.projectReducer.loading);
-    const error = useSelector(state => state.projectReducer.error);
+    const error = useSelector(state => state.projectReducer.commentError);
     const comments = useSelector(state => state.projectReducer.comments);
 
     const projectID = navigation.getParam('projectID', "");

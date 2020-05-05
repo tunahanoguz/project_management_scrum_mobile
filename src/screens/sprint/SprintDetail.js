@@ -109,7 +109,7 @@ const SprintDetail = ({navigation}) => {
 
                     <DirectionContainer>
                         <Text medium size={18}>Proje</Text>
-                        <Text normal size={16}>{project.name}</Text>
+                        <Text normal size={14}>{project.name}</Text>
                     </DirectionContainer>
                 </DirectionContainer>
             </InnerContainer>

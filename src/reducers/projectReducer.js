@@ -55,6 +55,7 @@ const initialState = {
     projectNotes: [],
     loading: false,
     error: "",
+    commentError: "",
     deleteProjectFileLoading: false,
     deleteProjectFileSuccess: false,
     deleteProjectFileFailure: "",
@@ -256,7 +257,7 @@ const projectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                error: action.error,
+                commentError: action.error,
             };
         case GET_PROJECT_REPLY_COMMENTS_START:
             return {
