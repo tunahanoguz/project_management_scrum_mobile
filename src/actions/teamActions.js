@@ -18,9 +18,26 @@ import {
     GET_TEAMS_FOR_HOME_START,
     GET_TEAMS_FOR_HOME_SUCCESS,
     GET_TEAMS_FOR_HOME_FAILURE,
-    GET_TEAM_USERS_ID_START, GET_TEAM_USERS_ID_SUCCESS, GET_TEAM_USERS_ID_FAILURE,
+    GET_TEAM_USERS_ID_START,
+    GET_TEAM_USERS_ID_SUCCESS,
+    GET_TEAM_USERS_ID_FAILURE,
+    GET_TEAM_DESCRIPTION_REQUEST,
+    GET_TEAM_DESCRIPTION_SUCCESS,
+    GET_TEAM_DESCRIPTION_FAILURE,
+    EDIT_TEAM_DESCRIPTION_REQUEST,
+    EDIT_TEAM_DESCRIPTION_SUCCESS,
+    EDIT_TEAM_DESCRIPTION_FAILURE,
 } from "./types/teamTypes";
 import {createNotification, sendNotifications} from "./notificationActions";
+import {
+    EDIT_PROJECT_DESCRIPTION_FAILURE,
+    EDIT_PROJECT_DESCRIPTION_REQUEST,
+    EDIT_PROJECT_DESCRIPTION_SUCCESS,
+    GET_PROJECT_DESCRIPTION_FAILURE,
+    GET_PROJECT_DESCRIPTION_REQUEST,
+    GET_PROJECT_DESCRIPTION_SUCCESS
+} from "./types/projectTypes";
+import {getProjectDescription, getSingleProject} from "./projectActions";
 
 export const getSingleTeam = teamID => dispatch => {
     const teamsRef = firestore().collection('teams');
@@ -184,4 +201,32 @@ export const getTeamUserIDs = (teamID) => dispatch => {
             dispatch({type: GET_TEAM_USERS_ID_SUCCESS, userIDs});
         })
         .catch(() => dispatch({type: GET_TEAM_USERS_ID_FAILURE, error: ""}));
+};
+
+export const getTeamDescription = (teamID) => dispatch => {
+    dispatch({type: GET_TEAM_DESCRIPTION_REQUEST});
+
+    const teamRef = firestore().collection('teams');
+    teamRef.doc(teamID).get()
+        .then(doc => {
+            const data = doc.data();
+            const teamDescription = data.description;
+            dispatch({type: GET_TEAM_DESCRIPTION_SUCCESS, teamDescription});
+        })
+        .catch(() => dispatch({type: GET_TEAM_DESCRIPTION_FAILURE, error: 'Proje notları getirilemedi.'}));
+};
+
+export const editTeamDescription = (teamID, description) => dispatch => {
+    dispatch({type: EDIT_TEAM_DESCRIPTION_REQUEST});
+
+    const teamRef = firestore().collection('teams');
+    teamRef.doc(teamID).update({
+        description,
+    })
+        .then(() => {
+            dispatch({type: EDIT_TEAM_DESCRIPTION_SUCCESS});
+            dispatch(getSingleTeam(teamID));
+            dispatch(getTeamDescription(teamID));
+        })
+        .catch(() => dispatch({type: EDIT_TEAM_DESCRIPTION_FAILURE}));
 };

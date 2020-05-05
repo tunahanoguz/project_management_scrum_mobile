@@ -18,12 +18,19 @@ class ProjectList extends Component {
             animatedValue: new Animated.Value(sizes.deviceHeight),
             isActionsModalOpen: false,
             selectedProjectID: "",
+            // index: 0,
         };
     }
 
     componentDidMount() {
         this.props.getAllProjects(this.props.teamIDs);
     }
+
+    // componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    //     if (prevState.index !== this.state.index){
+    //         this.props.getAllProjects(this.props.teamIDs, this.state.index);
+    //     }
+    // }
 
     toggleActionsContainer = (projectID) => {
         this.setState(state => ({isActionsModalOpen: !state.isActionsModalOpen}));
@@ -40,6 +47,13 @@ class ProjectList extends Component {
         this.props.navigation.navigate('CreateProject');
     };
 
+    endReachedFunc = () => {
+        console.log("Hey!");
+        if (this.state.index < this.props.teamIDs?.length){
+            this.setState(value => ({index: value.index + 10}));
+        }
+    };
+
     renderProjectList = (loading, error, projects) => {
         return (
             <Container flex={0.8}>
@@ -51,6 +65,7 @@ class ProjectList extends Component {
                     type='project'
                     isFunctioned={true}
                     modalFunc={this.toggleActionsContainer}
+                    endReachedFunc={this.endReachedFunc}
                 />
             </Container>
         );

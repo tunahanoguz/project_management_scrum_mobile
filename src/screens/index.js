@@ -72,4 +72,5 @@ export {
     TeamList,
     TeamMembers,
     TeamProjectsList,
+    EditTeamDescription,
 } from 'screens/team';

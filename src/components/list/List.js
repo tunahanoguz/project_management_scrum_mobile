@@ -11,7 +11,7 @@ import moment from "moment";
 import RNFetchBlob from "rn-fetch-blob";
 import uuid from "rn-fetch-blob/utils/uuid";
 
-const List = ({navigation, loading, error, data, type, icon, orderColor, isFunctioned, modalFunc}) => {
+const List = ({navigation, loading, error, data, type, icon, orderColor, isFunctioned, modalFunc, endReachedFunc}) => {
 
     const user = useSelector(state => state.authReducer.user);
 
@@ -35,12 +35,14 @@ const List = ({navigation, loading, error, data, type, icon, orderColor, isFunct
     };
 
     const renderBottomTitle = (item) => {
-        if (type === 'project' || type === 'sprint') {
+        if (type === 'project') {
             return item.startDate ? "Başladı" : "Başlamadı";
+        } else if (type === 'sprint') { 
+            return item.finishDate ? "Bitti" : "Henüz başlamadı veya devam ediyor";
         } else if (type === 'team') {
             return `${item.members?.length} Üye`;
         } else if (type === 'task') {
-            return item.priority === 0 ? "Başlamadı" : (item.priority === 1 ? "Devam Ediyor" : "Bitti");
+            return item.priority === 0 ? "Orta öncelikli" : (item.priority === 1 ? "Yüksek öncelikli" : "Düşük öncelikli");
         } else if (type === 'comment'){
             return renderDate(item?.createdAt.toDate());
         } else if (type === 'file'){
@@ -110,6 +112,10 @@ const List = ({navigation, loading, error, data, type, icon, orderColor, isFunct
                 return 'briefcase';
             } else if (item.type === 'team'){
                 return 'users';
+            } else if (item.type === 'task'){
+                return 'crosshair';
+            } else {
+                return 'wind';
             }
         }
     };
@@ -151,6 +157,8 @@ const List = ({navigation, loading, error, data, type, icon, orderColor, isFunct
                         }}
                         keyExtractor={(item, index) => index.toString()}
                         showsVerticalScrollIndicator={false}
+                        onEndReached={endReachedFunc}
+                        onEndReachedThreshold={1}
                     />
                 );
             }
@@ -173,6 +181,7 @@ List.propTypes = {
     orderColor: PropTypes.string.isRequired,
     isFunctioned: PropTypes.bool.isRequired,
     modalFunc: PropTypes.func,
+    endReachedFunc: PropTypes.func,
 };
 
 export default withNavigation(List);

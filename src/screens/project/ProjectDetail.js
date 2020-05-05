@@ -110,23 +110,24 @@ class ProjectDetail extends Component {
                     </InnerContainer>
                 </TouchableOpacity>
 
-
                 <Divider height={20}/>
 
                 <Text medium>Notlar</Text>
 
                 <Divider height={10}/>
 
-                <TouchableOpacity onPress={() => this.goToProjectNotes(projectID)}>
-                    <InnerContainer>
-                        {notes.map((note, index) => {
-                            if (index < 3) {
-                                return <TextMedium key={index}>{note.note}</TextMedium>;
-                            } else {
-                            }
-                        })}
-                    </InnerContainer>
-                </TouchableOpacity>
+                {notes && notes.length !== 0 && (
+                    <TouchableOpacity onPress={() => this.goToProjectNotes(projectID)}>
+                        <InnerContainer>
+                            {notes.map((note, index) => {
+                                if (index < 3) {
+                                    return <TextMedium key={index} numberOfLines={1}>{note.note}</TextMedium>;
+                                } else {
+                                }
+                            })}
+                        </InnerContainer>
+                    </TouchableOpacity>
+                )}
             </Container>
         );
     };

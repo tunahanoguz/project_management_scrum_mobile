@@ -10,7 +10,7 @@ import {
     Middle,
     RoundedButton,
 } from 'components';
-import {Container, Title} from "../../styles";
+import {Container, Title, Text} from "../../styles";
 import {changeProfilePhoto} from "../../actions/authActions";
 
 class EditProfile extends Component {
@@ -81,6 +81,8 @@ class EditProfile extends Component {
             <Divider height={20} />
             <FileInput iconName='image' text="Bir profil resmi seçin" setImage={this.setImage}/>
             <RoundedButton color='purple' icon='arrow-right' pressFunc={() => this.changeProfilePicture(this.state.imageURL)}/>
+            <Divider height={20} />
+            <Text>Profil resmi yüklenirken lütfen bekleyiniz.</Text>
         </Fragment>
     );
 

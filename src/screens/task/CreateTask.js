@@ -60,7 +60,7 @@ class CreateTask extends Component {
                                 <Fragment>
                                     <ExampleInput
                                         value={values.task}
-                                        placeholder="Görev (*)"
+                                        placeholder="İş (*)"
                                         name='task'
                                         iconName='target'
                                         handleChange={handleChange}

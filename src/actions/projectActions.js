@@ -52,6 +52,13 @@ import {
 export const getAllProjects = (teamIDs) => dispatch => {
     dispatch({type: GET_ALL_PROJECTS_START});
 
+    // let limitedTeamIDs = [];
+    // if (teamIDs.length > 10){
+    //     limitedTeamIDs.push(teamIDs.slice(index, index + 9));
+    // } else {
+    //     limitedTeamIDs = teamIDs;
+    // }
+
     firestore().collection('projects').where('teamID', 'in', teamIDs).orderBy('createdAt', 'desc').get()
         .then(snapshot => {
             if (snapshot.empty){
@@ -80,8 +87,9 @@ export const getAllProjects = (teamIDs) => dispatch => {
 export const getProjectsForHomeScreen = (teamIDs) => dispatch => {
     dispatch({type: GET_ALL_PROJECTS_FOR_HOME_START});
 
+    const limitedTeamIDs = teamIDs.slice(0, 9);
     const projectRef = firestore().collection('projects');
-    const query = projectRef.where('teamID', 'in', teamIDs).orderBy('createdAt', 'desc').limit(3);
+    const query = projectRef.where('teamID', 'in', limitedTeamIDs).orderBy('createdAt', 'desc').limit(3);
     query.get()
         .then(snapshot => {
             if (snapshot.empty)
@@ -154,6 +162,7 @@ export const getSingleProject = (projectID) => dispatch => {
                 id: doc.id,
                 ...doc.data(),
             };
+            // console.log(project);
             dispatch({type: GET_SINGLE_PROJECT_SUCCESS, project})
         })
         .catch(() => dispatch({type: GET_SINGLE_PROJECT_FAILURE, error: "Proje getirilemedi."}));

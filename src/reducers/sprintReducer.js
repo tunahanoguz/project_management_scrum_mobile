@@ -34,6 +34,7 @@ const sprintReducer = (state = initialState, action) => {
                 ...state,
                 sprints: action.sprints,
                 loading: false,
+                error: "",
             };
         case GET_ALL_SPRINTS_FAILURE:
             return {
@@ -52,6 +53,7 @@ const sprintReducer = (state = initialState, action) => {
                 ...state,
                 sprints: action.sprints,
                 loading: false,
+                error: "",
             };
         case GET_SPRINTS_FOR_PROJECT_FAILURE:
             return {
@@ -70,6 +72,7 @@ const sprintReducer = (state = initialState, action) => {
                 ...state,
                 homeSprints: action.sprints,
                 loading: false,
+                error: "",
             };
         case GET_SPRINTS_FOR_HOME_FAILURE:
             return {
@@ -87,6 +90,7 @@ const sprintReducer = (state = initialState, action) => {
                 ...state,
                 sprint: action.sprint,
                 loading: false,
+                error: "",
             };
         case GET_SINGLE_SPRINT_FAILURE:
             return {
@@ -104,10 +108,12 @@ const sprintReducer = (state = initialState, action) => {
                 ...state,
                 tasks: action.tasks,
                 loading: false,
+                error: "",
             };
         case GET_SPRINT_TASKS_FAILURE:
             return {
                 ...state,
+                tasks: [],
                 error: action.error,
                 loading: false,
             };

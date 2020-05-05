@@ -165,6 +165,7 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 project: action.project,
                 loading: false,
+                error: "",
             };
         case GET_SINGLE_PROJECT_FAILURE:
             return {
@@ -182,6 +183,7 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 projectDescription: action.projectDescription,
                 loading: false,
+                error: "",
             };
         case GET_PROJECT_DESCRIPTION_FAILURE:
             return {
@@ -196,6 +198,7 @@ const projectReducer = (state = initialState, action) => {
         case DELETE_PROJECT_SUCCESS:
             return {
                 ...state,
+                error: "",
             };
         case DELETE_PROJECT_FAILURE:
             return {
@@ -211,6 +214,7 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 files: action.files,
                 loading: false,
+                error: "",
             };
         case GET_ALL_PROJECT_FILES_FAILURE:
             return {
@@ -228,6 +232,7 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 deleteProjectFileSuccess: true,
                 deleteProjectFileLoading: false,
+                error: "",
             };
         case DELETE_PROJECT_FILE_FAILURE:
             return {
@@ -245,6 +250,7 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 comments: action.comments,
                 loading: false,
+                error: "",
             };
         case GET_ALL_PROJECT_COMMENTS_ERROR:
             return {

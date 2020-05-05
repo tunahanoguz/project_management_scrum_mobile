@@ -75,7 +75,6 @@ export const getAllTasks = (projectIDs) => dispatch => {
 
 export const getSingleTask = (taskID) => dispatch => {
     dispatch({type: GET_SINGLE_TASK_START});
-    console.log("Task ID: " + taskID);
 
     const taskRef = firestore().collection('task');
     const taskDoc = taskRef.doc(taskID);
@@ -85,8 +84,6 @@ export const getSingleTask = (taskID) => dispatch => {
                 id: doc.id,
                 ...doc.data(),
             };
-
-            console.log(task);
 
             dispatch({type: GET_SINGLE_TASK_SUCCESS, task});
         })

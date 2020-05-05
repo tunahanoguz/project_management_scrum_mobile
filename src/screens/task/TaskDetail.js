@@ -50,6 +50,8 @@ const TaskDetail = ({navigation}) => {
         dispatch(getAllTaskComments(taskID));
     }, []);
 
+    console.log("OuterProject: ", project);
+
     const goToStartTask = () => {
         navigation.navigate('StartTask', {project: project, task: taskObj});
     };
@@ -84,8 +86,9 @@ const TaskDetail = ({navigation}) => {
     };
 
     const projectDetail = () => {
+        console.log("Project: ", project);
         const {name} = project;
-        if (projectID !== null){
+        if (projectID !== null && Object.keys(project).length > 1){
             return (
                 <InnerContainer>
                     <Text medium>Proje: </Text>
@@ -139,7 +142,7 @@ const TaskDetail = ({navigation}) => {
 
                 <Divider height={10}/>
 
-                {projectDetail()}
+                {projectDetail(project)}
 
                 <Divider height={10}/>
 

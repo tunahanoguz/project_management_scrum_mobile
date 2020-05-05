@@ -108,17 +108,17 @@ const Home = (props) => {
         Animated.parallel([
             Animated.timing(animatedValueFirst, {
                 toValue: toValueFirst,
-                duration: 1000,
+                duration: 300,
                 useNativeDriver: true,
             }),
             Animated.timing(animatedValueSecond, {
                 toValue: toValueSecond,
-                duration: 1000,
+                duration: 300,
                 useNativeDriver: true,
             }),
             Animated.timing(animatedValueThird, {
                 toValue: toValueThird,
-                duration: 1000,
+                duration: 300,
                 useNativeDriver: true,
             }),
         ]).start();

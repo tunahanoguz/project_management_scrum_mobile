@@ -84,8 +84,9 @@ export const getSprintsForProjectDetail = (projectID) => dispatch => {
 export const getSprintsForHomeScreen = (projectIDs) => dispatch => {
     dispatch({type: GET_SPRINTS_FOR_HOME_START});
 
+    const limitedProjectIDs = projectIDs.slice(0, 9);
     const sprintRef = firestore().collection('sprint');
-    const sprintQuery = sprintRef.where('projectID', 'in', projectIDs).limit(3);
+    const sprintQuery = sprintRef.where('projectID', 'in', limitedProjectIDs).limit(3);
     sprintQuery.get()
         .then(snapshot => {
             if (snapshot.empty){

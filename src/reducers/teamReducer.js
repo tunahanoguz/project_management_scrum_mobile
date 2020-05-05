@@ -18,6 +18,12 @@ import {
     GET_TEAM_USERS_ID_START,
     GET_TEAM_USERS_ID_SUCCESS,
     GET_TEAM_USERS_ID_FAILURE,
+    GET_TEAM_DESCRIPTION_REQUEST,
+    GET_TEAM_DESCRIPTION_SUCCESS,
+    GET_TEAM_DESCRIPTION_FAILURE,
+    // EDIT_TEAM_DESCRIPTION_REQUEST,
+    // EDIT_TEAM_DESCRIPTION_SUCCESS,
+    // EDIT_TEAM_DESCRIPTION_FAILURE,
 } from "../actions/types/teamTypes";
 
 const initialState = {
@@ -28,6 +34,7 @@ const initialState = {
     teamIDs: [],
     teamMembers: [],
     userIDs: [],
+    teamDescription: "",
     error: "",
     loading: false,
 };
@@ -135,6 +142,24 @@ const teamReducer = (state = initialState, action) => {
                 loading: false,
             };
         case GET_TEAM_USERS_ID_FAILURE:
+            return {
+                ...state,
+                error: action.error,
+                loading: false,
+            };
+        case GET_TEAM_DESCRIPTION_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case GET_TEAM_DESCRIPTION_SUCCESS:
+            return {
+                ...state,
+                teamDescription: action.teamDescription,
+                loading: false,
+                error: "",
+            };
+        case GET_TEAM_DESCRIPTION_FAILURE:
             return {
                 ...state,
                 error: action.error,

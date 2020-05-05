@@ -206,7 +206,7 @@ const SprintDetail = ({navigation}) => {
     };
 
     const renderFinishSprintButton = () => {
-        if (!finishDate) {
+        if (!finishDate && startDate) {
             if (createdBy === authUser.uid){
                 return (
                     <Button

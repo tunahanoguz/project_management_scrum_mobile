@@ -1,5 +1,7 @@
-import React from 'react';
-import {TopBar} from "components";
+import React, {useEffect} from 'react';
+import {AbsoluteButton, TopBar} from "components";
+import {useDispatch, useSelector} from "react-redux";
+import {getTeamDescription, editTeamDescription} from "../../actions/teamActions";
 import {
     Container,
     Divider,
@@ -9,7 +11,15 @@ import {
 } from "../../styles";
 
 const TeamDescription = ({navigation}) => {
-    const description = navigation.getParam('description', "");
+    const dispatch = useDispatch();
+    const teamID = navigation.getParam('teamID', "");
+    const description = useSelector(reducer => reducer.teamReducer.teamDescription);
+
+    useEffect(() => {
+        if (teamID){
+            dispatch(getTeamDescription(teamID));
+        }
+    }, [teamID]);
 
     return (
         <Container>
@@ -24,6 +34,16 @@ const TeamDescription = ({navigation}) => {
                     <Text normal>{description}</Text>
                 </InnerContainer>
             </Container>
+
+            <AbsoluteButton
+                icon='edit'
+                backgroundColor='indigo'
+                pressFunc={() =>  navigation.navigate('EditTeamDescription', {teamID, description})}
+                style={{
+                    bottom: 10,
+                    right: 10,
+                }}
+            />
         </Container>
     );
 };

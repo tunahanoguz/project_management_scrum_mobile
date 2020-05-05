@@ -29,13 +29,13 @@ class ProjectActionsModal extends Component {
                             transform: [{translateY: animatedValue}],
                         }}>
                             <ModalButtonContainer>
-                                <ModalButton onPress={() => console.log("asdasdasd")}>
-                                    <Icon name='edit' size={24} color='white'/>
-                                    <Divider height={10} />
-                                    <Text style={[fonts.mediumText, {color: 'white'}]}>Projeyi düzenle</Text>
-                                </ModalButton>
+                                {/*<ModalButton onPress={() => console.log("asdasdasd")}>*/}
+                                {/*    <Icon name='edit' size={24} color='white'/>*/}
+                                {/*    <Divider height={10} />*/}
+                                {/*    <Text style={[fonts.mediumText, {color: 'white'}]}>Projeyi düzenle</Text>*/}
+                                {/*</ModalButton>*/}
 
-                                <Divider width={30} />
+                                {/*<Divider width={30} />*/}
 
                                 <ModalButton onPress={() => this.deleteProject(toggleFunc, teamIDs, selectedProjectID, deleteProject)}>
                                     <Icon name='trash-2' size={24} color='white'/>

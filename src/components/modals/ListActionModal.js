@@ -44,13 +44,13 @@ class ListActionModal extends Component {
                             transform: [{translateY: animatedValue}],
                         }}>
                             <ModalButtonContainer>
-                                <ModalButton onPress={() => editAction()}>
-                                    <Icon name='edit' size={24} color='white'/>
-                                    <Divider height={10} />
-                                    <Text style={[fonts.mediumText, {color: 'white'}]}>{editText}</Text>
-                                </ModalButton>
+                                {/*<ModalButton onPress={() => editAction()}>*/}
+                                {/*    <Icon name='edit' size={24} color='white'/>*/}
+                                {/*    <Divider height={10} />*/}
+                                {/*    <Text style={[fonts.mediumText, {color: 'white'}]}>{editText}</Text>*/}
+                                {/*</ModalButton>*/}
 
-                                <Divider width={30} />
+                                {/*<Divider width={30} />*/}
 
                                 <ModalButton onPress={() => deleteAction()}>
                                     <Icon name='trash-2' size={24} color='white'/>

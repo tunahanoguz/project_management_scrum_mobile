@@ -7,6 +7,7 @@ import {
     TeamProjectsList,
     CreateTeam,
     UserProfile,
+    EditTeamDescription,
 } from 'screens';
 
 const TeamNavigator = createStackNavigator(
@@ -18,6 +19,7 @@ const TeamNavigator = createStackNavigator(
         TeamProjectsList,
         CreateTeam,
         UserProfile,
+        EditTeamDescription,
     },
     {
         initialRouteName: 'TeamList',

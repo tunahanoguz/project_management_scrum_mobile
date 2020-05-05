@@ -31,7 +31,7 @@ const NotificationList = () => {
         <Container>
             <TopBar
                 isBack={false}
-                title="Takımlar"
+                title="Bildirimler"
             />
 
             <Container space>
