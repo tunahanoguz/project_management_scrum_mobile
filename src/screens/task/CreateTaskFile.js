@@ -12,7 +12,7 @@ import {
     RoundedButton,
 } from 'components';
 import {colors, Container, Divider, Text, Title} from "../../styles";
-import {taskFileDescription, taskFileName} from "../../validationSchema";
+import {taskFileName} from "../../validationSchema";
 import {createTaskFile} from "../../actions/taskActions";
 
 
@@ -25,7 +25,6 @@ const CreateTaskFile = ({navigation}) => {
 
     const validationSchema = yup.object().shape({
         name: taskFileName,
-        description: taskFileDescription,
     });
 
     const openFilePicker = async () => {
@@ -45,7 +44,7 @@ const CreateTaskFile = ({navigation}) => {
         }
     };
 
-    const uploadFile = async (fileName, fileDescription, fileURL, taskID) => {
+    const uploadFile = async (fileName, fileURL, taskID) => {
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
@@ -69,7 +68,6 @@ const CreateTaskFile = ({navigation}) => {
             ref.getDownloadURL().then(downloadURL => {
                 const file = {
                     fileName,
-                    fileDescription,
                     contentType,
                     size,
                     downloadURL,
@@ -88,7 +86,7 @@ const CreateTaskFile = ({navigation}) => {
         Keyboard.dismiss();
 
         if (fileUri !== ""){
-            uploadFile(values.name, values.description, fileUri, taskID)
+            uploadFile(values.name, fileUri, taskID)
                 .then(() => navigation.navigate('TaskFileList', {taskID}));
         }
     };
@@ -105,7 +103,7 @@ const CreateTaskFile = ({navigation}) => {
                 <Divider height={10}/>
 
                 <Formik
-                    initialValues={{name: "", description: ""}}
+                    initialValues={{name: ""}}
                     validationSchema={validationSchema}
                     onSubmit={values => handleSubmit(values)}
                 >
@@ -120,16 +118,6 @@ const CreateTaskFile = ({navigation}) => {
                                     handleChange={handleChange}
                                     setFieldTouched={setFieldTouched}
                                     errorMessage={touched.name && errors.name ? errors.name: ""}
-                                />
-
-                                <ExampleInput
-                                    value={values.description}
-                                    placeholder="Dosya açıklaması"
-                                    name='description'
-                                    iconName='align-left'
-                                    handleChange={handleChange}
-                                    setFieldTouched={setFieldTouched}
-                                    errorMessage={touched.description && errors.description ? errors.description: ""}
                                 />
 
                                 <TouchableOpacity

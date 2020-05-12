@@ -66,6 +66,7 @@ export const getAllUsers = () => dispatch => {
 export const login = (email, password) => dispatch => {
     auth().signInWithEmailAndPassword(email, password)
         .then(user => {
+            console.log(user);
             dispatch({type: LOGIN_SUCCESS, authState: true, user: user.user});
         })
         .catch(() => dispatch({type: LOGIN_FAILURE, error: "Kullanıcı girişi yapılamadı."}));

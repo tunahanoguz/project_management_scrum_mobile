@@ -79,23 +79,23 @@ const UserProfile = ({navigation}) => {
         </InnerContainer>
     );
 
-    const renderUserProjects = () => (
-        <InnerContainer>
-            <ProgressCircle
-                style={{ height: 60 }}
-                progress={finishedProjectsCount() / projects?.length}
-                progressColor={'indigo'}
-                strokeWidth={8}
-            />
-
-            <Divider height={20} />
-
-            <DirectionContainer alignCenter>
-                <Text medium size={14}>Toplamda {projects?.length} iş üzerinde çalışmış.</Text>
-                <Text medium size={14}>{finishedProjectsCount()} tanesi bitmiş.</Text>
-            </DirectionContainer>
-        </InnerContainer>
-    );
+    // const renderUserProjects = () => (
+    //     <InnerContainer>
+    //         <ProgressCircle
+    //             style={{ height: 60 }}
+    //             progress={finishedProjectsCount() / projects?.length}
+    //             progressColor={'indigo'}
+    //             strokeWidth={8}
+    //         />
+    //
+    //         <Divider height={20} />
+    //
+    //         <DirectionContainer alignCenter>
+    //             <Text medium size={14}>Toplamda {projects?.length} iş üzerinde çalışmış.</Text>
+    //             <Text medium size={14}>{finishedProjectsCount()} tanesi bitmiş.</Text>
+    //         </DirectionContainer>
+    //     </InnerContainer>
+    // );
 
     return (
         <Container>
@@ -108,9 +108,9 @@ const UserProfile = ({navigation}) => {
 
                 {renderUserTasks()}
 
-                <Divider height={30} />
-
-                {renderUserProjects()}
+                {/*<Divider height={30} />*/}
+                {/**/}
+                {/*{renderUserProjects()}*/}
             </Container>
         </Container>
     );

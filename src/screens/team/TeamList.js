@@ -89,6 +89,8 @@ class TeamList extends Component {
                     </Container>
                 </Container>
 
+                {console.log(teams)}
+
                 <ListActionModal
                     isOpen={isModalOpen}
                     toggleFunc={this.setIsOpenModal}

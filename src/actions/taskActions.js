@@ -355,12 +355,11 @@ export const createTaskComment = (comment, parentCommentID, taskID, userID) => d
 export const createTaskFile = (state, file) => dispatch => {
     dispatch({type: CREATE_TASK_FILE_START});
 
-    const {fileName, fileDescription, downloadURL, size, contentType, taskID} = file;
+    const {fileName, downloadURL, size, contentType, taskID} = file;
     const nowDate = new Date();
     if (state === true) {
         firestore().collection('taskFile').add({
             name: fileName,
-            description: fileDescription,
             downloadURL,
             size,
             contentType,

@@ -259,8 +259,9 @@ const SprintDetail = ({navigation}) => {
     };
 
     const renderDailyScrumButton = () => {
+        console.log(dailyScrumMeeting);
         if (!finishDate) {
-            if (createdBy === authUser.uid){
+            if (createdBy === authUser.uid || dailyScrumMeeting.status === 1){
                 return (
                     <Button
                         action={startDailyScrumMeetingAction}

@@ -15,6 +15,7 @@ import {
 import {createProjectFile} from "../../actions/projectActions";
 import {colors, fonts} from "../../styles";
 import {fileValidations} from "../../validations";
+import Input from "../../components/form/Input";
 
 class ProjectFileUpload extends Component {
     constructor(props) {
@@ -120,7 +121,7 @@ class ProjectFileUpload extends Component {
                 <TopBar isBack={true}/>
 
                 <InnerContainer>
-                    {/*<Input iconName='file' value={fileName} placeholder="Dosya adı" isValid={this.validateFileName} errorMessage={fileNameError === undefined ? "" : fileNameError} name='fileName' setStateFunc={this.setValue}/>*/}
+                    <Input iconName='file' value={fileName} placeholder="Dosya adı" isValid={this.validateFileName} errorMessage={fileNameError === undefined ? "" : fileNameError} name='fileName' setStateFunc={this.setValue}/>
 
                     <TouchableOpacity
                         onPress={() => this.openFilePicker()}

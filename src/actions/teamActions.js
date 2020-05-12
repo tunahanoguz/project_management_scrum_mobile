@@ -63,8 +63,11 @@ export const getAllTeams = (userID) => dispatch => {
             snapshot.forEach(doc => {
                 const docID = {id: doc.id};
                 const teamData = doc.data();
+                const members = teamData.members;
+                const isMemberOkay = members.filter(member => member.id === userID);
 
-                if (teamData.members[0].id === userID) {
+
+                if (isMemberOkay.length !== 0) {
                     const team = Object.assign(docID, teamData);
                     teams.push(team);
                     teamIDs.push(team.id);
@@ -79,7 +82,7 @@ export const getAllTeams = (userID) => dispatch => {
 export const getTeamsForHomeScreen = (userID) => dispatch => {
     dispatch({type: GET_TEAMS_FOR_HOME_START, loading: true});
 
-    firestore().collection('teams').limit(3).get()
+    firestore().collection('teams').get()
         .then(snapshot => {
             if (snapshot.empty) {
                 dispatch({type: GET_TEAMS_FOR_HOME_FAILURE, error: "Hiç takımınız yok."})
@@ -89,14 +92,18 @@ export const getTeamsForHomeScreen = (userID) => dispatch => {
             snapshot.forEach(doc => {
                 const docID = doc.id;
                 const teamData = doc.data();
+                const members = teamData.members;
+                const isMemberOkay = members.filter(member => member.id === userID);
 
-                if (teamData.members[0].id === userID) {
+                if (isMemberOkay.length !== 0) {
                     const team = {id: docID, ...teamData};
                     teams.push(team);
                 }
             });
 
-            dispatch({type: GET_TEAMS_FOR_HOME_SUCCESS, teams});
+            const newTeams = teams.slice(0, 3);
+
+            dispatch({type: GET_TEAMS_FOR_HOME_SUCCESS, teams: newTeams});
         })
         .catch(() => dispatch({type: GET_TEAMS_FOR_HOME_FAILURE, error: "Takımlar getirilemedi."}));
 };
