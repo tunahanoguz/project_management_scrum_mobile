@@ -48,7 +48,7 @@ class ProjectList extends Component {
     };
 
     endReachedFunc = () => {
-        console.log("Hey!");
+        // console.log("Hey!");
         if (this.state.index < this.props.teamIDs?.length){
             this.setState(value => ({index: value.index + 10}));
         }

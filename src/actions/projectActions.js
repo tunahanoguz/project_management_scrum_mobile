@@ -92,8 +92,8 @@ export const getProjectsForHomeScreen = (teamIDs) => dispatch => {
     const query = projectRef.where('teamID', 'in', limitedTeamIDs).orderBy('createdAt', 'desc').limit(3);
     query.get()
         .then(snapshot => {
-            if (snapshot.empty)
-                console.log('Success!');
+            // if (snapshot.empty)
+            //     console.log('Success!');
 
             let projects = [];
             snapshot.forEach(doc => {
@@ -184,12 +184,12 @@ export const getProjectDescription = (projectID) => dispatch => {
 export const getProjectNotes = (projectID) => dispatch => {
     dispatch({type: GET_PROJECT_NOTES_REQUEST});
 
-    console.log("id" + projectID);
+    // console.log("id" + projectID);
     const projectRef = firestore().collection('projects');
     projectRef.doc(projectID).get()
         .then(doc => {
             const data = doc.data();
-            console.log(doc);
+            // console.log(doc);
             const projectNotes = data.notes;
             dispatch({type: GET_PROJECT_NOTES_SUCCESS, projectNotes});
         })
@@ -409,7 +409,7 @@ export const getProjectReplyComments = (parentCommentID) => dispatch => {
             }
         })
         .catch((err) => {
-            console.log(err);
+            // console.log(err);
             dispatch({type: GET_PROJECT_REPLY_COMMENTS_FAILURE, error: "Bu yoruma ya hiç cevap gelmedi ya da cevaplar getirilemedi."})
         });
 };

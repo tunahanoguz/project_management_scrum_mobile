@@ -13,7 +13,7 @@ const getMessages = (setMessageArray, dailyScrumMeetingID) => {
                     ...doc.data(),
                 };
 
-                console.log(message);
+                // console.log(message);
 
                 messages.push(message);
             });

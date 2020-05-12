@@ -55,7 +55,7 @@ export const getAllNotifications = (userID) => dispatch => {
             }
         })
         .catch(err => {
-            console.log(err);
+            // console.log(err);
             dispatch({type: GET_ALL_NOTIFICATIONS_FAILURE, error: "Bildirimler getirilemedi."});
         });
 };
@@ -63,7 +63,7 @@ export const getAllNotifications = (userID) => dispatch => {
 export const sendNotifications = (userIDs, title, body) => dispatch => {
     dispatch({type: SEND_NOTIFICATION_START});
 
-    console.log("userIDs" + userIDs);
+    // console.log("userIDs" + userIDs);
 
     const userRef = firestore().collection('users');
     const userQuery = userRef.where('id', 'in', userIDs);

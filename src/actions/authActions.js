@@ -66,7 +66,7 @@ export const getAllUsers = () => dispatch => {
 export const login = (email, password) => dispatch => {
     auth().signInWithEmailAndPassword(email, password)
         .then(user => {
-            console.log(user);
+            // console.log(user);
             dispatch({type: LOGIN_SUCCESS, authState: true, user: user.user});
         })
         .catch(() => dispatch({type: LOGIN_FAILURE, error: "Kullanıcı girişi yapılamadı."}));
@@ -113,13 +113,13 @@ export const changeUserFullName = fullName => dispatch => {
 };
 
 export const changeProfilePhoto = photoURL => dispatch => {
-    console.log("changeProfilePhoto'ya girildi.");
+    // console.log("changeProfilePhoto'ya girildi.");
     const currentUser = auth().currentUser;
     currentUser.updateProfile({
         photoURL: photoURL,
     })
         .then(() => {
-            console.log("updateProfile başarılı.");
+            // console.log("updateProfile başarılı.");
             const userID = currentUser.uid;
             const userRef = firestore().collection('users');
             const userDoc = userRef.doc(userID);
@@ -127,16 +127,16 @@ export const changeProfilePhoto = photoURL => dispatch => {
                 photoURL
             })
                 .then(() => {
-                    console.log("update başarılı.");
+                    // console.log("update başarılı.");
                     dispatch(getUser());
                 })
                 .catch(() => {
-                    console.log("update başarısız.");
+                    // console.log("update başarısız.");
                     dispatch({type: UPDATE_PP_FAILURE, error: "Profil fotoğrafınız değiştirilemedi."})
                 });
         })
         .catch(() => {
-            console.log("updateProfile başarısız.");
+            // console.log("updateProfile başarısız.");
             dispatch({type: UPDATE_PP_FAILURE, error: "Profil fotoğrafınız değiştirilemedi."})
         });
 };

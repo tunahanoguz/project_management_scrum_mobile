@@ -89,7 +89,7 @@ class TeamList extends Component {
                     </Container>
                 </Container>
 
-                {console.log(teams)}
+                {/*{console.log(teams)}*/}
 
                 <ListActionModal
                     isOpen={isModalOpen}

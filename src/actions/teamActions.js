@@ -166,7 +166,7 @@ export const createTeam = (teamName, teamDescription, members, userID) => dispat
 export const getTeamMembers = (members) => dispatch => {
     dispatch({type: GET_TEAM_MEMBERS_START});
 
-    console.log(members);
+    // console.log(members);
 
     let users = [];
     let userIDs = [];

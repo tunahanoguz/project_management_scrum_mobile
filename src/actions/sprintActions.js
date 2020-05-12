@@ -106,7 +106,7 @@ export const getSprintsForHomeScreen = (projectIDs) => dispatch => {
             }
         })
         .catch((err) => {
-            console.log(err);
+            // console.log(err);
             dispatch({type: GET_SPRINTS_FOR_HOME_FAILURE, error: "Sprint'ler getirilemedi."});
         });
 };

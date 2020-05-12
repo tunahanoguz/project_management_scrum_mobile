@@ -42,15 +42,13 @@ const TaskDetail = ({navigation}) => {
     const {id, task, description, projectID, sprintID, createdBy, userID, startDate, estimatedFinishDate} = taskObj;
 
     useEffect(() => {
-        dispatch(getSingleProject(projectID));
+        // dispatch(getSingleProject(projectID));
         dispatch(getSingleTask(taskID));
         dispatch(getUserById(userID ? userID : ""));
         dispatch(getSingleSprint(sprintID));
         dispatch(getAllTaskFiles(taskID));
         dispatch(getAllTaskComments(taskID));
     }, []);
-
-    console.log("OuterProject: ", project);
 
     const goToStartTask = () => {
         navigation.navigate('StartTask', {project: project, task: taskObj});
@@ -86,7 +84,6 @@ const TaskDetail = ({navigation}) => {
     };
 
     const projectDetail = () => {
-        console.log("Project: ", project);
         const {name} = project;
         if (projectID !== null && Object.keys(project).length > 1){
             return (

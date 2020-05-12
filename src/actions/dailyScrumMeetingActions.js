@@ -159,7 +159,7 @@ export const getDailyScrumMeetingMessages = (dailyScrumMeetingID) => dispatch =>
             }
         })
         .catch((err) => {
-            console.log(err);
+            // console.log(err);
             dispatch({type: GET_ALL_DAILY_SCRUM_MEETING_MESSAGES_FAILURE, error: "Bu günlük scrum toplantısına gönderilen mesajlar getirilemedi."});
         });
 };
